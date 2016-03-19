@@ -4,7 +4,7 @@
 //Same is valid for css files. Remote files will be loaded normally from the remote host, no need to specify anything.
 return array(
 	'js_files' => array(
-		"lib/q.min.js"
+		"js/lib/q.min.js"
 	),
 	'css_files' => array(
 	)
