@@ -83,11 +83,30 @@ var netatmo = {
 		},
 		modules: function(device){
 			var sResult = '';
-			//render station data (main station)
-			sResult += netatmo.render.module(device);
-			//render module data (connected modules)
-			for(cnt = 0; cnt < device.modules.length; cnt++){
-				sResult += netatmo.render.module(device.modules[cnt]);
+			var aOrderedModuleList = config.netatmo.moduleOrder && config.netatmo.moduleOrder.length > 0
+				?config.netatmo.moduleOrder
+				:null;
+			
+			if(aOrderedModuleList){
+				for(var moduleName of aOrderedModuleList){
+					if(device.module_name === moduleName){
+						sResult += netatmo.render.module(device);
+					}else{
+						for(var module of device.modules){
+							if(module.module_name === moduleName){
+								sResult += netatmo.render.module(module);
+								break;
+							}
+						}
+					}
+				}
+			}else{
+				//render station data (main station)
+				sResult += netatmo.render.module(device);
+				//render module data (connected modules)
+				for(cnt = 0; cnt < device.modules.length; cnt++){
+					sResult += netatmo.render.module(device.modules[cnt]);
+				}
 			}
 			return netatmo.html.moduleWrapper.format(sResult);
 		},
