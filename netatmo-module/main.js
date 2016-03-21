@@ -2,7 +2,8 @@ var netatmo = {
 	id: 'netatmo',
 	lang: config.lang || 'nl',
 	params: config && config.netatmo && config.netatmo.params || "access_token=",
-	token: null,
+	access_token: null,
+	refresh_token: config && config.netatmo && config.netatmo.refresh_token,
 	translate:{
 		sensorType: {
 			'CO2': 'wi-na',
@@ -15,9 +16,9 @@ var netatmo = {
 		}
 	},
 	api: {
-		servlet: '/netatmo-module/servlet.php',
-		base: 'https://api.netatmo.com/api/',
-		endpoint: 'getstationsdata'
+		base: 'https://api.netatmo.com/',
+		auth_endpoint: 'oauth2/token',
+		data_endpoint: 'api/getstationsdata'
 	},
 	location: '.netatmo',
 	fadeInterval: config.weather.fadeInterval || 1000,
@@ -41,18 +42,26 @@ var netatmo = {
 			Q.fcall(function(){
 				// call for token
 				return Q(
-					$.ajax(netatmo.api.servlet)
+					$.ajax({
+						type: 'POST',
+						url: netatmo.api.base + netatmo.api.auth_endpoint,
+						data: 'grant_type=refresh_token'
+							+'&refresh_token='+netatmo.refresh_token
+							+'&client_id='+config.netatmo.client_id
+							+'&client_secret='+config.netatmo.client_secret
+					})
 				);
 			}, function(reason){
 				console.log("error " +reason);
 			}).then(function(data){
 				// call for station data
 				console.log("Done: "+data);
-				netatmo.token = data;
+				netatmo.refresh_token = data.refresh_token;
+				netatmo.access_token = data.access_token;
 				return Q(
 					$.ajax({
-						url: netatmo.api.base + netatmo.api.endpoint,
-						data: netatmo.params + netatmo.token
+						url: netatmo.api.base + netatmo.api.data_endpoint,
+						data: netatmo.params + netatmo.access_token
 					})
 				);
 			}, function(reason){
