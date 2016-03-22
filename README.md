@@ -6,11 +6,13 @@ A module to integrale informations from the Netatmo API into the MagicMirror.
 
 ## Usage
 
-To usw this module, just include the __netatmo-module__ folder into the __modules__ folder of your MagicMirror. The content will be added to your mirror. You also need to add some config entries to your config.js file.
-
 _Prerequisites_
 
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
+
+To usw this module, just include the __netatmo-module__ folder into the __modules__ folder of your MagicMirror and include a `netatmo.init();` in the jQuery.ready function in the main.js. You also need to add some config entries to your config.js file. After that the content will be added to your mirror.
+
+
 
 ### Access Your Data
 
@@ -47,17 +49,16 @@ The REFRESH_TOKEN will be needed in the config section aswell.
 
 To run the module properly, you need to add the following data to your config.js file.
 
-```JSON
+```
 netatmo: {
-  client_id: '[APP_ID]', // add your [APP_ID]
-	client_secret: '[APP_SECRET]', // add your [APP_SECRET]
-	refresh_token: '', // add your [REFRESH_TOKEN]
-	params: 'access_token=',
+  client_id: 'APP_ID', // add your [APP_ID]
+	client_secret: 'APP_SECRET', // add your [APP_SECRET]
+	refresh_token: 'REFRESH_TOKEN', // add your [REFRESH_TOKEN]
 	moduleOrder: [
 		// specify a certain module order
 	],
 	dataOrder: [
-	  // specify a certain data order
+		// specify a certain data order
 	]
 }
 ```
