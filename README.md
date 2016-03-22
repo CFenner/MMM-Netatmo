@@ -10,7 +10,7 @@ _Prerequisites_
 
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
 
-To usw this module, just include the __netatmo-module__ folder into the __modules__ folder of your MagicMirror and include a `netatmo.init();` in the jQuery.ready function in the main.js. You also need to add some [config entries](#configuration) to your config.js file. After that the content will be added to your mirror.
+To use this module, just include the __netatmo-module__ folder into the __modules__ folder of your MagicMirror and include a `netatmo.init();` in the jQuery.ready function in the main.js. You also need to add some [config entries](#configuration) to your config.js file. After that the content will be added to your mirror.
 
 
 
