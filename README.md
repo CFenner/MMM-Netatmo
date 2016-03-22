@@ -26,7 +26,7 @@ Your can register a new app [here](https://dev.netatmo.com/dev/createapp). After
 
 To allow the app to access your data, you need to send a POST request to the auth server and register the app.
 
-You can send a POST request with [Hurl.it](https://www.hurl.it)[Git](https://github.com/defunkt/hurl) to the Netatmo auth url: https://api.netatmo.com/oauth2/token
+You can send a POST request with [Hurl.it](https://www.hurl.it)([Git](https://github.com/defunkt/hurl)) to the Netatmo auth url: https://api.netatmo.com/oauth2/token
 
 Also you need to provide the following data:
 
