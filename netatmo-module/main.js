@@ -1,9 +1,13 @@
 var netatmo = {
 	id: 'netatmo',
 	lang: config.lang || 'nl',
-	params: config && config.netatmo && config.netatmo.params || "access_token=",
+	location: '.netatmo',
+	params: "access_token=",
 	access_token: null,
-	refresh_token: config && config.netatmo && config.netatmo.refresh_token,
+	refreshToken: config && config.netatmo && config.netatmo.refresh_token,
+	refreshInterval: config && config.netatmo && config.netatmo.refreshInterval || 1,
+	hideLoadTimer: config && config.netatmo && config.netatmo.hideLoadTimer,
+	fadeInterval: 1000,
 	translate:{
 		sensorType: {
 			'CO2': 'wi-na',
@@ -20,11 +24,17 @@ var netatmo = {
 		auth_endpoint: 'oauth2/token',
 		data_endpoint: 'api/getstationsdata'
 	},
-	location: '.netatmo',
-	fadeInterval: config.weather.fadeInterval || 1000,
 	init: function(){
-		netatmo.load.data();
-		
+		netatmo.loader = $('#netatmo-module .loadTimer .loader')[0];
+  		netatmo.border = $('#netatmo-module .loadTimer .border')[0];
+  		netatmo.α = 0;
+		netatmo.t = netatmo.refreshInterval * 60 * 1000 / 360;
+		if(netatmo.hideLoadTimer){
+			$(".loadTimer").hide();
+		}
+		// run timer
+		netatmo.update.load();
+		// add string format method
 		if (!String.prototype.format) {
 		  String.prototype.format = function() {
 			var args = arguments;
@@ -37,38 +47,64 @@ var netatmo = {
 		  };
 		}
 	},
+	update: {
+		load: function(){
+			return Q.fcall(
+				netatmo.load.token, netatmo.render.error
+			).then(
+				netatmo.load.data, netatmo.render.error
+			).then(
+				netatmo.render.all
+			).then(
+				netatmo.update.wait
+			);//.done();
+		},
+		wait: function(){
+			netatmo.α++;
+			netatmo.α %= 360;
+			var r = ( netatmo.α * Math.PI / 180 )
+			, x = Math.sin( r ) * 125
+			, y = Math.cos( r ) * - 125
+			, mid = ( netatmo.α > 180 ) ? 1 : 0
+			, anim = 'M 0 0 v -125 A 125 125 1 ' 
+			   + mid + ' 1 ' 
+			   +  x  + ' ' 
+			   +  y  + ' z';
+			netatmo.loader.setAttribute( 'd', anim );
+			netatmo.border.setAttribute( 'd', anim );
+			if(r === 0){
+				// refresh data
+				netatmo.update.load();
+			}else{
+				// wait further
+				setTimeout(netatmo.update.wait, netatmo.t);
+			}
+		}
+	},
 	load: {
-		data: function(){
-			Q.fcall(function(){
-				// call for token
-				return Q(
-					$.ajax({
-						type: 'POST',
-						url: netatmo.api.base + netatmo.api.auth_endpoint,
-						data: 'grant_type=refresh_token'
-							+'&refresh_token='+netatmo.refresh_token
-							+'&client_id='+config.netatmo.client_id
-							+'&client_secret='+config.netatmo.client_secret
-					})
-				);
-			}, function(reason){
-				console.log("error " +reason);
-			}).then(function(data){
-				// call for station data
-				console.log("Done: "+data);
-				netatmo.refresh_token = data.refresh_token;
-				netatmo.access_token = data.access_token;
-				return Q(
-					$.ajax({
-						url: netatmo.api.base + netatmo.api.data_endpoint,
-						data: netatmo.params + netatmo.access_token
-					})
-				);
-			}, function(reason){
-				console.log("error " +reason);
-			}).then(function(data){
-				netatmo.render.all(data);
-			}).done();
+		token: function(){
+			return Q(
+				$.ajax({
+					type: 'POST',
+					url: netatmo.api.base + netatmo.api.auth_endpoint,
+					data: 'grant_type=refresh_token'
+						+'&refresh_token='+netatmo.refreshToken
+						+'&client_id='+config.netatmo.client_id
+						+'&client_secret='+config.netatmo.client_secret
+				})
+			);
+		},
+		data: function(data){
+			// call for station data
+			console.log("Netatmo-Module: token loaded "+data.access_token);
+			netatmo.refreshToken = data.refresh_token;
+			netatmo.accessToken = data.access_token;
+			return Q(
+				$.ajax({
+					url: netatmo.api.base + netatmo.api.data_endpoint,
+					data: netatmo.params + netatmo.accessToken
+				})
+			);
 		}
 	},
 	html:{
@@ -76,12 +112,12 @@ var netatmo = {
 		module: '<div class="module"><div class="data">{0}</div><div class="name small">{1}</div></div>',
 		dataWrapper: '<table class>{0}</table>',
 		data: '<tr><td class="small">{0}</td><td class="value small">{1}</td></tr>'
-//		data: '<div><span class="small i2con ">{0}</span>&nbsp;<span class="value small">{1}</span></div>'
 	},
 	render: {
 		all: function(data){
 			var sContent = '';
 			var device = data.body.devices[0];
+			console.log("Netatmo-Module: data loaded, last updated "+new Date(1000*device.dashboard_data.time_utc));
 			// render modules
 			sContent += netatmo.render.modules(device);
 			// place content
@@ -89,6 +125,7 @@ var netatmo = {
 				sContent, 
 				netatmo.fadeInterval
 			);
+			return Q({});
 		},
 		modules: function(device){
 			var sResult = '';
@@ -142,6 +179,13 @@ var netatmo = {
 		},
 		data: function(clazz, dataType, value){
 			return netatmo.html.data.format(dataType, value.toFixed(1));
+		},
+		error: function(reason){
+			console.log("error " +reason);
+			$(netatmo.location).updateWithText(
+				"could not load data: "+reason.responseJSON.error, 
+				netatmo.fadeInterval
+			);
 		}
 	}
 };
