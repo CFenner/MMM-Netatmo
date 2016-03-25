@@ -1,0 +1,54 @@
+@light: #fff;
+@dark: #000;
+@dimmed: darken(@light, 33.5%);
+@borderColor: @light;
+
+.netatmo, .modules, .module, .loading, .loadTimer{
+	display: inline-block;
+}
+
+.netatmo{
+	.module{
+		overflow: hidden;
+		margin: .125em .25em;
+		border-radius: .25em;
+		border: 1px solid @borderColor;
+		
+		.name{
+			color: @dark;
+			text-align: center;
+			padding: .125em .25em;
+			background: @borderColor;
+		}
+		
+		.data{
+			padding: .125em .25em;
+		}
+	}
+	svg.loading{
+		width: .6em;
+		height: .6em;
+	
+		circle{
+			fill: none;
+			stroke-linecap: round;
+			cx: 50;
+			cy: 50;
+			r: 40;
+		}
+		circle.inner{
+			stroke: @light;
+			stroke-width: 6;
+		}
+		circle.outer{
+			stroke: @dimmed;
+			stroke-width: 10;
+		}
+	}
+	svg.loadTimer {
+		width: .5em;
+		height: .5em;
+		.loader{ fill: @dark;}
+		.border{ fill: @dimmed}
+	}
+}

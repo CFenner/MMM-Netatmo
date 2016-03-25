@@ -9,10 +9,9 @@ A module to integrale informations from a Netatmo weather station into the Magic
 _Prerequisites_
 
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
+- use the new MagicMirror module system
 
-To use this module, just include the __netatmo-module__ folder into the __modules__ folder of your MagicMirror and include a `netatmo.init();` in the jQuery.ready function in the main.js. You also need to add some [config entries](#configuration) to your config.js file. After that the content will be added to your mirror.
-
-
+To use this module, just create a new folder in the __modules__ folder of your MagicMirror, name it 'netatmo' and copy the content of the repository into this folder. You also need to add some [config entries](#configuration) to your config.js file. After that the content will be added to your mirror.
 
 ### Access Your Data
 
@@ -50,15 +49,45 @@ The REFRESH_TOKEN will be needed in the [config entries](#configuration).
 To run the module properly, you need to add the following data to your config.js file.
 
 ```
-netatmo: {
-  client_id: 'APP_ID',
-	client_secret: 'APP_SECRET',
-	refresh_token: 'REFRESH_TOKEN',
-	moduleOrder: [
-		// specify a certain module order
-	],
-	dataOrder: [
-		// specify a certain data order
-	]
+{
+	module: 'netatmo',
+	position: 'bottom_left', // you may choose any location
+	config: {
+		clientId: '<YOUR_CLIENT_ID>',
+		clientSecret: '<YOUR_CLIENT_SECRET>',
+		refreshToken: '<YOUR_GENERATED_REFRESH_TOKEN>'
+	}
 }
+```
+
+You also can set the refresh interval in minutes (default: 3). Keep in mind that the netatmo data is updated every 10 minutes.
+
+```
+	config: {
+		...,
+		refreshInterval: 0.5, // set to update every 30 seconds
+	}
+```
+
+You also can set the order of the modules and it's data. By omitting a certain module or data type, you can prevent it from being shown.
+Be aware that you need to use the module names that you set in the netatmo configuration.
+
+```
+	config: {
+		...,
+		moduleOrder: [
+			"Kitchen",
+			//"Kid's Bedroom",
+			//"Garage",
+			"Garden"
+		],
+		dataOrder: [
+			//"Noise", 
+			//"Pressure", 
+			"CO2", 
+			"Humidity", 
+			"Temperature",
+			"Rain"
+		]
+	}
 ```
