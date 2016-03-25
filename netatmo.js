@@ -4,8 +4,8 @@ Module.create({
 		access_token: null,
 		refreshToken: null,
 		refreshInterval: 3, // refresh interval on netatmo is 10 minutes
-		hideLoadTimer: false,
 		fadeInterval: 1000,
+		hideLoadTimer: false,
 		api:{
 			base: 'https://api.netatmo.com/',
 			auth_endpoint: 'oauth2/token',
@@ -44,8 +44,6 @@ Module.create({
 				});
 			};
 		}
-	},
-	translate:{
 	},
 	update_load: function(){
 			Log.info(this.name + " refresh triggered");
@@ -201,6 +199,7 @@ Module.create({
 		return [
 			'//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js',
 			'q.min.js',
+			'moment.js',
 		//	'require.min.js',
 		//	'//cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js',
 		//	'//cdnjs.cloudflare.com/ajax/libs/q.js/2.0.3/q.js'
