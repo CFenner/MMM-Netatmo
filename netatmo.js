@@ -112,6 +112,7 @@ Module.create({
 	render_all: function(data){
 		var sContent = '';
 		var device = data.body.devices[0];
+		this.lastUpdate = device.dashboard_data.time_utc;
 		Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
 		// render modules
 		sContent += this.render_modules(device);
@@ -193,7 +194,8 @@ Module.create({
 					'<animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>'+
 					'<animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>'+
 				'</circle>'+
-			'</svg>'
+			'</svg>',
+		update: '<div class="updated xsmall">{0}</div>'
 	},
 	getScripts: function() {
 		return [
@@ -214,7 +216,9 @@ Module.create({
 		return $(
 			'<div class="netatmo">'+
 				(this.dom
-					?this.dom+(this.config.hideLoadTimer?'':this.html.loadTimer)
+					?this.dom
+						+this.html.update.format(moment(new Date(1000*this.lastUpdate)).fromNow())
+						+(this.config.hideLoadTimer?'':this.html.loadTimer)
 					:this.html.loader)+
 			'</div>')[0];
 	}

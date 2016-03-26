@@ -3,7 +3,7 @@
 @dimmed: darken(@light, 33.5%);
 @borderColor: @light;
 
-.netatmo, .modules, .module, .loading, .loadTimer{
+.netatmo, .module, .loading, .loadTimer, .updated{
 	display: inline-block;
 }
 
@@ -48,7 +48,14 @@
 	svg.loadTimer {
 		width: .5em;
 		height: .5em;
+		margin: .2em 0;
+		vertical-align: middle;
 		.loader{ fill: @dark;}
 		.border{ fill: @dimmed}
+	}
+	.updated{
+		margin: .2em 0;
+		padding: 0 .5em;
+		vertical-align: middle;
 	}
 }
