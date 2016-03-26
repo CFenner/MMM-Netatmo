@@ -11,6 +11,8 @@ _Prerequisites_
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
 - use the new MagicMirror module system
 
+To use this module with the old module system, use this branch: https://github.com/CFenner/MagicMirror-Netatmo-Module/tree/rel-1.0
+
 To use this module, just create a new folder in the __modules__ folder of your MagicMirror, name it 'netatmo' and copy the content of the repository into this folder. You also need to add some [config entries](#configuration) to your config.js file. After that the content will be added to your mirror.
 
 ### Access Your Data
