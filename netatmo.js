@@ -13,14 +13,25 @@ Module.create({
 			data_endpoint: 'api/getstationsdata',
 			data_payload: 'access_token={0}'
 		},
-		sensorType: {
-			'CO2': 'wi-na',
-			'Humidity': 'wi-humidity',
-			'Noise': 'wi-na',
-			'Pressure': 'wi-barometer',
-			'Temperature': 'wi-thermometer',
-			'Rain': 'wi-raindrops',
-			'Wind': 'wi-na'
+		description: {
+			'en':{
+				'CO2': 'CO<sub>2</sub>',
+				'Noise': 'Noise',
+				'Humidity': 'Humidity',
+				'Pressure': 'Pressure',
+				'Temperature': 'Temperature',
+				'Rain': 'Rain',
+				'Wind': 'Wind'
+			},
+			'de':{
+				'CO2': 'CO<sub>2</sub>',
+				'Noise': 'Lautstärke',
+				'Humidity': 'Feuchtigkeit',
+				'Pressure': 'Luftdruck',
+				'Temperature': 'Temperatur',
+				'Rain': 'Niederschlag',
+				'Wind': 'Wind'
+			}
 		}
 	},
 	// init method
@@ -164,7 +175,7 @@ Module.create({
 			for(var dataType of aDataTypeList){
 				if($.inArray(dataType, oModule.data_type) > -1){
 					sResult += this.render_data(
-						/*netatmo.translate.sensorType[dataType] ||*/ 'wi-na', 
+						this.formatter.clazz(dataType), 
 						dataType, 
 						oModule.dashboard_data[dataType]);
 				}
@@ -172,7 +183,10 @@ Module.create({
 			return this.html.dataWrapper.format(sResult);
 		},
 	render_data: function(clazz, dataType, value){
-			return this.html.data.format(dataType, value.toFixed(1));
+			return this.html.data.format(
+				dataType,
+				//this.formatter.label.bind(this)(dataType), 
+				this.formatter.value(dataType, value));
 		},
 	render_error: function(reason){
 			console.log("error " +reason);
@@ -180,6 +194,47 @@ Module.create({
 				"could not load data: "+reason.responseJSON.error, 
 				this.config.fadeInterval
 			);
+	},
+	formatter: {
+		value: function(dataType, value){
+			switch(dataType){
+				case 'CO2':
+					return value.toFixed(0) + ' ppm';
+				case 'Noise':
+					return value.toFixed(0) + ' dB';
+				case 'Humidity':
+					return value.toFixed(0) + '%';
+				case 'Pressure':
+					return value.toFixed(0) + ' mbar';
+				case 'Temperature':
+					return value.toFixed(1) + '°';
+				case 'Rain':
+					return value;
+				case 'Wind':
+					return value;
+			}
+		},
+		label: function(dataType){
+			return this.config.description[this.config.language][dataType];
+		},
+		clazz: function(dataType){
+			switch(dataType){
+				case 'CO2':
+					return 'wi-na';
+				case 'Noise':
+					return 'wi-na';
+				case 'Humidity':
+					return 'wi-humidity';
+				case 'Pressure':
+					return 'wi-barometer';
+				case 'Temperature':
+					return 'wi-thermometer';
+				case 'Rain':
+					return 'wi-raindrops';
+				case 'Wind':
+					return 'wi-na';
+			}
+		}
 	},
 	html:{
 		moduleWrapper: '<div class="modules">{0}</div>',
