@@ -73,7 +73,7 @@ Module.create({
 				this.render_error.bind(that)
 			).then(
 				this.render_all.bind(that)
-			).then(
+			).done(
 				this.update_wait.bind(that)
 			);
 		},
