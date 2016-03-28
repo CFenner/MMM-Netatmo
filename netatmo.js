@@ -48,19 +48,6 @@ Module.create({
 		this.t = this.config.refreshInterval * 60 * 1000 / 360;
 		// run timer
 		this.update_load();
-		
-		// add string format method
-		if (!String.prototype.format) {
-			String.prototype.format = function() {
-				var args = arguments;
-				return this.replace(/{(\d+)}/g, function(match, number) { 
-					return typeof args[number] != 'undefined'
-						? args[number]
-						: match
-					;
-				});
-			};
-		}
 	},
 	update_load: function(){
 			Log.info(this.name + " refresh triggered");
@@ -260,6 +247,7 @@ Module.create({
 	},
 	getScripts: function() {
 		return [
+			'String.format.js',
 			'//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js',
 			'q.min.js',
 			'moment.js',
