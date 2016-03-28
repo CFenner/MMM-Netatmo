@@ -1,3 +1,9 @@
+/* Magic Mirror
+ * Module: Netatmo
+ *
+ * By Christopher Fenner http://github.com/CFenner
+ * MIT Licensed.
+ */
 Module.create({
 	// default config
 	defaults: {
