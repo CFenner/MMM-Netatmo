@@ -4,6 +4,8 @@
 
 A module to integrale informations from a Netatmo weather station into the MagicMirror.
 
+![Netatmo visualisation](https://cloud.githubusercontent.com/assets/9592452/14049247/45058c36-f2b4-11e5-98bb-d0804ea6b55a.png)
+
 ## Usage
 
 _Prerequisites_
