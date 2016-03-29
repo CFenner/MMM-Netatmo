@@ -8,8 +8,8 @@ A module to integrale informations from a Netatmo weather station into the Magic
 
 _Prerequisites_
 
+- requires MagicMirror v2.0.0
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
-- use the new MagicMirror module system
 
 To use this module with the old module system, use this branch: https://github.com/CFenner/MagicMirror-Netatmo-Module/tree/rel-1.0
 
