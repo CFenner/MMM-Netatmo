@@ -3,11 +3,13 @@
 @dimmed: darken(@light, 33.5%);
 @borderColor: @light;
 
-.netatmo, .module, .loading, .loadTimer, .updated{
-	display: inline-block;
-}
-
 .netatmo{
+	display: inline-block;
+
+	.module, .loading, .loadTimer, .updated{
+		display: inline-block;
+	}
+
 	.module{
 		overflow: hidden;
 		margin: .125em .25em;
