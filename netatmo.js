@@ -4,13 +4,13 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
-Module.create({
+Module.register('netatmo', {
 	// default config
 	defaults: {
 		access_token: null,
 		refreshToken: null,
-		updateInterval: 3, // refresh interval on netatmo is 10 minutes
-		fadeInterval: 1000,
+		updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
+		animationSpeed: 1000,
 		hideLoadTimer: false,
 		api:{
 			base: 'https://api.netatmo.com/',
@@ -122,7 +122,7 @@ Module.create({
 		sContent += this.render_modules(device);
 		// place content
 		this.dom = sContent;
-		this.updateDom(this.config.fadeInterval);
+		this.updateDom(this.config.animationSpeed);
 		return Q({});
 	},
 	render_modules: function(device){
