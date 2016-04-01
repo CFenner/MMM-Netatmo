@@ -9,7 +9,7 @@ Module.create({
 	defaults: {
 		access_token: null,
 		refreshToken: null,
-		refreshInterval: 3, // refresh interval on netatmo is 10 minutes
+		updateInterval: 3, // refresh interval on netatmo is 10 minutes
 		fadeInterval: 1000,
 		hideLoadTimer: false,
 		api:{
@@ -45,7 +45,7 @@ Module.create({
 		Log.info('Starting module: ' + this.name);
   		this.α = 0;
   		// set interval for reload timer
-		this.t = this.config.refreshInterval * 60 * 1000 / 360;
+		this.t = this.config.updateInterval * 60 * 1000 / 360;
 		// run timer
 		this.update_load();
 	},
