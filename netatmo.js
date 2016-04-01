@@ -50,7 +50,7 @@ Module.register('netatmo', {
 		this.update_load();
 	},
 	update_load: function(){
-			Log.info(this.name + " refresh triggered");
+			//Log.info(this.name + " refresh triggered");
 			var that = this;
 			return Q.fcall(
 				this.load.token.bind(that), 
@@ -104,7 +104,7 @@ Module.register('netatmo', {
 			}));
 		},
 		data: function(data){
-			Log.info(this.name + " token loaded "+data.access_token);
+			//Log.info(this.name + " token loaded "+data.access_token);
 			this.config.refreshToken = data.refresh_token;
 			// call for station data
 			return Q($.ajax({
@@ -117,7 +117,7 @@ Module.register('netatmo', {
 		var sContent = '';
 		var device = data.body.devices[0];
 		this.lastUpdate = device.dashboard_data.time_utc;
-		Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
+		//Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
 		// render modules
 		sContent += this.render_modules(device);
 		// place content
@@ -250,10 +250,7 @@ Module.register('netatmo', {
 			'String.format.js',
 			'//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js',
 			'q.min.js',
-			'moment.js',
-		//	'require.min.js',
-		//	'//cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js',
-		//	'//cdnjs.cloudflare.com/ajax/libs/q.js/2.0.3/q.js'
+			'moment.js'
 		];
 	},
 	getStyles: function() {
@@ -266,7 +263,7 @@ Module.register('netatmo', {
 			'<div class="netatmo">'+
 				(this.dom
 					?this.dom
-						+this.html.update.format(moment(new Date(1000*this.lastUpdate)).fromNow())
+						+this.html.update.format(moment(new Date(1000 * this.lastUpdate)).fromNow())
 						+(this.config.hideLoadTimer?'':this.html.loadTimer)
 					:this.html.loader)+
 			'</div>')[0];
