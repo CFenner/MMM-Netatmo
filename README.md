@@ -53,7 +53,7 @@ The module needs the default configuration block in your config.js to work.
 
 ```
 {
-	module: 'netatmo', //name of the module folder, 
+	module: 'netatmo',
 	position: 'bottom_left', // the location where the module should be displayed
 	config: {
 		clientId: '', // your app id
