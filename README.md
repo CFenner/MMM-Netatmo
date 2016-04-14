@@ -28,10 +28,9 @@ Your can register a new app [here](https://dev.netatmo.com/dev/createapp). After
 #### Grant Access to Your Data
 
 To allow the app to access your data, you need to send a POST request to the auth server and register the app.
-
 You can send a POST request with [Hurl.it](https://www.hurl.it)([Git](https://github.com/defunkt/hurl)) to the Netatmo auth url: https://api.netatmo.com/oauth2/token
 
-Also you need to provide the following data:
+Also you need to provide the following data (add as parameters):
 
 - grant_type: password
 - client_id: [APP_ID]
@@ -50,48 +49,27 @@ The REFRESH_TOKEN will be needed in the [config entries](#configuration).
 
 ### Configuration
 
-To run the module properly, you need to add the following data to your config.js file.
+The module needs the default configuration block in your config.js to work.
 
 ```
 {
-	module: 'netatmo',
-	position: 'bottom_left', // you may choose any location
+	module: 'netatmo', //name of the module folder, 
+	position: 'bottom_left', // the location where the module should be displayed
 	config: {
-		clientId: '<YOUR_CLIENT_ID>',
-		clientSecret: '<YOUR_CLIENT_SECRET>',
-		refreshToken: '<YOUR_GENERATED_REFRESH_TOKEN>'
+		clientId: '', // your app id
+		clientSecret: '', // your app secret
+		refreshToken: '' // your generated refresh token
 	}
 }
 ```
 
-You also can set the refresh interval in minutes (default: 3). Keep in mind that the netatmo data is updated every 10 minutes.
+The following properties can be configured:
 
-```
-	config: {
-		...,
-		refreshInterval: 0.5, // set to update every 30 seconds
-	}
-```
-
-You also can set the order of the modules and it's data. By omitting a certain module or data type, you can prevent it from being shown.
-Be aware that you need to use the module names that you set in the netatmo configuration.
-
-```
-	config: {
-		...,
-		moduleOrder: [
-			"Kitchen",
-			//"Kid's Bedroom",
-			//"Garage",
-			"Garden"
-		],
-		dataOrder: [
-			//"Noise", 
-			//"Pressure", 
-			"CO2", 
-			"Humidity", 
-			"Temperature",
-			"Rain"
-		]
-	}
-```
+|Option|Description|
+|---|---|
+|clientId|The ID of your Netatmo [application](https://dev.netatmo.com/dev/listapps).<br><br>This value is **REQUIRED**|
+|clientSecret|The app secret of your Netatmo [application](https://dev.netatmo.com/dev/listapps).<br><br>This value is **REQUIRED**|
+|refreshToken|The generated refresh token you got from the POST request to the auth api.<br><br>This value is **REQUIRED**|
+|refreshInterval|How often does the content needs to be updated? (Minutes)<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `3`|
+|moduleOrder|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.|
+|dataOrder|The rendering order of the data types of a module, ommit a data type to hide the output.<br><br>**Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`|
