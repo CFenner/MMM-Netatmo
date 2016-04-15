@@ -50,7 +50,7 @@ Module.register('netatmo', {
     // run timer
     this.update_load();
   },
-  update_load: function(){
+  update_load: function() {
     //Log.info(this.name + " refresh triggered");
     var that = this;
     return Q.fcall(
@@ -65,7 +65,7 @@ Module.register('netatmo', {
       this.update_wait.bind(that)
     );
   },
-  update_wait: function(){
+  update_wait: function() {
     this.α++;
     this.α %= 360;
     var r = ( this.α * Math.PI / 180 )
@@ -78,14 +78,14 @@ Module.register('netatmo', {
        +  y  + ' z';
 
     var loader = $('.netatmo .loadTimer .loader');
-    if (loader.length > 0){
+    if (loader.length > 0) {
       loader.attr('d', anim);
     }
     var border = $('.netatmo .loadTimer .border');
-    if (border.length > 0){
+    if (border.length > 0) {
       border.attr('d', anim);
     }
-    if (r === 0){
+    if (r === 0) {
       // refresh data
       this.update_load();
     } else {
@@ -94,7 +94,7 @@ Module.register('netatmo', {
     }
   },
   load: {
-    token: function(){
+    token: function() {
       return Q($.ajax({
         type: 'POST',
         url: this.config.api.base + this.config.api.auth_endpoint,
@@ -104,7 +104,7 @@ Module.register('netatmo', {
             this.config.clientSecret)
       }));
     },
-    data: function(data){
+    data: function(data) {
       //Log.info(this.name + " token loaded "+data.access_token);
       this.config.refreshToken = data.refresh_token;
       // call for station data
@@ -114,7 +114,7 @@ Module.register('netatmo', {
       }));
     }
   },
-  render_all: function(data){
+  render_all: function(data) {
     var sContent = '';
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
@@ -126,19 +126,19 @@ Module.register('netatmo', {
     this.updateDom(this.config.animationSpeed);
     return Q({});
   },
-  render_modules: function(device){
+  render_modules: function(device) {
     var sResult = '';
     var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0
       ?this.config.moduleOrder
       :null;
 
-    if (aOrderedModuleList){
-      for (var moduleName of aOrderedModuleList){
-        if (device.module_name === moduleName){
+    if (aOrderedModuleList) {
+      for (var moduleName of aOrderedModuleList) {
+        if (device.module_name === moduleName) {
           sResult += this.render_module(device);
         } else {
-          for (var module of device.modules){
-            if (module.module_name === moduleName){
+          for (var module of device.modules) {
+            if (module.module_name === moduleName) {
               sResult += this.render_module(module);
               break;
             }
@@ -149,25 +149,25 @@ Module.register('netatmo', {
       //render station data (main station)
       sResult += this.render_module(device);
       //render module data (connected modules)
-      for (var cnt = 0; cnt < device.modules.length; cnt++){
+      for (var cnt = 0; cnt < device.modules.length; cnt++) {
         sResult += this.render_module(device.modules[cnt]);
       }
     }
     return this.html.moduleWrapper.format(sResult);
   },
-  render_module: function(oModule){
+  render_module: function(oModule) {
     return this.html.module.format(
       this.render_sensorData(oModule),
       oModule.module_name
     );
   },
-  render_sensorData: function(oModule){
+  render_sensorData: function(oModule) {
     var sResult = '';
     var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0
       ?this.config.dataOrder
       :oModule.data_type;
-    for (var dataType of aDataTypeList){
-      if ($.inArray(dataType, oModule.data_type) > -1){
+    for (var dataType of aDataTypeList) {
+      if ($.inArray(dataType, oModule.data_type) > -1) {
         sResult += this.render_data(
           this.formatter.clazz(dataType),
           dataType,
@@ -176,13 +176,13 @@ Module.register('netatmo', {
     }
     return this.html.dataWrapper.format(sResult);
   },
-  render_data: function(clazz, dataType, value){
+  render_data: function(clazz, dataType, value) {
     return this.html.data.format(
       dataType,
       //this.formatter.label.bind(this)(dataType),
       this.formatter.value(dataType, value));
   },
-  render_error: function(reason){
+  render_error: function(reason) {
     console.log("error " +reason);
     //TODO: enable display of error messages
     /*
@@ -193,8 +193,8 @@ Module.register('netatmo', {
     */
   },
   formatter: {
-    value: function(dataType, value){
-      switch (dataType){
+    value: function(dataType, value) {
+      switch (dataType) {
         case 'CO2':
           return value.toFixed(0) + ' ppm';
         case 'Noise':
@@ -211,11 +211,11 @@ Module.register('netatmo', {
           return value;
       }
     },
-    label: function(dataType){
+    label: function(dataType) {
       return this.config.description[this.config.language][dataType];
     },
-    clazz: function(dataType){
-      switch (dataType){
+    clazz: function(dataType) {
+      switch (dataType) {
         case 'CO2':
           return 'wi-na';
         case 'Noise':
