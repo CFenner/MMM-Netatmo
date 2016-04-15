@@ -70,12 +70,12 @@ Module.register('netatmo', {
     this.α %= 360;
     var r = (this.α * Math.PI / 180);
     var x = Math.sin(r) * 125;
-    var y = Math.cos(r) * - 125;
+    var y = Math.cos(r) * -125;
     var mid = (this.α > 180) ? 1 : 0;
-    var anim = 'M 0 0 v -125 A 125 125 1 '
-       + mid + ' 1 '
-       +  x  + ' '
-       +  y  + ' z';
+    var anim = 'M 0 0 v -125 A 125 125 1 ' +
+       mid + ' 1 ' +
+       x + ' ' +
+       y + ' z';
 
     var loader = $('.netatmo .loadTimer .loader');
     if (loader.length > 0) {
@@ -128,9 +128,9 @@ Module.register('netatmo', {
   },
   render_modules: function(device) {
     var sResult = '';
-    var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0
-      ?this.config.moduleOrder
-      :null;
+    var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0 ?
+      this.config.moduleOrder :
+      null;
 
     if (aOrderedModuleList) {
       for (var moduleName of aOrderedModuleList) {
@@ -163,9 +163,9 @@ Module.register('netatmo', {
   },
   render_sensorData: function(oModule) {
     var sResult = '';
-    var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0
-      ?this.config.dataOrder
-      :oModule.data_type;
+    var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0 ?
+      this.config.dataOrder :
+      oModule.data_type;
     for (var dataType of aDataTypeList) {
       if ($.inArray(dataType, oModule.data_type) > -1) {
         sResult += this.render_data(
@@ -183,7 +183,7 @@ Module.register('netatmo', {
       this.formatter.value(dataType, value));
   },
   render_error: function(reason) {
-    console.log("error " +reason);
+    console.log("error " + reason);
     //TODO: enable display of error messages
     /*
     $(netatmo.location).updateWithText(
@@ -240,12 +240,12 @@ Module.register('netatmo', {
     data: '<tr><td class="small">{0}</td><td class="value small">{1}</td></tr>',
     loadTimer: '<svg class="loadTimer" viewbox="0 0 250 250"><path class="border" transform="translate(125, 125)"/><path class="loader" transform="translate(125, 125) scale(.84)"/></svg>',
     loader:
-      '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">'+
-        '<circle class="outer"></circle>'+
-        '<circle class="inner">'+
-          '<animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>'+
-          '<animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>'+
-        '</circle>'+
+      '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">' +
+      '  <circle class="outer"></circle>' +
+      '  <circle class="inner">' +
+      '    <animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>' +
+      '    <animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>' +
+      '  </circle>' +
       '</svg>',
     update: '<div class="updated xsmall">{0}</div>'
   },
@@ -264,12 +264,12 @@ Module.register('netatmo', {
   },
   getDom: function() {
     return $(
-      '<div class="netatmo">'+
-        (this.dom
-          ?this.dom
-            +this.html.update.format(moment(new Date(1000 * this.lastUpdate)).fromNow())
-            +(this.config.hideLoadTimer?'':this.html.loadTimer)
-          :this.html.loader)+
+      '<div class="netatmo">' +
+        (this.dom ?
+          this.dom +
+          this.html.update.format(moment(new Date(1000 * this.lastUpdate)).fromNow()) +
+          (this.config.hideLoadTimer ? '' : this.html.loadTimer) :
+          this.html.loader) +
       '</div>')[0];
   }
 });
