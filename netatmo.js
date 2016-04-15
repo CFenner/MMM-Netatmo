@@ -4,6 +4,7 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
+ /* global $, Q, moment, Module */
 Module.register('netatmo', {
 	// default config
 	defaults: {
@@ -148,7 +149,7 @@ Module.register('netatmo', {
 				//render station data (main station)
 				sResult += this.render_module(device);
 				//render module data (connected modules)
-				for(cnt = 0; cnt < device.modules.length; cnt++){
+				for(var cnt = 0; cnt < device.modules.length; cnt++){
 					sResult += this.render_module(device.modules[cnt]);
 				}
 			}
@@ -183,10 +184,13 @@ Module.register('netatmo', {
 		},
 	render_error: function(reason){
 			console.log("error " +reason);
+			//TODO: enable display of error messages
+			/*
 			$(netatmo.location).updateWithText(
 				"could not load data: "+reason.responseJSON.error,
 				this.config.fadeInterval
 			);
+			*/
 	},
 	formatter: {
 		value: function(dataType, value){
