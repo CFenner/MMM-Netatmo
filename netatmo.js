@@ -68,10 +68,10 @@ Module.register('netatmo', {
   update_wait: function() {
     this.α++;
     this.α %= 360;
-    var r = ( this.α * Math.PI / 180 )
-    , x = Math.sin( r ) * 125
-    , y = Math.cos( r ) * - 125
-    , mid = ( this.α > 180 ) ? 1 : 0
+    var r = (this.α * Math.PI / 180)
+    , x = Math.sin(r) * 125
+    , y = Math.cos(r) * - 125
+    , mid = (this.α > 180) ? 1 : 0
     , anim = 'M 0 0 v -125 A 125 125 1 '
        + mid + ' 1 '
        +  x  + ' '
