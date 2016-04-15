@@ -78,17 +78,17 @@ Module.register('netatmo', {
 			   +  y  + ' z';
 
 			var loader = $('.netatmo .loadTimer .loader');
-			if(loader.length > 0){
+			if (loader.length > 0){
 				loader.attr('d', anim);
 			}
 			var border = $('.netatmo .loadTimer .border');
-			if(border.length > 0){
+			if (border.length > 0){
 				border.attr('d', anim);
 			}
-			if(r === 0){
+			if (r === 0){
 				// refresh data
 				this.update_load();
-			}else{
+			} else {
 				// wait further
 				setTimeout(this.update_wait.bind(this), this.t);
 			}
@@ -132,24 +132,24 @@ Module.register('netatmo', {
 				?this.config.moduleOrder
 				:null;
 
-			if(aOrderedModuleList){
-				for(var moduleName of aOrderedModuleList){
-					if(device.module_name === moduleName){
+			if (aOrderedModuleList){
+				for (var moduleName of aOrderedModuleList){
+					if (device.module_name === moduleName){
 						sResult += this.render_module(device);
-					}else{
-						for(var module of device.modules){
-							if(module.module_name === moduleName){
+					} else {
+						for (var module of device.modules){
+							if (module.module_name === moduleName){
 								sResult += this.render_module(module);
 								break;
 							}
 						}
 					}
 				}
-			}else{
+			} else {
 				//render station data (main station)
 				sResult += this.render_module(device);
 				//render module data (connected modules)
-				for(var cnt = 0; cnt < device.modules.length; cnt++){
+				for (var cnt = 0; cnt < device.modules.length; cnt++){
 					sResult += this.render_module(device.modules[cnt]);
 				}
 			}
@@ -166,8 +166,8 @@ Module.register('netatmo', {
 			var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0
 				?this.config.dataOrder
 				:oModule.data_type;
-			for(var dataType of aDataTypeList){
-				if($.inArray(dataType, oModule.data_type) > -1){
+			for (var dataType of aDataTypeList){
+				if ($.inArray(dataType, oModule.data_type) > -1){
 					sResult += this.render_data(
 						this.formatter.clazz(dataType),
 						dataType,
@@ -194,7 +194,7 @@ Module.register('netatmo', {
 	},
 	formatter: {
 		value: function(dataType, value){
-			switch(dataType){
+			switch (dataType){
 				case 'CO2':
 					return value.toFixed(0) + ' ppm';
 				case 'Noise':
@@ -215,7 +215,7 @@ Module.register('netatmo', {
 			return this.config.description[this.config.language][dataType];
 		},
 		clazz: function(dataType){
-			switch(dataType){
+			switch (dataType){
 				case 'CO2':
 					return 'wi-na';
 				case 'Noise':
