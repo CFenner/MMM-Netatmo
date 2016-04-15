@@ -21,23 +21,23 @@ Module.register('netatmo', {
       data_payload: 'access_token={0}'
     },
     description: {
-      'en': {
-        'CO2': 'CO<sub>2</sub>',
-        'Noise': 'Noise',
-        'Humidity': 'Humidity',
-        'Pressure': 'Pressure',
-        'Temperature': 'Temperature',
-        'Rain': 'Rain',
-        'Wind': 'Wind'
+      en: {
+        CO2: 'CO<sub>2</sub>',
+        Noise: 'Noise',
+        Humidity: 'Humidity',
+        Pressure: 'Pressure',
+        Temperature: 'Temperature',
+        Rain: 'Rain',
+        Wind: 'Wind'
       },
-      'de': {
-        'CO2': 'CO<sub>2</sub>',
-        'Noise': 'Lautstärke',
-        'Humidity': 'Feuchtigkeit',
-        'Pressure': 'Luftdruck',
-        'Temperature': 'Temperatur',
-        'Rain': 'Niederschlag',
-        'Wind': 'Wind'
+      de: {
+        CO2: 'CO<sub>2</sub>',
+        Noise: 'Lautstärke',
+        Humidity: 'Feuchtigkeit',
+        Pressure: 'Luftdruck',
+        Temperature: 'Temperatur',
+        Rain: 'Niederschlag',
+        Wind: 'Wind'
       }
     }
   },
