@@ -1,0 +1,27 @@
+{
+  "name": "netatmo",
+  "version": "2.0.0",
+  "description": "",
+  "main": "netatmo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CFenner/MagicMirror-Netatmo-Module.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CFenner/MagicMirror-Netatmo-Module/issues"
+  },
+  "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
+  "devDependencies": {
+    "eslint": "^2.7.0",
+    "eslint-config-google": "^0.5.0"
+  },
+  "eslintConfig": {
+    "extends": "google"
+  }
+}
