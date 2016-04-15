@@ -51,7 +51,7 @@ Module.register('netatmo', {
     this.update_load();
   },
   update_load: function() {
-    //Log.info(this.name + " refresh triggered");
+    // Log.info(this.name + " refresh triggered");
     var that = this;
     return Q.fcall(
       this.load.token.bind(that),
@@ -105,7 +105,7 @@ Module.register('netatmo', {
       }));
     },
     data: function(data) {
-      //Log.info(this.name + " token loaded "+data.access_token);
+      // Log.info(this.name + " token loaded "+data.access_token);
       this.config.refreshToken = data.refresh_token;
       // call for station data
       return Q($.ajax({
@@ -118,7 +118,7 @@ Module.register('netatmo', {
     var sContent = '';
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
-    //Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
+    // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
     sContent += this.render_modules(device);
     // place content
@@ -146,9 +146,9 @@ Module.register('netatmo', {
         }
       }
     } else {
-      //render station data (main station)
+      // render station data (main station)
       sResult += this.render_module(device);
-      //render module data (connected modules)
+      // render module data (connected modules)
       for (var cnt = 0; cnt < device.modules.length; cnt++) {
         sResult += this.render_module(device.modules[cnt]);
       }
@@ -179,12 +179,12 @@ Module.register('netatmo', {
   render_data: function(clazz, dataType, value) {
     return this.html.data.format(
       dataType,
-      //this.formatter.label.bind(this)(dataType),
+      // this.formatter.label.bind(this)(dataType),
       this.formatter.value(dataType, value));
   },
   render_error: function(reason) {
     console.log("error " + reason);
-    //TODO: enable display of error messages
+    //  enable display of error messages
     /*
     $(netatmo.location).updateWithText(
       "could not load data: "+reason.responseJSON.error,
