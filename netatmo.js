@@ -13,7 +13,7 @@ Module.register('netatmo', {
 		updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
 		animationSpeed: 1000,
 		hideLoadTimer: false,
-		api:{
+		api: {
 			base: 'https://api.netatmo.com/',
 			auth_endpoint: 'oauth2/token',
 			auth_payload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
@@ -21,7 +21,7 @@ Module.register('netatmo', {
 			data_payload: 'access_token={0}'
 		},
 		description: {
-			'en':{
+			'en': {
 				'CO2': 'CO<sub>2</sub>',
 				'Noise': 'Noise',
 				'Humidity': 'Humidity',
@@ -30,7 +30,7 @@ Module.register('netatmo', {
 				'Rain': 'Rain',
 				'Wind': 'Wind'
 			},
-			'de':{
+			'de': {
 				'CO2': 'CO<sub>2</sub>',
 				'Noise': 'Lautstärke',
 				'Humidity': 'Feuchtigkeit',
@@ -233,7 +233,7 @@ Module.register('netatmo', {
 			}
 		}
 	},
-	html:{
+	html: {
 		moduleWrapper: '<div class="modules">{0}</div>',
 		module: '<div class="module"><div class="data">{0}</div><div class="name small">{1}</div></div>',
 		dataWrapper: '<table class>{0}</table>',
