@@ -4,21 +4,21 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
- /* global $, Q, moment, Module */
+ /* eslint-disable max-len */
+ /* global $, Q, moment, Module, Log */
 Module.register('netatmo', {
   // default config
   defaults: {
-    access_token: null,
     refreshToken: null,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
     hideLoadTimer: false,
     api: {
       base: 'https://api.netatmo.com/',
-      auth_endpoint: 'oauth2/token',
-      auth_payload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
-      data_endpoint: 'api/getstationsdata',
-      data_payload: 'access_token={0}'
+      authEndpoint: 'oauth2/token',
+      authPayload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
+      dataEndpoint: 'api/getstationsdata',
+      dataPayload: 'access_token={0}'
     },
     description: {
       en: {
@@ -48,24 +48,24 @@ Module.register('netatmo', {
     // set interval for reload timer
     this.t = this.config.updateInterval * 60 * 1000 / 360;
     // run timer
-    this.update_load();
+    this.updateLoad();
   },
-  update_load: function() {
+  updateLoad: function() {
     // Log.info(this.name + " refresh triggered");
     var that = this;
     return Q.fcall(
       this.load.token.bind(that),
-      this.render_error.bind(that)
+      this.renderError.bind(that)
     ).then(
       this.load.data.bind(that),
-      this.render_error.bind(that)
+      this.renderError.bind(that)
     ).then(
-      this.render_all.bind(that)
+      this.renderAll.bind(that)
     ).done(
-      this.update_wait.bind(that)
+      this.updateWait.bind(that)
     );
   },
-  update_wait: function() {
+  updateWait: function() {
     this.α++;
     this.α %= 360;
     var r = (this.α * Math.PI / 180);
@@ -87,18 +87,18 @@ Module.register('netatmo', {
     }
     if (r === 0) {
       // refresh data
-      this.update_load();
+      this.updateLoad();
     } else {
       // wait further
-      setTimeout(this.update_wait.bind(this), this.t);
+      setTimeout(this.updateWait.bind(this), this.t);
     }
   },
   load: {
     token: function() {
       return Q($.ajax({
         type: 'POST',
-        url: this.config.api.base + this.config.api.auth_endpoint,
-        data: this.config.api.auth_payload.format(
+        url: this.config.api.base + this.config.api.authEndpoint,
+        data: this.config.api.authPayload.format(
             this.config.refreshToken,
             this.config.clientId,
             this.config.clientSecret)
@@ -109,24 +109,24 @@ Module.register('netatmo', {
       this.config.refreshToken = data.refresh_token;
       // call for station data
       return Q($.ajax({
-        url: this.config.api.base + this.config.api.data_endpoint,
-        data: this.config.api.data_payload.format(data.access_token)
+        url: this.config.api.base + this.config.api.dataEndpoint,
+        data: this.config.api.dataPayload.format(data.access_token)
       }));
     }
   },
-  render_all: function(data) {
+  renderAll: function(data) {
     var sContent = '';
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
-    sContent += this.render_modules(device);
+    sContent += this.renderModules(device);
     // place content
     this.dom = sContent;
     this.updateDom(this.config.animationSpeed);
     return Q({});
   },
-  render_modules: function(device) {
+  renderModules: function(device) {
     var sResult = '';
     var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0 ?
       this.config.moduleOrder :
@@ -135,11 +135,11 @@ Module.register('netatmo', {
     if (aOrderedModuleList) {
       for (var moduleName of aOrderedModuleList) {
         if (device.module_name === moduleName) {
-          sResult += this.render_module(device);
+          sResult += this.renderModule(device);
         } else {
           for (var module of device.modules) {
             if (module.module_name === moduleName) {
-              sResult += this.render_module(module);
+              sResult += this.renderModule(module);
               break;
             }
           }
@@ -147,28 +147,28 @@ Module.register('netatmo', {
       }
     } else {
       // render station data (main station)
-      sResult += this.render_module(device);
+      sResult += this.renderModule(device);
       // render module data (connected modules)
       for (var cnt = 0; cnt < device.modules.length; cnt++) {
-        sResult += this.render_module(device.modules[cnt]);
+        sResult += this.renderModule(device.modules[cnt]);
       }
     }
     return this.html.moduleWrapper.format(sResult);
   },
-  render_module: function(oModule) {
+  renderModule: function(oModule) {
     return this.html.module.format(
-      this.render_sensorData(oModule),
+      this.renderSensorData(oModule),
       oModule.module_name
     );
   },
-  render_sensorData: function(oModule) {
+  renderSensorData: function(oModule) {
     var sResult = '';
     var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0 ?
       this.config.dataOrder :
       oModule.data_type;
     for (var dataType of aDataTypeList) {
       if ($.inArray(dataType, oModule.data_type) > -1) {
-        sResult += this.render_data(
+        sResult += this.renderData(
           this.formatter.clazz(dataType),
           dataType,
           oModule.dashboard_data[dataType]);
@@ -176,13 +176,13 @@ Module.register('netatmo', {
     }
     return this.html.dataWrapper.format(sResult);
   },
-  render_data: function(clazz, dataType, value) {
+  renderData: function(clazz, dataType, value) {
     return this.html.data.format(
       dataType,
       // this.formatter.label.bind(this)(dataType),
       this.formatter.value(dataType, value));
   },
-  render_error: function(reason) {
+  renderError: function(reason) {
     console.log("error " + reason);
     //  enable display of error messages
     /*
