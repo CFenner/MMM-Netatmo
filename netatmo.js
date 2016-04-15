@@ -53,7 +53,7 @@ Module.register('netatmo', {
 			//Log.info(this.name + " refresh triggered");
 			var that = this;
 			return Q.fcall(
-				this.load.token.bind(that), 
+				this.load.token.bind(that),
 				this.render_error.bind(that)
 			).then(
 				this.load.data.bind(that),
@@ -71,9 +71,9 @@ Module.register('netatmo', {
 			, x = Math.sin( r ) * 125
 			, y = Math.cos( r ) * - 125
 			, mid = ( this.α > 180 ) ? 1 : 0
-			, anim = 'M 0 0 v -125 A 125 125 1 ' 
-			   + mid + ' 1 ' 
-			   +  x  + ' ' 
+			, anim = 'M 0 0 v -125 A 125 125 1 '
+			   + mid + ' 1 '
+			   +  x  + ' '
 			   +  y  + ' z';
 
 			var loader = $('.netatmo .loadTimer .loader');
@@ -130,7 +130,7 @@ Module.register('netatmo', {
 			var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0
 				?this.config.moduleOrder
 				:null;
-			
+
 			if(aOrderedModuleList){
 				for(var moduleName of aOrderedModuleList){
 					if(device.module_name === moduleName){
@@ -168,8 +168,8 @@ Module.register('netatmo', {
 			for(var dataType of aDataTypeList){
 				if($.inArray(dataType, oModule.data_type) > -1){
 					sResult += this.render_data(
-						this.formatter.clazz(dataType), 
-						dataType, 
+						this.formatter.clazz(dataType),
+						dataType,
 						oModule.dashboard_data[dataType]);
 				}
 			}
@@ -178,13 +178,13 @@ Module.register('netatmo', {
 	render_data: function(clazz, dataType, value){
 			return this.html.data.format(
 				dataType,
-				//this.formatter.label.bind(this)(dataType), 
+				//this.formatter.label.bind(this)(dataType),
 				this.formatter.value(dataType, value));
 		},
 	render_error: function(reason){
 			console.log("error " +reason);
 			$(netatmo.location).updateWithText(
-				"could not load data: "+reason.responseJSON.error, 
+				"could not load data: "+reason.responseJSON.error,
 				this.config.fadeInterval
 			);
 	},
@@ -235,7 +235,7 @@ Module.register('netatmo', {
 		dataWrapper: '<table class>{0}</table>',
 		data: '<tr><td class="small">{0}</td><td class="value small">{1}</td></tr>',
 		loadTimer: '<svg class="loadTimer" viewbox="0 0 250 250"><path class="border" transform="translate(125, 125)"/><path class="loader" transform="translate(125, 125) scale(.84)"/></svg>',
-		loader: 
+		loader:
 			'<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">'+
 				'<circle class="outer"></circle>'+
 				'<circle class="inner">'+
