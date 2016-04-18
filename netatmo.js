@@ -211,7 +211,13 @@ Module.register('netatmo', {
       }
     },
     label: function(dataType) {
-      return this.config.description[config.language][dataType];
+      if(config && config.language
+        && this.config.description[config.language]
+        && this.config.description[config.language][dataType]){
+        return this.config.description[config.language][dataType];
+      } else {
+        return dataType;
+      }
     },
     clazz: function(dataType) {
       switch (dataType) {
