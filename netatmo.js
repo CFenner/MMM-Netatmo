@@ -178,8 +178,7 @@ Module.register('netatmo', {
   },
   renderData: function(clazz, dataType, value) {
     return this.html.data.format(
-      dataType,
-      // this.formatter.label.bind(this)(dataType),
+      this.formatter.label.bind(this)(dataType),
       this.formatter.value(dataType, value));
   },
   renderError: function(reason) {
@@ -212,7 +211,7 @@ Module.register('netatmo', {
       }
     },
     label: function(dataType) {
-      return this.config.description[this.config.language][dataType];
+      return this.config.description[config.language][dataType];
     },
     clazz: function(dataType) {
       switch (dataType) {
