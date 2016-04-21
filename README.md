@@ -1,8 +1,9 @@
 # MagicMirror-Netatmo-Module
 
 <p>
-<a href="https://dev.netatmo.com/doc"><img src="https://img.shields.io/badge/Netatmo-API-orange.svg" alt="API"></a>
-<a href="http://choosealicense.com/licenses/mit"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+	<a href="https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module"><img src="https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module/badges/gpa.svg" /></a>
+	<a href="https://dev.netatmo.com/doc"><img src="https://img.shields.io/badge/Netatmo-API-orange.svg" alt="API"></a>
+	<a href="http://choosealicense.com/licenses/mit"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
 </p>
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
