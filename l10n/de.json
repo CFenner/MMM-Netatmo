@@ -1,0 +1,9 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Lautstärke",
+  "HUMIDITY": "Feuchtigkeit",
+  "PRESSURE": "Luftdruck",
+  "TEMPERATURE": "Temperatur",
+  "RAIN": "Niederschlag",
+  "WIND": "Wind"
+}

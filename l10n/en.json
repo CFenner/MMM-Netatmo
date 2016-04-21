@@ -1,0 +1,9 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Noise",
+  "HUMIDITY": "Humidity",
+  "PRESSURE": "Pressure",
+  "TEMPERATURE": "Temperature",
+  "RAIN": "Rain",
+  "WIND": "Wind"
+}

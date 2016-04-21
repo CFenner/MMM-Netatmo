@@ -19,26 +19,6 @@ Module.register('netatmo', {
       authPayload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
       dataEndpoint: 'api/getstationsdata',
       dataPayload: 'access_token={0}'
-    },
-    description: {
-      en: {
-        CO2: 'CO<sub>2</sub>',
-        Noise: 'Noise',
-        Humidity: 'Humidity',
-        Pressure: 'Pressure',
-        Temperature: 'Temperature',
-        Rain: 'Rain',
-        Wind: 'Wind'
-      },
-      de: {
-        CO2: 'CO<sub>2</sub>',
-        Noise: 'Lautstärke',
-        Humidity: 'Feuchtigkeit',
-        Pressure: 'Luftdruck',
-        Temperature: 'Temperatur',
-        Rain: 'Niederschlag',
-        Wind: 'Wind'
-      }
     }
   },
   // init method
@@ -95,6 +75,7 @@ Module.register('netatmo', {
   },
   load: {
     token: function() {
+      /* eslint-disable new-cap */
       return Q($.ajax({
         type: 'POST',
         url: this.config.api.base + this.config.api.authEndpoint,
@@ -103,8 +84,10 @@ Module.register('netatmo', {
             this.config.clientId,
             this.config.clientSecret)
       }));
+      /* eslint-enable new-cap */
     },
     data: function(data) {
+      /* eslint-disable new-cap */
       // Log.info(this.name + " token loaded "+data.access_token);
       this.config.refreshToken = data.refresh_token;
       // call for station data
@@ -112,9 +95,11 @@ Module.register('netatmo', {
         url: this.config.api.base + this.config.api.dataEndpoint,
         data: this.config.api.dataPayload.format(data.access_token)
       }));
+      /* eslint-enable new-cap */
     }
   },
   renderAll: function(data) {
+    /* eslint-disable new-cap */
     var sContent = '';
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
@@ -125,6 +110,7 @@ Module.register('netatmo', {
     this.dom = sContent;
     this.updateDom(this.config.animationSpeed);
     return Q({});
+    /* eslint-enable new-cap */
   },
   renderModules: function(device) {
     var sResult = '';
@@ -178,7 +164,7 @@ Module.register('netatmo', {
   },
   renderData: function(clazz, dataType, value) {
     return this.html.data.format(
-      this.formatter.label.bind(this)(dataType),
+      this.translate(dataType.toUpperCase()),
       this.formatter.value(dataType, value));
   },
   renderError: function(reason) {
@@ -208,15 +194,8 @@ Module.register('netatmo', {
           return value;
         case 'Wind':
           return value;
-      }
-    },
-    label: function(dataType) {
-      if(config && config.language
-        && this.config.description[config.language]
-        && this.config.description[config.language][dataType]){
-        return this.config.description[config.language][dataType];
-      } else {
-        return dataType;
+        default:
+          return value;
       }
     },
     clazz: function(dataType) {
@@ -235,6 +214,8 @@ Module.register('netatmo', {
           return 'wi-raindrops';
         case 'Wind':
           return 'wi-na';
+        default:
+          return '';
       }
     }
   },
@@ -266,6 +247,12 @@ Module.register('netatmo', {
     return [
       'netatmo.css'
     ];
+  },
+  getTranslations: function() {
+    return {
+      en: 'l10n/en.json',
+      de: 'l10n/de.json'
+    };
   },
   getDom: function() {
     return $(
