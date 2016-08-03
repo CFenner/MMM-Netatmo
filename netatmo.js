@@ -251,7 +251,7 @@ Module.register('netatmo', {
   getTranslations: function() {
     return {
       en: 'l10n/en.json',
-      en: 'l10n/de.json',
+      de: 'l10n/de.json',
       fr: 'l10n/fr.json'
     };
   },
