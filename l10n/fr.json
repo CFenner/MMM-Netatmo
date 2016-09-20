@@ -1,0 +1,9 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Sonomètre",
+  "HUMIDITY": "Humidité",
+  "PRESSURE": "Pression",
+  "TEMPERATURE": "Température",
+  "RAIN": "Pluie",
+  "WIND": "Vent"
+}
