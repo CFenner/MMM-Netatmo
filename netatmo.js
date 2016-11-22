@@ -148,10 +148,10 @@ Module.register('netatmo', {
           $('<td/>').append(this.data(module))
         )))
       );
-      return result;
+      return result[0].outerHTML;
     },
     left: function(module){
-      var result = '';
+      var result;
       switch(module.type){
         case this.moduleType.MAIN:
           result = $('<div/>').addClass('large light bright').append(module.dashboard_data['Temperature'] + '°');
@@ -161,17 +161,17 @@ Module.register('netatmo', {
       return result;
     },
     center: function(module){
-      var result = '';
+      var result;
       return result;
     },
     data: function(module){
-      var result = '';
+      var result;
       switch(module.type){
         case this.moduleType.MAIN:
 
           break;
         case this.moduleType.INDOOR:
-          result += $('<div/>').append('Battery: ' + module.battery_percent + '%');
+          result = $('<div/>').append('Battery: ' + module.battery_percent + '%');
           break;
         /*case this.moduleType.OUTDOOR:
           break;
