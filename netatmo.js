@@ -138,7 +138,7 @@ Module.register('netatmo', {
     module: function(module){
       var type = module.type;
       var result = $('<div/>').append(
-        $('<div/>').addClass('small').append(module.module_name)
+        $('<div/>').addClass('small').css({'text-align', 'left'}).append(module.module_name)
       ).append(
         $('<div/>').append($('<table/>').append($('<tr/>').append(
           $('<td/>').append(this.left(module))
@@ -154,6 +154,8 @@ Module.register('netatmo', {
       var result;
       switch(module.type){
         case this.moduleType.MAIN:
+        case this.moduleType.INDOOR:
+        case this.moduleType.OUTDOOR:
           result = $('<div/>').addClass('large light bright').append(module.dashboard_data['Temperature'] + '°');
           break;
         default:
@@ -189,6 +191,8 @@ Module.register('netatmo', {
       switch(module.type){
         case this.moduleType.MAIN:
           result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Noise: ' + module.dashboard_data['Noise'] + 'db')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Pressure: ' + module.dashboard_data['Pressure'] + 'mbar')[0].outerHTML;
           break;
         case this.moduleType.INDOOR:
           result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
@@ -196,6 +200,7 @@ Module.register('netatmo', {
           break;
         case this.moduleType.OUTDOOR:
           result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Battery: ' + module.battery_percent + '%')[0].outerHTML;
           break;
         default:
           break;
