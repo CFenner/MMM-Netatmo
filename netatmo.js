@@ -128,10 +128,10 @@ Module.register('netatmo', {
     render: function(device){
       var result = '';
       // render station data (main station)
-      result += this.design2.module(device);
+      result += this.module(device);
       // render module data (connected modules)
       for (var cnt = 0; cnt < device.modules.length; cnt++) {
-        result += this.design2.module(device.modules[cnt]);
+        result += this.module(device.modules[cnt]);
       }
       return result;
     },
@@ -141,11 +141,11 @@ Module.register('netatmo', {
         $('div').append(module.module_name)
       ).append(
         $('div').append($('table').append($('tr').append(
-          $('td').append(this.design2.left(module))
+          $('td').append(this.left(module))
         ).append(
-          $('td').append(this.design2.center(module))
+          $('td').append(this.center(module))
         ).append(
-          $('td').append(this.design2.data(module))
+          $('td').append(this.data(module))
         )))
       );
       return result;
