@@ -165,7 +165,14 @@ Module.register('netatmo', {
       switch(module.type){
         case this.moduleType.MAIN:
         case this.moduleType.INDOOR:
-          result += $('<div/>').addStyle('width: .2em; height: .2em; background-color: limegreen; border-radius: 5em; box-shadow: 0 0 1em 1.8em limegreen; margin: 2.4em;')[0].outerHTML;
+          result += $('<div/>').css({
+            width: '.2em'
+            height: '.2em'
+            background-color: 'limegreen'
+            border-radius: '5em'
+            box-shadow: '0 0 1em 1.8em limegreen'
+            margin: '2.4em;'
+          })[0].outerHTML;
           result += $('<div/>').addClass('small').append(module.dashboard_data['CO2'] + ' ppm')[0].outerHTML;
           break;
         /*case this.moduleType.OUTDOOR:
