@@ -7,11 +7,19 @@
  /* eslint-disable max-len */
  /* global $, Q, moment, Module, Log */
 Module.register('netatmo', {
-  // default config
+  // default config,
+  moduleType: {
+    MAIN: "NAMain",
+    INDOOR: "NAModule4",
+    OUTDOOR: "NAModule1",
+    RAIN: "NAModule3",
+    WIND: "NAModule2"
+  },
   defaults: {
     refreshToken: null,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
+    newDesign: true,
     hideLoadTimer: false,
     api: {
       base: 'https://api.netatmo.com/',
@@ -105,12 +113,75 @@ Module.register('netatmo', {
     this.lastUpdate = device.dashboard_data.time_utc;
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
-    sContent += this.renderModules(device);
+    if(this.config.newDesign){
+      sContent += this.design2.render(device);
+    }else{
+      sContent += this.renderModules(device);
+    }
     // place content
     this.dom = sContent;
     this.updateDom(this.config.animationSpeed);
     return Q({});
     /* eslint-enable new-cap */
+  },
+  design2: {
+    render: function(device){
+      var result = '';
+      // render station data (main station)
+      result += this.design2.module(device);
+      // render module data (connected modules)
+      for (var cnt = 0; cnt < device.modules.length; cnt++) {
+        result += this.design2.module(device.modules[cnt]);
+      }
+      return result;
+    },
+    module: function(module){
+      var type = module.type;
+      var result = $('div').append(
+        $('div').append(module.module_name)
+      ).append(
+        $('div').append($('table').append($('tr').append(
+          $('td').append(this.design2.left(module))
+        ).append(
+          $('td').append(this.design2.center(module))
+        ).append(
+          $('td').append(this.design2.data(module))
+        )))
+      );
+      return result;
+    },
+    left: function(module){
+      var result = '';
+      switch(module.type){
+        case this.moduleType.MAIN:
+          result = $('div').addClass('large light bright').append(module.dashboard_data['Temperature'] + '°');
+          break;
+        default:
+      }
+      return result;
+    },
+    center: function(module){
+      var result = '';
+      return result;
+    },
+    data: function(module){
+      var result = '';
+      switch(module.type){
+        case this.moduleType.MAIN:
+
+          break;
+        case this.moduleType.INDOOR:
+          result += $('div').append('Battery: ' + module.battery_percent + '%');
+          break;
+        /*case this.moduleType.OUTDOOR:
+          break;
+        case this.moduleType.MAIN:
+          break;*/
+        default:
+          break;
+      }
+      return result;
+    }
   },
   renderModules: function(device) {
     var sResult = '';
