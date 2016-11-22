@@ -171,7 +171,7 @@ Module.register('netatmo', {
             'background-color': 'limegreen',
             'border-radius': '5em',
             'box-shadow': '0 0 1em 1.8em limegreen',
-            'margin': '2.4em;'
+            'margin': '2.4em'
           })[0].outerHTML;
           result += $('<div/>').addClass('small').append(module.dashboard_data['CO2'] + ' ppm')[0].outerHTML;
           break;
