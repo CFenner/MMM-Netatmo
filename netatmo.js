@@ -175,7 +175,7 @@ Module.register('netatmo', {
             'box-shadow': '0 0 1em 1.8em limegreen',
             'margin': '2.4em'
           })[0].outerHTML;
-          result += $('<div/>').addClass('small').append(module.dashboard_data['CO2'] + ' ppm')[0].outerHTML;
+          result += $('<div/>').addClass('small').css({'text-align': 'center'}).append(module.dashboard_data['CO2'] + ' ppm')[0].outerHTML;
           break;
         /*case this.moduleType.OUTDOOR:
           break;
@@ -191,16 +191,29 @@ Module.register('netatmo', {
       switch(module.type){
         case this.moduleType.MAIN:
           result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Temp Trend: ' + module.dashboard_data['temp_trend'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('max Temp: ' + module.dashboard_data['max_temp'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('min Temp: ' + module.dashboard_data['min_temp'])[0].outerHTML;
           result += $('<div/>').addClass('small').append('Noise: ' + module.dashboard_data['Noise'] + 'db')[0].outerHTML;
           result += $('<div/>').addClass('small').append('Pressure: ' + module.dashboard_data['Pressure'] + 'mbar')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Pressure Trend: ' + module.dashboard_data['pressure_trend'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('WiFi: ' + module.wifi_status)[0].outerHTML;
           break;
         case this.moduleType.INDOOR:
           result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Temp Trend: ' + module.dashboard_data['temp_trend'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('max Temp: ' + module.dashboard_data['max_temp'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('min Temp: ' + module.dashboard_data['min_temp'])[0].outerHTML;
           result += $('<div/>').addClass('small').append('Battery: ' + module.battery_percent + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
           break;
         case this.moduleType.OUTDOOR:
           result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Temp Trend: ' + module.dashboard_data['temp_trend'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('max Temp: ' + module.dashboard_data['max_temp'])[0].outerHTML;
+          result += $('<div/>').addClass('small').append('min Temp: ' + module.dashboard_data['min_temp'])[0].outerHTML;
           result += $('<div/>').addClass('small').append('Battery: ' + module.battery_percent + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
           break;
         default:
           break;
