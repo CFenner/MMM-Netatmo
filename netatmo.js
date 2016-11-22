@@ -8,13 +8,6 @@
  /* global $, Q, moment, Module, Log */
 Module.register('netatmo', {
   // default config,
-  moduleType: {
-    MAIN: "NAMain",
-    INDOOR: "NAModule4",
-    OUTDOOR: "NAModule1",
-    RAIN: "NAModule3",
-    WIND: "NAModule2"
-  },
   defaults: {
     refreshToken: null,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
@@ -125,6 +118,13 @@ Module.register('netatmo', {
     /* eslint-enable new-cap */
   },
   design2: {
+    moduleType: {
+      MAIN: "NAMain",
+      INDOOR: "NAModule4",
+      OUTDOOR: "NAModule1",
+      RAIN: "NAModule3",
+      WIND: "NAModule2"
+    },
     render: function(device){
       var result = '';
       // render station data (main station)
@@ -137,15 +137,15 @@ Module.register('netatmo', {
     },
     module: function(module){
       var type = module.type;
-      var result = $('div').append(
-        $('div').append(module.module_name)
+      var result = $('<div/>').append(
+        $('<div/>').append(module.module_name)
       ).append(
-        $('div').append($('table').append($('tr').append(
-          $('td').append(this.left(module))
+        $('<div/>').append($('<table/>').append($('<tr/>').append(
+          $('<td/>').append(this.left(module))
         ).append(
-          $('td').append(this.center(module))
+          $('<td/>').append(this.center(module))
         ).append(
-          $('td').append(this.data(module))
+          $('<td/>').append(this.data(module))
         )))
       );
       return result;
@@ -154,7 +154,7 @@ Module.register('netatmo', {
       var result = '';
       switch(module.type){
         case this.moduleType.MAIN:
-          result = $('div').addClass('large light bright').append(module.dashboard_data['Temperature'] + '°');
+          result = $('<div/>').addClass('large light bright').append(module.dashboard_data['Temperature'] + '°');
           break;
         default:
       }
@@ -171,7 +171,7 @@ Module.register('netatmo', {
 
           break;
         case this.moduleType.INDOOR:
-          result += $('div').append('Battery: ' + module.battery_percent + '%');
+          result += $('<div/>').append('Battery: ' + module.battery_percent + '%');
           break;
         /*case this.moduleType.OUTDOOR:
           break;
