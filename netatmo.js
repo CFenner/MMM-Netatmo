@@ -138,7 +138,7 @@ Module.register('netatmo', {
     module: function(module){
       var type = module.type;
       var result = $('<div/>').append(
-        $('<div/>').append(module.module_name)
+        $('<div/>').addClass('small').append(module.module_name)
       ).append(
         $('<div/>').append($('<table/>').append($('<tr/>').append(
           $('<td/>').append(this.left(module))
@@ -161,22 +161,35 @@ Module.register('netatmo', {
       return result;
     },
     center: function(module){
-      var result;
-      return result;
-    },
-    data: function(module){
-      var result;
+      var result = '';
       switch(module.type){
         case this.moduleType.MAIN:
-
-          break;
         case this.moduleType.INDOOR:
-          result = $('<div/>').append('Battery: ' + module.battery_percent + '%');
+          result += $('<div/>').addStyle('width: .2em; height: .2em; background-color: limegreen; border-radius: 5em; box-shadow: 0 0 1em 1.8em limegreen; margin: 2.4em;')[0].outerHTML;
+          result += $('<div/>').addClass('small').append(module.dashboard_data['CO2'] + ' ppm')[0].outerHTML;
           break;
         /*case this.moduleType.OUTDOOR:
           break;
         case this.moduleType.MAIN:
           break;*/
+        default:
+          break;
+      }
+      return result;
+    },
+    data: function(module){
+      var result = '';
+      switch(module.type){
+        case this.moduleType.MAIN:
+          result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          break;
+        case this.moduleType.INDOOR:
+          result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          result += $('<div/>').addClass('small').append('Battery: ' + module.battery_percent + '%')[0].outerHTML;
+          break;
+        case this.moduleType.OUTDOOR:
+          result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
+          break;
         default:
           break;
       }
