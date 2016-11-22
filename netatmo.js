@@ -138,7 +138,7 @@ Module.register('netatmo', {
     module: function(module){
       var type = module.type;
       var result = $('<div/>').append(
-        $('<div/>').addClass('small').css({'text-align', 'left'}).append(module.module_name)
+        $('<div/>').addClass('small').css({'text-align': 'left'}).append(module.module_name)
       ).append(
         $('<div/>').append($('<table/>').append($('<tr/>').append(
           $('<td/>').append(this.left(module))
