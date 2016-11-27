@@ -167,15 +167,17 @@ Module.register('netatmo', {
       switch(module.type){
         case this.moduleType.MAIN:
         case this.moduleType.INDOOR:
-          result += $('<div/>').css({
-            'width': '.2em',
-            'height': '.2em',
-            'background-color': 'limegreen',
+          var value = module.dashboard_data['CO2'];
+          var color = value > 1600?'bad':value > 800?'average':'good';
+          result += $('<div/>').addClass(color).css({
+            'width': '.01em',
+            'height': '.01em',
+            'color': 'limegreen',
             'border-radius': '5em',
-            'box-shadow': '0 0 1em 1.8em limegreen',
+            'box-shadow': '0 0 1em 1.8em',
             'margin': '2.4em'
           })[0].outerHTML;
-          result += $('<div/>').addClass('small').css({'text-align': 'center'}).append(module.dashboard_data['CO2'] + ' ppm')[0].outerHTML;
+          result += $('<div/>').addClass('small').css({'text-align': 'center'}).append(value + ' ppm')[0].outerHTML;
           break;
         /*case this.moduleType.OUTDOOR:
           break;
