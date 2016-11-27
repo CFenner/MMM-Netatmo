@@ -170,9 +170,10 @@ Module.register('netatmo', {
           var value = module.dashboard_data['CO2'];
           var color = value > 1600?'red':value > 800?'orange':'limegreen';
           result += $('<div/>').css({
-            'width': '.01em',
-            'height': '.01em',
+            'width': '.1em',
+            'height': '.1em',
             'color': color,
+            'background-color': color,
             'border-radius': '5em',
             'box-shadow': '0 0 1em 1.8em',
             'margin': '2.4em'
