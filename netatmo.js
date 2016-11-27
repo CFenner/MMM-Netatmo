@@ -168,11 +168,11 @@ Module.register('netatmo', {
         case this.moduleType.MAIN:
         case this.moduleType.INDOOR:
           var value = module.dashboard_data['CO2'];
-          var color = value > 1600?'bad':value > 800?'average':'good';
-          result += $('<div/>').addClass(color).css({
+          var color = value > 1600?'red':value > 800?'orange':'limegreen';
+          result += $('<div/>').css({
             'width': '.01em',
             'height': '.01em',
-            'color': 'limegreen',
+            'color': color,
             'border-radius': '5em',
             'box-shadow': '0 0 1em 1.8em',
             'margin': '2.4em'
