@@ -107,7 +107,7 @@ Module.register('netatmo', {
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
     if(this.config.newDesign){
-      sContent += this.design()['bubbles'].render(device);
+      sContent += this.getDesign('bubbles').render(device);
     }else{
       sContent += this.renderModules(device);
     }
@@ -242,15 +242,16 @@ Module.register('netatmo', {
       '</svg>',
     update: '<div class="updated xsmall">{0}</div>'
   },
-  design: function(){
+  getDesign: function(design){
     var formatter = this.formatter;
+    var translator = this.translate;
     return {
       default: function(formatter){
         return {
 
         };
       }(formatter),
-      bubbles: function(formatter){
+      bubbles: function(formatter, translator){
         return {
           moduleType: {
             MAIN: "NAMain",
@@ -290,7 +291,11 @@ Module.register('netatmo', {
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
               case this.moduleType.OUTDOOR:
-                result = $('<div/>').addClass('large light bright').append(module.dashboard_data['Temperature'] + '°');
+                var type = 'Temperature';
+                var value = module.dashboard_data[type];
+                result = $('<div/>')
+                  .addClass('large light bright')
+                  .append(formatter.value(type, value));
                 break;
               default:
             }
@@ -345,6 +350,7 @@ Module.register('netatmo', {
                 result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
                 break;
               case this.moduleType.OUTDOOR:
+                result += this.addData('Humidity', module.dashboard_data['Humidity']);
                 result += $('<div/>').addClass('small').append('Humidity: ' + module.dashboard_data['Humidity'] + '%')[0].outerHTML;
                 result += $('<div/>').addClass('small').append('Temp Trend: ' + module.dashboard_data['temp_trend'])[0].outerHTML;
                 result += $('<div/>').addClass('small').append('max Temp: ' + module.dashboard_data['max_temp'])[0].outerHTML;
@@ -356,10 +362,19 @@ Module.register('netatmo', {
                 break;
             }
             return result;
+          },
+          addData: function(type, value){
+            return $('<div/>')
+              .addClass('small')
+              .append(
+                translator(type.toUpperCase())
+                + ': '
+                + formatter.value(type, value)
+              )[0].outerHTML;
           }
         };
-      }(formatter)
-    }
+      }(formatter, translator)
+    }[design]
   },
   getScripts: function() {
     return [
