@@ -357,7 +357,7 @@ Module.register('netatmo', {
         }
       };
     }(this.formatter)
-  }
+  },
   getScripts: function() {
     return [
       'String.format.js',
