@@ -107,7 +107,7 @@ Module.register('netatmo', {
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
     if(this.config.newDesign){
-      sContent += this.design.['bubbles'].render(device);
+      sContent += this.design['bubbles'].render(device);
     }else{
       sContent += this.renderModules(device);
     }
