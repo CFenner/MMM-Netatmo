@@ -107,7 +107,7 @@ Module.register('netatmo', {
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
     if(this.config.newDesign){
-      sContent += this.design.2.render(device);
+      sContent += this.design.['bubbles'].render(device);
     }else{
       sContent += this.renderModules(device);
     }
@@ -243,12 +243,12 @@ Module.register('netatmo', {
     update: '<div class="updated xsmall">{0}</div>'
   },
   design: {
-    1: function(formatter){
+    default: function(formatter){
       return {
 
       };
     }(this.formatter),
-    2: function(formatter){
+    bubbles: function(formatter){
       return {
         moduleType: {
           MAIN: "NAMain",
