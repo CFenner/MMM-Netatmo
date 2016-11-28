@@ -243,6 +243,7 @@ Module.register('netatmo', {
     update: '<div class="updated xsmall">{0}</div>'
   },
   getDesign: function(design){
+    var that = this;
     var formatter = this.formatter;
     var translator = this.translate;
     return {
@@ -251,7 +252,7 @@ Module.register('netatmo', {
 
         };
       }(formatter),
-      bubbles: function(formatter, translator){
+      bubbles: function(formatter, translator, that){
         return {
           moduleType: {
             MAIN: "NAMain",
@@ -367,13 +368,13 @@ Module.register('netatmo', {
             return $('<div/>')
               .addClass('small')
               .append(
-                translator(type.toUpperCase())
+                translator(type.toUpperCase()).bind(that)
                 + ': '
                 + formatter.value(type, value)
               )[0].outerHTML;
           }
         };
-      }(formatter, translator)
+      }(formatter, translator, that)
     }[design]
   },
   getScripts: function() {
