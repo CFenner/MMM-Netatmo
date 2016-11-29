@@ -3,11 +3,44 @@
 @bad: red;
 
 .netatmo.bubble{
-	.bubble{
-		margin: 2em;
-		width: .1em;
-		height: .1em;
-		border-radius: 5em;
-		box-shadow: 0px 0px 1em 2em;
-	}
+  .module{
+    .name{
+      text-align: left;
+    }
+    .primary{
+      text-align: left;
+    }
+    .secondary{
+      .co2{
+        .visual{
+          width: .1em;
+          height: .1em;
+          margin: 2em auto;
+      		border-radius: 5em;
+          box-shadow: 0px 0px 1em 1.4em;
+        }
+        .value{
+          text-align: center;
+        }
+        .good{
+          color: @good;
+          background-color: @good;
+        }
+        .average{
+          color: @average;
+          background-color: @average;
+        }
+        .bad{
+          color: @bad;
+          background-color: @bad;
+        }
+      }
+    }
+    .data{
+      text-align: left;
+    }
+  }
+  table tr td{
+    width: 33.33%;
+  }
 }

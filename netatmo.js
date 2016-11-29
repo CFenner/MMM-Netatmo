@@ -279,62 +279,51 @@ Module.register('netatmo', {
           },
           module: function(module){
             var type = module.type;
-            var result = $('<div/>').append(
-              $('<div/>').addClass('small').css({'text-align': 'left'}).append(module.module_name)
+            var result = $('<div/>').addClass('module').append(
+              $('<div/>').addClass('name small').append(module.module_name)
             ).append(
               $('<div/>').append(
-                $('<table/>').append(
+                $('<table/>').addClass('').append(
                   $('<tr/>').append(
-                    $('<td/>').addClass('left').append(this.left(module))
+                    this.primary(module)
                   ).append(
-                    $('<td/>').addClass('center').append(this.center(module))
+                    this.secondary(module)
                   ).append(
-                    $('<td/>').addClass('right').append(this.data(module))
+                    this.data(module)
                   )))
             );
             return result[0].outerHTML;
           },
-          left: function(module){
-            var result = $('<div/>');
+          primary: function(module){
+            var result = $('<td/>').addClass('primary');
             switch(module.type){
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
               case this.moduleType.OUTDOOR:
                 var type = 'Temperature';
                 var value = module.dashboard_data[type];
-                $('<div/>')
-                  .addClass('large light bright')
-                  .append(formatter.value(type, value))
-                  .appendTo(result);
+                $('<div/>').addClass(type).append(
+                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
+                ).appendTo(result);
                 break;
               default:
             }
             return result;
           },
-          center: function(module){
-            var result = $('<div/>');
+          secondary: function(module){
+            var result = $('<td/>').addClass('secondary');
             switch(module.type){
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
                 var type = 'CO2';
                 var value = module.dashboard_data[type];
-                var color = value > 1600?'red':value > 800?'orange':'limegreen';
-                $('<div/>')
-                  .css({
-                    'width': '.1em',
-                    'height': '.1em',
-                    'color': color,
-                    'background-color': color,
-                    'border-radius': '5em',
-                    'box-shadow': '0 0 1em 1.8em',
-                    'margin': '2.4em'
-                  })
-                  .appendTo(result);
-                $('<div/>')
-                  .addClass('small')
-                  .css({'text-align': 'center'})
-                  .append(formatter.value(type, value))
-                  .appendTo(result);
+                var status = value > 1600?'bad':value > 800?'average':'good';
+
+                $('<div/>').addClass(type).append(
+                  $('<div/>').addClass('visual').addClass(status)
+                ).append(
+                  $('<div/>').addClass('small value').append(formatter.value(type, value))
+                )appendTo(result);
                 break;
               /*case this.moduleType.OUTDOOR:
                 break;
@@ -346,13 +335,13 @@ Module.register('netatmo', {
             return result;
           },
           data: function(module){
-            var result = $('<div/>');
+            var result = $('<td/>').addClass('data');
             switch(module.type){
               case this.moduleType.MAIN:
                 this.addHumidity(result, module);
-                this.addTemperatureTrend(result, module);
+                //this.addTemperatureTrend(result, module);
                 this.addPressure(result, module);
-                this.addPressureTrend(result, module);
+                //this.addPressureTrend(result, module);
                 this.addNoise(result, module);
                 //result += this.addData('max_temp', module.dashboard_data['max_temp']);
                 //result += this.addData('min_temp', module.dashboard_data['min_temp']);
@@ -360,13 +349,13 @@ Module.register('netatmo', {
                 break;
               case this.moduleType.INDOOR:
                 this.addHumidity(result, module);
-                this.addTemperatureTrend(result, module);
+                //this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 //result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
                 break;
               case this.moduleType.OUTDOOR:
                 this.addHumidity(result, module);
-                this.addTemperatureTrend(result, module);
+                //this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 break;
               default:
