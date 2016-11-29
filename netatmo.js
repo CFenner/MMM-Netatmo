@@ -305,22 +305,29 @@ Module.register('netatmo', {
             return result;
           },
           center: function(module){
-            var result = '';
+            var result = $('<div/>');
             switch(module.type){
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
-                var value = module.dashboard_data['CO2'];
+                var type = 'CO2';
+                var value = module.dashboard_data[type];
                 var color = value > 1600?'red':value > 800?'orange':'limegreen';
-                result += $('<div/>').css({
-                  'width': '.1em',
-                  'height': '.1em',
-                  'color': color,
-                  'background-color': color,
-                  'border-radius': '5em',
-                  'box-shadow': '0 0 1em 1.8em',
-                  'margin': '2.4em'
-                })[0].outerHTML;
-                result += $('<div/>').addClass('small').css({'text-align': 'center'}).append(value + ' ppm')[0].outerHTML;
+                $('<div/>')
+                  .css({
+                    'width': '.1em',
+                    'height': '.1em',
+                    'color': color,
+                    'background-color': color,
+                    'border-radius': '5em',
+                    'box-shadow': '0 0 1em 1.8em',
+                    'margin': '2.4em'
+                  })
+                  .appendTo(result);
+                $('<div/>')
+                  .addClass('small')
+                  .css({'text-align': 'center'})
+                  .append(formatter.value(type, value))
+                  .appendTo(result);
                 break;
               /*case this.moduleType.OUTDOOR:
                 break;
@@ -332,32 +339,28 @@ Module.register('netatmo', {
             return result;
           },
           data: function(module){
-            var result = '';
+            var result = $('<div/>');
             switch(module.type){
               case this.moduleType.MAIN:
-                result += this.addData('Humidity', module.dashboard_data['Humidity']);
-                result += this.addData('temp_trend', translator.bind(that)(module.dashboard_data['temp_trend'].toUpperCase()));
-                result += this.addData('max_temp', module.dashboard_data['max_temp']);
-                result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                result += this.addData('Pressure', module.dashboard_data['Pressure']);
-                result += this.addData('pressure_trend', translator.bind(that)(module.dashboard_data['pressure_trend'].toUpperCase()));
-                result += this.addData('Noise', module.dashboard_data['Noise']);
+                this.addHumidity(result, module);
+                this.addData(result, 'temp_trend', translator.bind(that)(module.dashboard_data['temp_trend'].toUpperCase()));
+                //result += this.addData('max_temp', module.dashboard_data['max_temp']);
+                //result += this.addData('min_temp', module.dashboard_data['min_temp']);
+                this.addPressure(result, module);
+                this.addData(result, 'pressure_trend', translator.bind(that)(module.dashboard_data['pressure_trend'].toUpperCase()));
+                this.addNoise(result, module);
                 //result += $('<div/>').addClass('small').append('WiFi: ' + module.wifi_status)[0].outerHTML;
                 break;
               case this.moduleType.INDOOR:
-                result += this.addData('Humidity', module.dashboard_data['Humidity']);
-                result += this.addData('temp_trend', module.dashboard_data['temp_trend']);
-                result += this.addData('max_temp', module.dashboard_data['max_temp']);
-                result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                result += this.addData('Battery', module.battery_percent);
+                this.addHumidity(result, module);
+                this.addData(result, 'temp_trend', module.dashboard_data['temp_trend']);
+                this.addBattery(result, module);
                 //result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
                 break;
               case this.moduleType.OUTDOOR:
-                result += this.addData('Humidity', module.dashboard_data['Humidity']);
-                result += this.addData('temp_trend', module.dashboard_data['temp_trend']);
-                result += this.addData('max_temp', module.dashboard_data['max_temp']);
-                result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                result += this.addData('Battery', module.battery_percent);
+                this.addHumidity(result, module);
+                this.addData(result, 'temp_trend', module.dashboard_data['temp_trend']);
+                this.addBattery(result, module);
                 //result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
                 break;
               default:
@@ -365,14 +368,27 @@ Module.register('netatmo', {
             }
             return result;
           },
-          addData: function(type, value){
+          addNoise: function(parent, module){
+            return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
+          },
+          addPressure: function(parent, module){
+            return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
+          },
+          addHumidity: function(parent, module){
+            return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
+          },
+          addBattery: function(parent, module){
+            return this.addData(parent, 'Battery', module.battery_percent);
+          },
+          addData: function(parent, type, value){
             return $('<div/>')
               .addClass('small')
               .append(
                 translator.bind(that)(type.toUpperCase())
                 + ': '
                 + formatter.value(type, value)
-              )[0].outerHTML;
+              )
+              .appendTo(parent);
           }
         };
       }(formatter, translator, that)
