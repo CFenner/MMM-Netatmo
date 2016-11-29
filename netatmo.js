@@ -249,7 +249,7 @@ Module.register('netatmo', {
     var formatter = this.formatter;
     var translator = this.translate;
     return {
-      default: function(formatter){
+      classic: function(formatter){
         return {
 
         };
