@@ -294,6 +294,9 @@ Module.register('netatmo', {
       if(value < 348.75) return 'NNW';
       return 'N';
     },
+    rain: function(value){
+      return '';
+    },
     clazz: function(dataType) {
       switch (dataType) {
         case 'CO2':
@@ -436,8 +439,8 @@ Module.register('netatmo', {
                 var value = module.dashboard_data[type];
 
                 $('<div/>').addClass(type).append(
-                //  $('<div/>').addClass('visual').addClass(status)
-                //).append(
+                  $('<div/>').addClass('large bright').addClass('visual').append('&nwarr;').css('transform', 'rotate(' + (45 + 180 + value) + 'deg)')
+                ).append(
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
                 ).appendTo(result);
                 break;
