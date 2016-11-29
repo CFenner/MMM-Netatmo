@@ -139,7 +139,7 @@ Module.register('netatmo', {
       "data_type": ["Wind"],
       "battery_vp": 5613,
       "battery_percent": 79,
-      "rf_status": 79
+      "rf_status": 79,
       "_id": "",
       "last_message": 1462745975,
       "last_seen": 1462745949,
