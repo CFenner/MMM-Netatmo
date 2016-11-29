@@ -105,8 +105,8 @@ Module.register('netatmo', {
     this.lastUpdate = device.dashboard_data.time_utc;
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
-    //sContent += this.getDesign(this.config.design).render(device);
-    this.dom = this.renderModules(device);
+    this.dom = this.getDesign(this.config.design).render(device);
+    //this.dom = this.renderModules(device);
     this.updateDom(this.config.animationSpeed);
     return Q({});
     /* eslint-enable new-cap */
