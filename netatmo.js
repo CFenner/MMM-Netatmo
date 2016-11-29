@@ -263,9 +263,9 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
-          return value;
+          return value.toFixed(1) + 'mm/h';
         case 'Wind':
-          return value;
+          return value.toFixed(0) + 'm/s';
         case 'Battery':
           return value.toFixed(0) + '%';
         default:
@@ -365,6 +365,20 @@ Module.register('netatmo', {
               case this.moduleType.INDOOR:
               case this.moduleType.OUTDOOR:
                 var type = 'Temperature';
+                var value = module.dashboard_data[type];
+                $('<div/>').addClass(type).append(
+                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
+                ).appendTo(result);
+                break;
+              case this.moduleType.WIND:
+                var type = 'WindStrength';
+                var value = module.dashboard_data[type];
+                $('<div/>').addClass(type).append(
+                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
+                ).appendTo(result);
+                break;
+              case this.moduleType.RAIN:
+                var type = 'Rain';
                 var value = module.dashboard_data[type];
                 $('<div/>').addClass(type).append(
                   $('<div/>').addClass('large light bright').append(formatter.value(type, value))
