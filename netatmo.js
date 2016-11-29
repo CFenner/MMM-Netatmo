@@ -422,8 +422,8 @@ Module.register('netatmo', {
       if(!this.config.hideLoadTimer){
         dom.append($(
           '<svg class="loadTimer" viewbox="0 0 250 250">' +
-          '<path class="border" transform="translate(125, 125)"/>' +
-          '<path class="loader" transform="translate(125, 125) scale(.84)"/>' +
+          '  <path class="border" transform="translate(125, 125)"/>' +
+          '  <path class="loader" transform="translate(125, 125) scale(.84)"/>' +
           '</svg>'
         ));
       }
