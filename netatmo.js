@@ -439,7 +439,7 @@ Module.register('netatmo', {
                 var value = module.dashboard_data[type];
 
                 $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large bright').addClass('visual').append('&nwarr;').css('transform', 'rotate(' + (45 + 180 + value) + 'deg)')
+                  $('<div/>').addClass('visual xlarge wi wi-wind-south').css('transform', 'rotate(' + value + 'deg)')
                 ).append(
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
                 ).appendTo(result);
