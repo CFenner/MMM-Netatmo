@@ -278,13 +278,15 @@ Module.register('netatmo', {
             var result = $('<div/>').append(
               $('<div/>').addClass('small').css({'text-align': 'left'}).append(module.module_name)
             ).append(
-              $('<div/>').append($('<table/>').append($('<tr/>').append(
-                $('<td/>').addClass('left').append(this.left(module))
-              ).append(
-                $('<td/>').addClass('center').append(this.center(module))
-              ).append(
-                $('<td/>').addClass('right').append(this.data(module))
-              )))
+              $('<div/>').append(
+                $('<table/>').append(
+                  $('<tr/>').append(
+                    $('<td/>').addClass('left').append(this.left(module))
+                  ).append(
+                    $('<td/>').addClass('center').append(this.center(module))
+                  ).append(
+                    $('<td/>').addClass('right').append(this.data(module))
+                  )))
             );
             return result[0].outerHTML;
           },
@@ -423,13 +425,12 @@ Module.register('netatmo', {
     };
   },
   getDom: function() {
-    return $(
-      '<div class="netatmo">' +
-        (this.dom ?
-          this.dom +
+    return $('<div/>').addClass('netatmo').addClass(this.config.design).append(
+      this.dom
+        ? this.dom +
           this.html.update.format(moment(new Date(1000 * this.lastUpdate)).fromNow()) +
-          (this.config.hideLoadTimer ? '' : this.html.loadTimer) :
-          this.html.loader) +
-      '</div>')[0];
+          (this.config.hideLoadTimer ? '' : this.html.loadTimer)
+        : this.html.loader
+    )[0];
   }
 });
