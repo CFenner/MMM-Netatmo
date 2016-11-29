@@ -249,14 +249,33 @@ Module.register('netatmo', {
             WIND: "NAModule2"
           },
           render: function(device){
-            var result = '';
-            // render station data (main station)
-            result += this.module(device);
-            // render module data (connected modules)
-            for (var cnt = 0; cnt < device.modules.length; cnt++) {
-              result += this.module(device.modules[cnt]);
+            var sResult = $('<div/>').addClass('modules');
+            var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
+              that.config.moduleOrder :
+              null;
+
+            if (aOrderedModuleList) {
+              for (var moduleName of aOrderedModuleList) {
+                if (device.module_name === moduleName) {
+                  sResult.append(this.module(device));
+                } else {
+                  for (var module of device.modules) {
+                    if (module.module_name === moduleName) {
+                      sResult.append(this.module(module));
+                      break;
+                    }
+                  }
+                }
+              }
+            } else {
+              // render station data (main station)
+              sResult.append(this.module(device));
+              // render module data (connected modules)
+              for (var cnt = 0; cnt < device.modules.length; cnt++) {
+                sResult.append(this.module(device.modules[cnt]));
+              }
             }
-            return result;
+            return sResult;
           },
           module: function(module){
             var type = module.type;
