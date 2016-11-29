@@ -336,11 +336,11 @@ Module.register('netatmo', {
             switch(module.type){
               case this.moduleType.MAIN:
                 result += this.addData('Humidity', module.dashboard_data['Humidity']);
-                result += this.addData('temp_trend', module.dashboard_data['temp_trend']);
+                result += this.addData('temp_trend', translator.bind(that)(module.dashboard_data['temp_trend'].toUpperCase()));
                 result += this.addData('max_temp', module.dashboard_data['max_temp']);
                 result += this.addData('min_temp', module.dashboard_data['min_temp']);
                 result += this.addData('Pressure', module.dashboard_data['Pressure']);
-                result += this.addData('pressure_trend', module.dashboard_data['pressure_trend']);
+                result += this.addData('pressure_trend', translator.bind(that)(module.dashboard_data['pressure_trend'].toUpperCase()));
                 result += this.addData('Noise', module.dashboard_data['Noise']);
                 //result += $('<div/>').addClass('small').append('WiFi: ' + module.wifi_status)[0].outerHTML;
                 break;

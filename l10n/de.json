@@ -9,5 +9,8 @@
   "WIFI": "WiFi",
   "TEMP_TREND": "Temperatur Trend",
   "PRESSURE_TREND": "Luftdruck Trend",
-  "BATTERY": "Batterie"
+  "BATTERY": "Batterie",
+  "UP": "steigend",
+  "STABLE": "stabil",
+  "DOWN": "fallend"
 }
