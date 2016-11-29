@@ -289,16 +289,17 @@ Module.register('netatmo', {
             return result[0].outerHTML;
           },
           left: function(module){
-            var result;
+            var result = $('<div/>');
             switch(module.type){
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
               case this.moduleType.OUTDOOR:
                 var type = 'Temperature';
                 var value = module.dashboard_data[type];
-                result = $('<div/>')
+                $('<div/>')
                   .addClass('large light bright')
-                  .append(formatter.value(type, value));
+                  .append(formatter.value(type, value))
+                  .appendTo(result);
                 break;
               default:
             }
@@ -343,39 +344,46 @@ Module.register('netatmo', {
             switch(module.type){
               case this.moduleType.MAIN:
                 this.addHumidity(result, module);
-                this.addData(result, 'temp_trend', translator.bind(that)(module.dashboard_data['temp_trend'].toUpperCase()));
+                this.addTemperatureTrend(result, module);
+                this.addPressure(result, module);
+                this.addPressureTrend(result, module);
+                this.addNoise(result, module);
                 //result += this.addData('max_temp', module.dashboard_data['max_temp']);
                 //result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                this.addPressure(result, module);
-                this.addData(result, 'pressure_trend', translator.bind(that)(module.dashboard_data['pressure_trend'].toUpperCase()));
-                this.addNoise(result, module);
                 //result += $('<div/>').addClass('small').append('WiFi: ' + module.wifi_status)[0].outerHTML;
                 break;
               case this.moduleType.INDOOR:
                 this.addHumidity(result, module);
-                this.addData(result, 'temp_trend', module.dashboard_data['temp_trend']);
+                this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 //result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
                 break;
               case this.moduleType.OUTDOOR:
                 this.addHumidity(result, module);
-                this.addData(result, 'temp_trend', module.dashboard_data['temp_trend']);
+                this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
-                //result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
                 break;
               default:
                 break;
             }
             return result;
           },
-          addNoise: function(parent, module){
-            return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
+          addTemperatureTrend: function(parent, module){
+            this.addData(parent, 'temp_trend',
+              translator.bind(that)(module.dashboard_data['temp_trend'].toUpperCase()));
           },
           addPressure: function(parent, module){
             return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
           },
+          addPressureTrend: function(parent, module){
+            this.addData(parent, 'pressure_trend',
+              translator.bind(that)(module.dashboard_data['pressure_trend'].toUpperCase()));
+          },
           addHumidity: function(parent, module){
             return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
+          },
+          addNoise: function(parent, module){
+            return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
           },
           addBattery: function(parent, module){
             return this.addData(parent, 'Battery', module.battery_percent);
