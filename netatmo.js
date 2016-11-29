@@ -173,7 +173,7 @@ Module.register('netatmo', {
           oModule.dashboard_data[dataType]);
       }
     }
-    return $('<div/>').append(sResult)[0].outerHTML;
+    return $('<table/>').append(sResult)[0].outerHTML;
     //return this.html.dataWrapper.format(sResult);
   },
   renderData: function(clazz, dataType, value) {
