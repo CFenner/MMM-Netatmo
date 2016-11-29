@@ -263,15 +263,36 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
-          return value.toFixed(1);
+          return value.toFixed(0);
         case 'Wind':
         case 'WindStrength':
           return value.toFixed(0);
+        case 'WindAngle':
+          return this.direction(value) + ' ' + value + '°'; // value to direction (W, S, NW)
         case 'Battery':
           return value.toFixed(0) + '%';
         default:
           return value;
       }
+    },
+    direction: function(value){
+      if(value < 11.25)return 'N';
+      if(value < 33.75) return 'NNE';
+      if(value < 56.25) return 'NE';
+      if(value < 78.75) return 'ENE';
+      if(value < 101.25) return 'E';
+      if(value < 123.75) return 'ESE';
+      if(value < 146.25) return 'SE';
+      if(value < 168.75) return 'SSE';
+      if(value < 191.25) return 'S';
+      if(value < 213.75) return 'SSW';
+      if(value < 236.25) return 'SW';
+      if(value < 258.75) return 'WSW';
+      if(value < 281.25) return 'W';
+      if(value < 303.75) return 'WNW';
+      if(value < 326.25) return 'NW';
+      if(value < 348.75) return 'NNW';
+      return 'N';
     },
     clazz: function(dataType) {
       switch (dataType) {
@@ -408,10 +429,20 @@ Module.register('netatmo', {
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
                 ).appendTo(result);
                 break;
-              /*case this.moduleType.OUTDOOR:
+              case this.moduleType.OUTDOOR:
                 break;
-              case this.moduleType.MAIN:
-                break;*/
+              case this.moduleType.WIND:
+                var type = 'WindAngle';
+                var value = module.dashboard_data[type];
+
+                $('<div/>').addClass(type).append(
+                //  $('<div/>').addClass('visual').addClass(status)
+                //).append(
+                  $('<div/>').addClass('small value').append(formatter.value(type, value))
+                ).appendTo(result);
+                break;
+              case this.moduleType.RAIN:
+                break;
               default:
                 break;
             }
