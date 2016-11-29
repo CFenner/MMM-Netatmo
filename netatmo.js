@@ -146,13 +146,19 @@ Module.register('netatmo', {
         sResult += this.renderModule(device.modules[cnt]);
       }
     }
-    return this.html.moduleWrapper.format(sResult);
+    return $('<div/>').addClass('modules').append(sResult)[0].outerHTML
+    //return this.html.moduleWrapper.format(sResult);
   },
   renderModule: function(oModule) {
-    return this.html.module.format(
-      this.renderSensorData(oModule),
-      oModule.module_name
-    );
+    return $('<div/>').addClass('module').append(
+      $('<div>').addClass('data').append(this.renderSensorData(oModule))
+    ).append(
+      $('<div>').addClass('name small').append(oModule.module_name)
+    )[0].outerHTML;
+    //return this.html.module.format(
+    //  this.renderSensorData(oModule),
+    //  oModule.module_name
+    //);
   },
   renderSensorData: function(oModule) {
     var sResult = '';
@@ -167,12 +173,22 @@ Module.register('netatmo', {
           oModule.dashboard_data[dataType]);
       }
     }
-    return this.html.dataWrapper.format(sResult);
+    return $('<div/>').append(sResult)[0].outerHTML;
+    //return this.html.dataWrapper.format(sResult);
   },
   renderData: function(clazz, dataType, value) {
-    return this.html.data.format(
-      this.translate(dataType.toUpperCase()),
-      this.formatter.value(dataType, value));
+    return $('<tr/>').append(
+      $('<td/>').addClass('small').append(
+        this.translate(dataType.toUpperCase())
+      )
+    ).append(
+      $('<td/>').addClass('small value').append(
+        this.formatter.value(dataType, value)
+      )
+    )[0].outerHTML;
+    //return this.html.data.format(
+    //  this.translate(dataType.toUpperCase()),
+    //  this.formatter.value(dataType, value));
   },
   renderError: function(reason) {
     console.log("error " + reason);
