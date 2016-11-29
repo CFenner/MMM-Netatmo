@@ -323,7 +323,7 @@ Module.register('netatmo', {
                   $('<div/>').addClass('visual').addClass(status)
                 ).append(
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
-                )appendTo(result);
+                ).appendTo(result);
                 break;
               /*case this.moduleType.OUTDOOR:
                 break;
