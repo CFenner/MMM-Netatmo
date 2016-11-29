@@ -5,5 +5,9 @@
   "PRESSURE": "Pressure",
   "TEMPERATURE": "Temperature",
   "RAIN": "Rain",
-  "WIND": "Wind"
+  "WIND": "Wind",
+  "WIFI": "WiFi",
+  "TEMP_TREND": "Temperature Trend",
+  "PRESSURE_TREND": "Pressure Trend",
+  "BATTERY": "Battery"
 }
