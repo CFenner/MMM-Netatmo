@@ -6,31 +6,13 @@
 .netatmo{
 	display: inline-block;
 
-	.module, .loading, .loadTimer, .updated{
+	.loading, .loadTimer, .updated{
 		display: inline-block;
-	}
-
-	.module{
-		overflow: hidden;
-		margin: .125em .25em;
-		border-radius: .25em;
-		border: 1px solid @borderColor;
-		
-		.name{
-			color: @dark;
-			text-align: center;
-			padding: .125em .25em;
-			background: @borderColor;
-		}
-		
-		.data{
-			padding: .125em .25em;
-		}
 	}
 	svg.loading{
 		width: .6em;
 		height: .6em;
-	
+
 		circle{
 			fill: none;
 			stroke-linecap: round;
@@ -59,5 +41,39 @@
 		margin: .2em 0;
 		padding: 0 .5em;
 		vertical-align: middle;
+	}
+}
+
+.netatmo.classic{
+	.module{
+		display: inline-block;
+	}
+
+	.module{
+		overflow: hidden;
+		margin: .125em .25em;
+		border-radius: .25em;
+		border: 1px solid @borderColor;
+
+		.name{
+			color: @dark;
+			text-align: center;
+			padding: .125em .25em;
+			background: @borderColor;
+		}
+
+		.data{
+			padding: .125em .25em;
+		}
+	}
+}
+
+.netatmo.bubble{
+	.bubble{
+		margin: 2em;
+		width: .1em;
+		height: .1em;
+		border-radius: 5em;
+		box-shadow: 0px 0px 1em 2em;
 	}
 }
