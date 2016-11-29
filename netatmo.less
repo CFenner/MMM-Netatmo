@@ -44,36 +44,5 @@
 	}
 }
 
-.netatmo.classic{
-	.module{
-		display: inline-block;
-	}
-
-	.module{
-		overflow: hidden;
-		margin: .125em .25em;
-		border-radius: .25em;
-		border: 1px solid @borderColor;
-
-		.name{
-			color: @dark;
-			text-align: center;
-			padding: .125em .25em;
-			background: @borderColor;
-		}
-
-		.data{
-			padding: .125em .25em;
-		}
-	}
-}
-
-.netatmo.bubble{
-	.bubble{
-		margin: 2em;
-		width: .1em;
-		height: .1em;
-		border-radius: 5em;
-		box-shadow: 0px 0px 1em 2em;
-	}
-}
+@import 'netatmo.classic';
+@import 'netatmo.bubbles';
