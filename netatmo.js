@@ -12,7 +12,7 @@ Module.register('netatmo', {
     refreshToken: null,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
-    design: 'classic',
+    design: 'bubbles',
     hideLoadTimer: false,
     api: {
       base: 'https://api.netatmo.com/',
@@ -101,26 +101,18 @@ Module.register('netatmo', {
   },
   renderAll: function(data) {
     /* eslint-disable new-cap */
-    var sContent = '';
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
     // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
     // render modules
-    if(this.config.newDesign){
-      sContent += this.getDesign('bubbles').render(device);
-    }else{
-      sContent += this.renderModules(device);
-    }
-    // place content
-    this.dom = sContent;
+    //sContent += this.getDesign(this.config.design).render(device);
+    this.dom = this.renderModules(device);
     this.updateDom(this.config.animationSpeed);
     return Q({});
     /* eslint-enable new-cap */
   },
-  design2: {
-  },
   renderModules: function(device) {
-    var sResult = '';
+    var sResult = $('<div/>').addClass('modules');
     var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0 ?
       this.config.moduleOrder :
       null;
@@ -128,11 +120,11 @@ Module.register('netatmo', {
     if (aOrderedModuleList) {
       for (var moduleName of aOrderedModuleList) {
         if (device.module_name === moduleName) {
-          sResult += this.renderModule(device);
+          sResult.append(this.renderModule(device));
         } else {
           for (var module of device.modules) {
             if (module.module_name === moduleName) {
-              sResult += this.renderModule(module);
+              sResult.append(this.renderModule(module));
               break;
             }
           }
@@ -140,41 +132,37 @@ Module.register('netatmo', {
       }
     } else {
       // render station data (main station)
-      sResult += this.renderModule(device);
+      sResult.append(this.renderModule(device));
       // render module data (connected modules)
       for (var cnt = 0; cnt < device.modules.length; cnt++) {
-        sResult += this.renderModule(device.modules[cnt]);
+        sResult.append(this.renderModule(device.modules[cnt]));
       }
     }
-    return $('<div/>').addClass('modules').append(sResult)[0].outerHTML
-    //return this.html.moduleWrapper.format(sResult);
+    return sResult;
   },
   renderModule: function(oModule) {
     return $('<div/>').addClass('module').append(
       $('<div>').addClass('data').append(this.renderSensorData(oModule))
     ).append(
       $('<div>').addClass('name small').append(oModule.module_name)
-    )[0].outerHTML;
-    //return this.html.module.format(
-    //  this.renderSensorData(oModule),
-    //  oModule.module_name
-    //);
+    );
   },
   renderSensorData: function(oModule) {
-    var sResult = '';
+    var sResult = $('<table/>');
     var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0 ?
       this.config.dataOrder :
       oModule.data_type;
     for (var dataType of aDataTypeList) {
       if ($.inArray(dataType, oModule.data_type) > -1) {
-        sResult += this.renderData(
-          this.formatter.clazz(dataType),
-          dataType,
-          oModule.dashboard_data[dataType]);
+        sResult.append(
+          this.renderData(
+            this.formatter.clazz(dataType),
+            dataType,
+            oModule.dashboard_data[dataType])
+        );
       }
     }
-    return $('<table/>').append(sResult)[0].outerHTML;
-    //return this.html.dataWrapper.format(sResult);
+    return sResult;
   },
   renderData: function(clazz, dataType, value) {
     return $('<tr/>').append(
@@ -185,10 +173,7 @@ Module.register('netatmo', {
       $('<td/>').addClass('small value').append(
         this.formatter.value(dataType, value)
       )
-    )[0].outerHTML;
-    //return this.html.data.format(
-    //  this.translate(dataType.toUpperCase()),
-    //  this.formatter.value(dataType, value));
+    );
   },
   renderError: function(reason) {
     console.log("error " + reason);
@@ -243,22 +228,6 @@ Module.register('netatmo', {
           return '';
       }
     }
-  },
-  html: {
-    moduleWrapper: '<div class="modules">{0}</div>',
-    module: '<div class="module"><div class="data">{0}</div><div class="name small">{1}</div></div>',
-    dataWrapper: '<table class>{0}</table>',
-    data: '<tr><td class="small">{0}</td><td class="value small">{1}</td></tr>',
-    loadTimer: '<svg class="loadTimer" viewbox="0 0 250 250"><path class="border" transform="translate(125, 125)"/><path class="loader" transform="translate(125, 125) scale(.84)"/></svg>',
-    loader:
-      '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">' +
-      '  <circle class="outer"></circle>' +
-      '  <circle class="inner">' +
-      '    <animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>' +
-      '    <animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>' +
-      '  </circle>' +
-      '</svg>',
-    update: '<div class="updated xsmall">{0}</div>'
   },
   getDesign: function(design){
     var that = this;
@@ -441,12 +410,34 @@ Module.register('netatmo', {
     };
   },
   getDom: function() {
-    return $('<div/>').addClass('netatmo').addClass(this.config.design).append(
-      this.dom
-        ? this.dom +
-          this.html.update.format(moment(new Date(1000 * this.lastUpdate)).fromNow()) +
-          (this.config.hideLoadTimer ? '' : this.html.loadTimer)
-        : this.html.loader
-    )[0];
+    var dom = $('<div/>').addClass('netatmo').addClass(this.config.design);
+    if(this.dom){
+      dom.append(
+        this.dom
+      ).append(
+        $('<div/>')
+          .addClass('updated xsmall')
+          .append(moment(new Date(1000 * this.lastUpdate)).fromNow())
+      );
+      if(!this.config.hideLoadTimer){
+        dom.append($(
+          '<svg class="loadTimer" viewbox="0 0 250 250">' +
+          '<path class="border" transform="translate(125, 125)"/>' +
+          '<path class="loader" transform="translate(125, 125) scale(.84)"/>' +
+          '</svg>'
+        ));
+      }
+    }else{
+      dom.append($(
+        '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">' +
+        '  <circle class="outer"></circle>' +
+        '  <circle class="inner">' +
+        '    <animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>' +
+        '    <animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>' +
+        '  </circle>' +
+        '</svg>'
+      ));
+    }
+    return dom[0];
   }
 });
