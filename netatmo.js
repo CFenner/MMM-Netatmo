@@ -253,6 +253,7 @@ Module.register('netatmo', {
         };
       }(formatter),
       bubbles: function(formatter, translator, that){
+        translator.bind(that);
         return {
           moduleType: {
             MAIN: "NAMain",
@@ -368,7 +369,7 @@ Module.register('netatmo', {
             return $('<div/>')
               .addClass('small')
               .append(
-                translator(type.toUpperCase()).bind(that)
+                translator(type.toUpperCase())
                 + ': '
                 + formatter.value(type, value)
               )[0].outerHTML;
