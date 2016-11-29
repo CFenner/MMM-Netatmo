@@ -268,7 +268,7 @@ Module.register('netatmo', {
         case 'WindStrength':
           return value.toFixed(0);
         case 'WindAngle':
-          return this.direction(value) + ' ' + value + '°'; // value to direction (W, S, NW)
+          return this.direction(value) + ' | ' + value + '°';
         case 'Battery':
           return value.toFixed(0) + '%';
         default:
