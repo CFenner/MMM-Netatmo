@@ -191,7 +191,7 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
-          return value;
+          return value.toFixed(1) + 'mm';
         case 'Wind':
           return value;
         default:
