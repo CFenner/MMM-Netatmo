@@ -1,10 +1,10 @@
-# MagicMirror-Netatmo-Module
+[![Build Status](https://travis-ci.org/CFenner/MagicMirror-Netatmo-Module.svg?branch=master)](https://travis-ci.org/CFenner/MagicMirror-Netatmo-Module)
+[![Known Vulnerabilities](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module/badge.svg)](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module)
+[![code climate](https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module/badges/gpa.svg)](https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module)
+[![api](https://img.shields.io/badge/api-Netatmo-orange.svg)](https://dev.netatmo.com/doc)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](http://choosealicense.com/licenses/mit)
 
-<p>
-	<a href="https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module"><img src="https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module/badges/gpa.svg" /></a>
-	<a href="https://dev.netatmo.com/doc"><img src="https://img.shields.io/badge/Netatmo-API-orange.svg" alt="API"></a>
-	<a href="http://choosealicense.com/licenses/mit"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
-</p>
+# MagicMirror-Netatmo-Module
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
