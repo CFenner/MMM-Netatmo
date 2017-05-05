@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/CFenner/MagicMirror-Netatmo-Module.svg?branch=master)](https://travis-ci.org/CFenner/MagicMirror-Netatmo-Module)
 [![Known Vulnerabilities](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module/badge.svg)](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module)
 [![code climate](https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module/badges/gpa.svg)](https://codeclimate.com/github/CFenner/MagicMirror-Netatmo-Module)
 [![api](https://img.shields.io/badge/api-Netatmo-orange.svg)](https://dev.netatmo.com/doc)
