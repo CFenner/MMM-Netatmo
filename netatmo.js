@@ -536,8 +536,9 @@ Module.register('netatmo', {
             return this.addData(parent, 'WiFi', module.wifi_status);
           },
           addLastSeen: function(parent, module){
+            var duration = Date.now() - 1000*module.last_message;
             return $('<div/>')
-              .addClass('small')
+              .addClass('small' + (duration > 600000?' flash':''))
               .append(
                 translator.bind(that)("LAST_MESSAGE")
                 + ': '
