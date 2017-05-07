@@ -175,70 +175,6 @@ Module.register('netatmo', {
     return Q({});
     /* eslint-enable new-cap */
   },
-  renderModules: function(device) {
-    var sResult = $('<div/>').addClass('modules');
-    var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0 ?
-      this.config.moduleOrder :
-      null;
-
-    if (aOrderedModuleList) {
-      for (var moduleName of aOrderedModuleList) {
-        if (device.module_name === moduleName) {
-          sResult.append(this.renderModule(device));
-        } else {
-          for (var module of device.modules) {
-            if (module.module_name === moduleName) {
-              sResult.append(this.renderModule(module));
-              break;
-            }
-          }
-        }
-      }
-    } else {
-      // render station data (main station)
-      sResult.append(this.renderModule(device));
-      // render module data (connected modules)
-      for (var cnt = 0; cnt < device.modules.length; cnt++) {
-        sResult.append(this.renderModule(device.modules[cnt]));
-      }
-    }
-    return sResult;
-  },
-  renderModule: function(oModule) {
-    return $('<div/>').addClass('module').append(
-      $('<div>').addClass('data').append(this.renderSensorData(oModule))
-    ).append(
-      $('<div>').addClass('name small').append(oModule.module_name)
-    );
-  },
-  renderSensorData: function(oModule) {
-    var sResult = $('<table/>');
-    var aDataTypeList = this.config.dataOrder && this.config.dataOrder.length > 0 ?
-      this.config.dataOrder :
-      oModule.data_type;
-    for (var dataType of aDataTypeList) {
-      if ($.inArray(dataType, oModule.data_type) > -1) {
-        sResult.append(
-          this.renderData(
-            this.formatter.clazz(dataType),
-            dataType,
-            oModule.dashboard_data[dataType])
-        );
-      }
-    }
-    return sResult;
-  },
-  renderData: function(clazz, dataType, value) {
-    return $('<tr/>').append(
-      $('<td/>').addClass('small').append(
-        this.translate(dataType.toUpperCase())
-      )
-    ).append(
-      $('<td/>').addClass('small value').append(
-        this.formatter.value(dataType, value)
-      )
-    );
-  },
   renderError: function(reason) {
     console.log("error " + reason);
     //  enable display of error messages
@@ -266,8 +202,10 @@ Module.register('netatmo', {
           return value.toFixed(1) + 'mm';
         case 'Wind':
         case 'WindStrength':
+        case 'GustStrength':
           return value.toFixed(0);
         case 'WindAngle':
+        case 'GustAngle':
           return this.direction(value) + ' | ' + value + '°';
         case 'Battery':
           return value.toFixed(0) + '%';
@@ -323,11 +261,75 @@ Module.register('netatmo', {
     var formatter = this.formatter;
     var translator = this.translate;
     return {
-      classic: function(formatter){
+      classic: function(formatter, translator, that){
         return {
-
+          return {
+            render: function(device){
+              var sResult = $('<div/>').addClass('modules');
+              var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
+                that.config.moduleOrder :
+                null;
+              if (aOrderedModuleList) {
+                for (var moduleName of aOrderedModuleList) {
+                  if (device.module_name === moduleName) {
+                    sResult.append(this.renderModule(device));
+                  } else {
+                    for (var module of device.modules) {
+                      if (module.module_name === moduleName) {
+                        sResult.append(this.renderModule(module));
+                        break;
+                      }
+                    }
+                  }
+                }
+              } else {
+                // render station data (main station)
+                sResult.append(this.renderModule(device));
+                // render module data (connected modules)
+                for (var cnt = 0; cnt < device.modules.length; cnt++) {
+                  sResult.append(this.renderModule(device.modules[cnt]));
+                }
+              }
+              return sResult;
+            },
+            renderModule: function(oModule) {
+              return $('<div/>').addClass('module').append(
+                $('<div>').addClass('data').append(this.renderSensorData(oModule))
+              ).append(
+                $('<div>').addClass('name small').append(oModule.module_name)
+              );
+            },
+            renderSensorData: function(oModule) {
+              var sResult = $('<table/>');
+              var aDataTypeList = that.config.dataOrder && that.config.dataOrder.length > 0 ?
+                that.config.dataOrder :
+                oModule.data_type;
+              for (var dataType of aDataTypeList) {
+                if ($.inArray(dataType, oModule.data_type) > -1) {
+                  sResult.append(
+                    this.renderData(
+                      formatter.clazz(dataType),
+                      dataType,
+                      oModule.dashboard_data[dataType])
+                  );
+                }
+              }
+              return sResult;
+            },
+            renderData: function(clazz, dataType, value) {
+              return $('<tr/>').append(
+                $('<td/>').addClass('small').append(
+                  translator(dataType.toUpperCase())
+                )
+              ).append(
+                $('<td/>').addClass('small value').append(
+                  formatter.value(dataType, value)
+                )
+              );
+            }
+          }
         };
-      }(formatter),
+      }(formatter, translator, that),
       bubbles: function(formatter, translator, that){
         return {
           moduleType: {
