@@ -473,15 +473,15 @@ Module.register('netatmo', {
                 //result += this.addData('min_temp', module.dashboard_data['min_temp']);
                 break;
               case this.moduleType.INDOOR:
-                this.addHumidity(result, module);
                 this.addTemperatureTrend(result, module);
+                this.addHumidity(result, module);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
                 this.addLastSeen(result, module);
                 break;
               case this.moduleType.OUTDOOR:
-                this.addHumidity(result, module);
                 this.addTemperatureTrend(result, module);
+                this.addHumidity(result, module);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
                 this.addLastSeen(result, module);
