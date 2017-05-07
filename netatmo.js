@@ -199,6 +199,8 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
+        case 'sum_rain_24':
+        case 'sum_rain_1':
           return value.toFixed(1) + 'mm/h';
         case 'Wind':
         case 'WindStrength':
