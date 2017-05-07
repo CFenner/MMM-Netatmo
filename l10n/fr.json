@@ -3,14 +3,24 @@
   "NOISE": "Sonomètre",
   "HUMIDITY": "Humidité",
   "PRESSURE": "Pression",
+  "PRESSURE_TREND": "Pression",
   "TEMPERATURE": "Température",
+  "TEMP_TREND": "Température",
   "RAIN": "Pluie",
-  "WIND": "Vent",
-  "WIFI": "",
-  "TEMP_TREND": "",
-  "PRESSURE_TREND": "",
-  "BATTERY": "",
+  "SUM_RAIN_1": "Pluie (1h)",
+  "SUM_RAIN_24": "Pluie (24h)",
+  "WINDSTRENGTH": "Vent",
+  "WINDANGLE": "Vent",
+  "GUSTSTRENGTH": "",
+  "GUSTANGLE": "",
+
   "UP": "",
   "STABLE": "",
-  "DOWN": ""
+  "DOWN": "",
+  "UNDEFINED": "",
+
+  "WIFI": "",
+  "RADIO": "",
+  "BATTERY": "",
+  "LAST_MESSAGE": ""
 }

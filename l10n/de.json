@@ -3,7 +3,9 @@
   "NOISE": "Lautstärke",
   "HUMIDITY": "Feuchtigkeit",
   "PRESSURE": "Luftdruck",
+  "PRESSURE_TREND": "Luftdruck",
   "TEMPERATURE": "Temperatur",
+  "TEMP_TREND": "Temperatur",
   "RAIN": "Niederschlag",
   "SUM_RAIN_1": "Niederschlag (1h)",
   "SUM_RAIN_24": "Niederschlag (24h)",
@@ -11,13 +13,14 @@
   "WINDANGLE": "Wind",
   "GUSTSTRENGTH": "Böen",
   "GUSTANGLE": "Böen",
-  "WIFI": "WiFi",
-  "LAST_MESSAGE": "letzter Kontakt",
-  "TEMP_TREND": "Temperatur",
-  "PRESSURE_TREND": "Luftdruck",
-  "BATTERY": "Batterie",
+
   "UP": "steigend",
   "STABLE": "stabil",
   "DOWN": "fallend",
-  "UNDEFINED": "nicht verfügbar"
+  "UNDEFINED": "nicht verfügbar",
+
+  "WIFI": "WiFi",
+  "RADIO": "Funksignal",
+  "BATTERY": "Batterie",
+  "LAST_MESSAGE": "letzter Kontakt"
 }

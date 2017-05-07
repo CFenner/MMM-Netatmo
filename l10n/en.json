@@ -3,14 +3,24 @@
   "NOISE": "Noise",
   "HUMIDITY": "Humidity",
   "PRESSURE": "Pressure",
+  "PRESSURE_TREND": "Pressure",
   "TEMPERATURE": "Temperature",
+  "TEMP_TREND": "Temperature",
   "RAIN": "Rain",
-  "WIND": "Wind",
-  "WIFI": "WiFi",
-  "TEMP_TREND": "Temperature Trend",
-  "PRESSURE_TREND": "Pressure Trend",
-  "BATTERY": "Battery",
+  "SUM_RAIN_1": "Rain (1h)",
+  "SUM_RAIN_24": "Rain (24h)",
+  "WINDSTRENGTH": "Wind",
+  "WINDANGLE": "Wind",
+  "GUSTSTRENGTH": "Gusts",
+  "GUSTANGLE": "Gusts",
+
   "UP": "rising",
   "STABLE": "stable",
-  "DOWN": "falling"
+  "DOWN": "falling",
+  "UNDEFINED": "not available",
+
+  "WIFI": "WiFi",
+  "RADIO": "Radio signal",
+  "BATTERY": "Battery",
+  "LAST_MESSAGE": "last contact"
 }
