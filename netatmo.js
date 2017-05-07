@@ -471,7 +471,6 @@ Module.register('netatmo', {
                 this.addRadio(result, module);
                 //result += this.addData('max_temp', module.dashboard_data['max_temp']);
                 //result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                //result += $('<div/>').addClass('small').append('WiFi: ' + module.wifi_status)[0].outerHTML;
                 break;
               case this.moduleType.INDOOR:
                 this.addHumidity(result, module);
@@ -525,7 +524,7 @@ Module.register('netatmo', {
           addRadio: function(parent, module){
             return this.addData(parent, 'Radio', module.rf_status);
           },
-          addWiFi: function(){
+          addWiFi: function(parent, module){
             return this.addData(parent, 'WiFi', module.wifi_status);
           },
           addData: function(parent, type, value){
