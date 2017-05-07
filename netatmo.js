@@ -474,27 +474,31 @@ Module.register('netatmo', {
                 break;
               case this.moduleType.INDOOR:
                 this.addHumidity(result, module);
-                this.addTemperatureTrend(result, module);
+                //this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
+                this.addLastSeen(result, module);
                 break;
               case this.moduleType.OUTDOOR:
                 this.addHumidity(result, module);
                 this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
+                this.addLastSeen(result, module);
                 break;
               case this.moduleType.WIND:
                 this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
                 this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
+                this.addLastSeen(result, module);
                 break;
               case this.moduleType.RAIN:
                 this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
                 this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
+                this.addLastSeen(result, module);
                 break;
               default:
                 break;
@@ -526,6 +530,16 @@ Module.register('netatmo', {
           },
           addWiFi: function(parent, module){
             return this.addData(parent, 'WiFi', module.wifi_status);
+          },
+          addLastSeen: function(parent, module){
+            return $('<div/>')
+              .addClass('small')
+              .append(
+                translator.bind(that)("LAST_MESSAGE")
+                + ': '
+                + moment(new Date(1000 * module.last_message)).fromNow()
+              )
+              .appendTo(parent);
           },
           addData: function(parent, type, value){
             return $('<div/>')
