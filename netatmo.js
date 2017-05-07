@@ -201,11 +201,11 @@ Module.register('netatmo', {
         case 'Rain':
         case 'sum_rain_24':
         case 'sum_rain_1':
-          return value.toFixed(1) + 'mm/h';
+          return value.toFixed(1) + ' mm/h';
         case 'Wind':
         case 'WindStrength':
         case 'GustStrength':
-          return value.toFixed(0) + 'm/s';
+          return value.toFixed(0) + ' m/s';
         case 'WindAngle':
         case 'GustAngle':
           return this.direction(value) + ' | ' + value + '°';
