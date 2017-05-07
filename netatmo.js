@@ -328,7 +328,7 @@ Module.register('netatmo', {
           renderData: function(clazz, dataType, value) {
             return $('<tr/>').append(
               $('<td/>').addClass('small').append(
-                translator(dataType.toUpperCase())
+                translator.bind(that)(dataType.toUpperCase())
               )
             ).append(
               $('<td/>').addClass('small value').append(
