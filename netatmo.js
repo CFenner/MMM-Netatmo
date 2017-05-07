@@ -193,6 +193,9 @@ Module.register('netatmo', {
         case 'Noise':
           return value.toFixed(0) + ' dB';
         case 'Humidity':
+        case 'Battery':
+        case 'WiFi':
+        case 'Radio':
           return value.toFixed(0) + '%';
         case 'Pressure':
           return value.toFixed(0) + ' mbar';
@@ -208,8 +211,6 @@ Module.register('netatmo', {
         case 'WindAngle':
         case 'GustAngle':
           return this.direction(value) + ' | ' + value + '°';
-        case 'Battery':
-          return value.toFixed(0) + '%';
         default:
           return value;
       }
