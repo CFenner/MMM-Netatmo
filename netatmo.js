@@ -317,12 +317,9 @@ Module.register('netatmo', {
                 );
               }
             }
-            sResult.append(
-              this.renderData(
-                formatter.clazz(dataType),
-                'Battery',
-                oModule.battery_percent)
-            );
+            if(oModule.battery_percent){
+              sResult.append(this.renderData(formatter.clazz(dataType), 'Battery', oModule.battery_percent));
+            }
             return sResult;
           },
           renderData: function(clazz, dataType, value) {
