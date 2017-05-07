@@ -12,7 +12,7 @@ Module.register('netatmo', {
     refreshToken: null,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
-    design: 'bubbles',
+    design: 'classic', //bubbles
     hideLoadTimer: false,
     api: {
       base: 'https://api.netatmo.com/',
