@@ -199,7 +199,7 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
-          return value.toFixed(1) + 'mm';
+          return value.toFixed(1);
         case 'Wind':
         case 'WindStrength':
         case 'GustStrength':
@@ -313,6 +313,12 @@ Module.register('netatmo', {
                 );
               }
             }
+            sResult.append(
+              this.renderData(
+                formatter.clazz(dataType),
+                'Battery',
+                oModule.battery_percent)
+            );
             return sResult;
           },
           renderData: function(clazz, dataType, value) {
@@ -439,7 +445,7 @@ Module.register('netatmo', {
                 var value = module.dashboard_data[type];
 
                 $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('visual xlarge wi wi-wind-direction').css('transform', 'rotate(' + value + 'deg)')
+                  $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
                 ).append(
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
                 ).appendTo(result);
