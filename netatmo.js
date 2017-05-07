@@ -540,7 +540,7 @@ Module.register('netatmo', {
               .append(
                 translator.bind(that)("LAST_MESSAGE")
                 + ': '
-                + moment(new Date(1000 * module.last_message)).fromNow()
+                + moment.unix(module.last_message).fromNow()
               )
               .appendTo(parent);
           },
@@ -586,7 +586,7 @@ Module.register('netatmo', {
       ).append(
         $('<div/>')
           .addClass('updated xsmall')
-          .append(moment(new Date(1000 * this.lastUpdate)).fromNow())
+          .append(moment.unix(this.lastUpdate).fromNow())
       );
       if(!this.config.hideLoadTimer){
         dom.append($(
