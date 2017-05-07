@@ -463,9 +463,9 @@ Module.register('netatmo', {
             switch(module.type){
               case this.moduleType.MAIN:
                 this.addHumidity(result, module);
-                //this.addTemperatureTrend(result, module);
+                this.addTemperatureTrend(result, module);
                 this.addPressure(result, module);
-                //this.addPressureTrend(result, module);
+                this.addPressureTrend(result, module);
                 this.addNoise(result, module);
                 this.addWiFi(result, module);
                 this.addRadio(result, module);
