@@ -481,6 +481,20 @@ Module.register('netatmo', {
                 //this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 break;
+              case this.moduleType.WIND:
+                //this.addHumidity(result, module);
+                //this.addTemperatureTrend(result, module);
+                this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
+                this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
+                this.addBattery(result, module);
+                break;
+              case this.moduleType.RAIN:
+                //this.addHumidity(result, module);
+                //this.addTemperatureTrend(result, module);
+                this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
+                this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
+                this.addBattery(result, module);
+                break;
               default:
                 break;
             }
