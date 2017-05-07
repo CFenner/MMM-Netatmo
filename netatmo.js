@@ -202,7 +202,6 @@ Module.register('netatmo', {
         case 'sum_rain_24':
         case 'sum_rain_1':
           return value.toFixed(1) + ' mm/h';
-        case 'Wind':
         case 'WindStrength':
         case 'GustStrength':
           return value.toFixed(0) + ' m/s';
@@ -468,34 +467,35 @@ Module.register('netatmo', {
                 this.addPressure(result, module);
                 //this.addPressureTrend(result, module);
                 this.addNoise(result, module);
+                this.addWiFi(result, module);
+                this.addRadio(result, module);
                 //result += this.addData('max_temp', module.dashboard_data['max_temp']);
                 //result += this.addData('min_temp', module.dashboard_data['min_temp']);
                 //result += $('<div/>').addClass('small').append('WiFi: ' + module.wifi_status)[0].outerHTML;
                 break;
               case this.moduleType.INDOOR:
                 this.addHumidity(result, module);
-                //this.addTemperatureTrend(result, module);
+                this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
-                //result += $('<div/>').addClass('small').append('Radio: ' + module.rf_status)[0].outerHTML;
+                this.addRadio(result, module);
                 break;
               case this.moduleType.OUTDOOR:
                 this.addHumidity(result, module);
-                //this.addTemperatureTrend(result, module);
+                this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
+                this.addRadio(result, module);
                 break;
               case this.moduleType.WIND:
-                //this.addHumidity(result, module);
-                //this.addTemperatureTrend(result, module);
                 this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
                 this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
                 this.addBattery(result, module);
+                this.addRadio(result, module);
                 break;
               case this.moduleType.RAIN:
-                //this.addHumidity(result, module);
-                //this.addTemperatureTrend(result, module);
-                this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
                 this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
+                this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
                 this.addBattery(result, module);
+                this.addRadio(result, module);
                 break;
               default:
                 break;
@@ -521,6 +521,12 @@ Module.register('netatmo', {
           },
           addBattery: function(parent, module){
             return this.addData(parent, 'Battery', module.battery_percent);
+          },
+          addRadio: function(parent, module){
+            return this.addData(parent, 'Radio', module.rf_status);
+          },
+          addWiFi: function(){
+            return this.addData(parent, 'WiFi', module.wifi_status);
           },
           addData: function(parent, type, value){
             return $('<div/>')
