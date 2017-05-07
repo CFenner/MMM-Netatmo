@@ -13,10 +13,11 @@
   "GUSTANGLE": "Böen",
   "WIFI": "WiFi",
   "LAST_MESSAGE": "letzter Kontakt",
-  "TEMP_TREND": "Temperatur Trend",
-  "PRESSURE_TREND": "Luftdruck Trend",
+  "TEMP_TREND": "Temperatur",
+  "PRESSURE_TREND": "Luftdruck",
   "BATTERY": "Batterie",
   "UP": "steigend",
   "STABLE": "stabil",
-  "DOWN": "fallend"
+  "DOWN": "fallend",
+  "UNDEFINED": "nicht verfügbar"
 }

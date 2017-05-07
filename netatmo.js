@@ -462,19 +462,18 @@ Module.register('netatmo', {
             var result = $('<td/>').addClass('data');
             switch(module.type){
               case this.moduleType.MAIN:
-                this.addHumidity(result, module);
                 this.addTemperatureTrend(result, module);
+                this.addHumidity(result, module);
                 this.addPressure(result, module);
                 this.addPressureTrend(result, module);
                 this.addNoise(result, module);
                 this.addWiFi(result, module);
-                this.addRadio(result, module);
                 //result += this.addData('max_temp', module.dashboard_data['max_temp']);
                 //result += this.addData('min_temp', module.dashboard_data['min_temp']);
                 break;
               case this.moduleType.INDOOR:
                 this.addHumidity(result, module);
-                //this.addTemperatureTrend(result, module);
+                this.addTemperatureTrend(result, module);
                 this.addBattery(result, module);
                 this.addRadio(result, module);
                 this.addLastSeen(result, module);
@@ -506,15 +505,19 @@ Module.register('netatmo', {
             return result;
           },
           addTemperatureTrend: function(parent, module){
-            this.addData(parent, 'temp_trend',
-              translator.bind(that)(module.dashboard_data['temp_trend'].toUpperCase()));
+            var value = module.dashboard_data['temp_trend'];
+            if(!value)
+              value = 'UNDEFINED'
+            this.addData(parent, 'temp_trend', translator.bind(that)(value.toUpperCase()));
           },
           addPressure: function(parent, module){
             return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
           },
           addPressureTrend: function(parent, module){
-            this.addData(parent, 'pressure_trend',
-              translator.bind(that)(module.dashboard_data['pressure_trend'].toUpperCase()));
+            var value = module.dashboard_data['pressure_trend'];
+            if(!value)
+              value = 'UNDEFINED'
+            this.addData(parent, 'pressure_trend', translator.bind(that)(value.toUpperCase()));
           },
           addHumidity: function(parent, module){
             return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
