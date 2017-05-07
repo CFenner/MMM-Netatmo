@@ -187,6 +187,8 @@ Module.register('netatmo', {
   },
   formatter: {
     value: function(dataType, value) {
+      if(!value)
+        return value;
       switch (dataType) {
         case 'CO2':
           return value.toFixed(0) + ' ppm';
