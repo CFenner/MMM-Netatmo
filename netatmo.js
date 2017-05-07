@@ -199,11 +199,11 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
-          return value.toFixed(1);
+          return value.toFixed(1) + 'mm/h';
         case 'Wind':
         case 'WindStrength':
         case 'GustStrength':
-          return value.toFixed(0);
+          return value.toFixed(0) + 'm/s';
         case 'WindAngle':
         case 'GustAngle':
           return this.direction(value) + ' | ' + value + '°';
@@ -405,7 +405,7 @@ Module.register('netatmo', {
                 var type = 'WindStrength';
                 var value = module.dashboard_data[type];
                 $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
+                  $('<div/>').addClass('large light bright').append(value)
                 ).append(
                   $('<div/>').addClass('xsmall').append('m/s')
                 ).appendTo(result);
@@ -414,7 +414,7 @@ Module.register('netatmo', {
                 var type = 'Rain';
                 var value = module.dashboard_data[type];
                 $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
+                  $('<div/>').addClass('large light bright').append(value)
                 ).append(
                   $('<div/>').addClass('xsmall').append('mm/h')
                 ).appendTo(result);
