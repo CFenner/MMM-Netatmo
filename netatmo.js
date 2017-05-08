@@ -14,7 +14,12 @@ Module.register('netatmo', {
     animationSpeed: 1000,
     design: 'classic', //bubbles
     hideLoadTimer: false,
-    showlastSeenAfter: 600, // in seconds (10 minutes)
+    lastSeenThreshold: 600, // in seconds (10 minutes)
+    showlastMessage: true,
+    showBattery: true,
+    showRadio: true,
+    showWiFi: true,
+    showTrend: true,
     api: {
       base: 'https://api.netatmo.com/',
       authEndpoint: 'oauth2/token',
@@ -509,7 +514,8 @@ Module.register('netatmo', {
             var value = module.dashboard_data['temp_trend'];
             if(!value)
               value = 'UNDEFINED'
-            this.addData(parent, 'temp_trend', translator.bind(that)(value.toUpperCase()));
+            if(that.config.showTrend)
+              this.addData(parent, 'temp_trend', translator.bind(that)(value.toUpperCase()));
           },
           addPressure: function(parent, module){
             return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
@@ -518,7 +524,8 @@ Module.register('netatmo', {
             var value = module.dashboard_data['pressure_trend'];
             if(!value)
               value = 'UNDEFINED'
-            this.addData(parent, 'pressure_trend', translator.bind(that)(value.toUpperCase()));
+            if(that.config.showTrend)
+              this.addData(parent, 'pressure_trend', translator.bind(that)(value.toUpperCase()));
           },
           addHumidity: function(parent, module){
             return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
@@ -527,17 +534,20 @@ Module.register('netatmo', {
             return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
           },
           addBattery: function(parent, module){
-            return this.addData(parent, 'Battery', module.battery_percent);
+            if(that.config.showBattery)
+              this.addData(parent, 'Battery', module.battery_percent);
           },
           addRadio: function(parent, module){
-            return this.addData(parent, 'Radio', module.rf_status);
+            if(that.config.showRadio)
+              this.addData(parent, 'Radio', module.rf_status);
           },
           addWiFi: function(parent, module){
-            return this.addData(parent, 'WiFi', module.wifi_status);
+            if(that.config.showWiFi)
+              this.addData(parent, 'WiFi', module.wifi_status);
           },
           addLastSeen: function(parent, module){
             var duration = Date.now() / 1000 - module.last_message;
-            if(duration > that.config.showlastSeenAfter){
+            if(that.config.showlastMessage && duration > that.config.lastMessageThreshold){
               $('<div/>')
                 .addClass('small flash')
                 .append(
