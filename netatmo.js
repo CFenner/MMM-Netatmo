@@ -4,7 +4,6 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
- /* eslint-disable max-len */
  /* global $, Q, moment, Module, Log */
 Module.register('netatmo', {
   // default config,
@@ -82,7 +81,6 @@ Module.register('netatmo', {
   },
   load: {
     token: function() {
-      /* eslint-disable new-cap */
       return Q($.ajax({
         type: 'POST',
         url: this.config.api.base + this.config.api.authEndpoint,
@@ -91,10 +89,8 @@ Module.register('netatmo', {
             this.config.clientId,
             this.config.clientSecret)
       }));
-      /* eslint-enable new-cap */
     },
     data: function(data) {
-      /* eslint-disable new-cap */
       // Log.info(this.name + " token loaded "+data.access_token);
       this.config.refreshToken = data.refresh_token;
       // call for station data
@@ -102,21 +98,20 @@ Module.register('netatmo', {
         url: this.config.api.base + this.config.api.dataEndpoint,
         data: this.config.api.dataPayload.format(data.access_token)
       }));
-      /* eslint-enable new-cap */
     }
   },
   renderAll: function(data) {
-    /* eslint-disable new-cap */
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
     // render modules
     this.dom = this.getDesign(this.config.design).render(device);
     this.updateDom(this.config.animationSpeed);
     return Q({});
-    /* eslint-enable new-cap */
   },
   renderError: function(reason) {
+    /* eslint-disable no-console */
     console.log("error " + reason);
+    /* eslint-enable no-console */
     //  enable display of error messages
     /*
     $(netatmo.location).updateWithText(
@@ -176,7 +171,7 @@ Module.register('netatmo', {
       if(value < 348.75) return 'NNW';
       return 'N';
     },
-    rain: function(value){
+    rain: function(){
       return '';
     },
     clazz: function(dataType) {
@@ -314,7 +309,6 @@ Module.register('netatmo', {
             return sResult;
           },
           module: function(module){
-            var type = module.type;
             var result = $('<div/>').addClass('module').append(
               $('<div/>').addClass('name small').append(module.module_name)
             ).append(
@@ -332,19 +326,21 @@ Module.register('netatmo', {
           },
           primary: function(module){
             var result = $('<td/>').addClass('primary');
+            var type;
+            var value;
             switch(module.type){
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
               case this.moduleType.OUTDOOR:
-                var type = 'Temperature';
-                var value = module.dashboard_data[type];
+                type = 'Temperature';
+                value = module.dashboard_data[type];
                 $('<div/>').addClass(type).append(
                   $('<div/>').addClass('large light bright').append(formatter.value(type, value))
                 ).appendTo(result);
                 break;
               case this.moduleType.WIND:
-                var type = 'WindStrength';
-                var value = module.dashboard_data[type];
+                type = 'WindStrength';
+                value = module.dashboard_data[type];
                 $('<div/>').addClass(type).append(
                   $('<div/>').addClass('large light bright').append(value)
                 ).append(
@@ -352,8 +348,8 @@ Module.register('netatmo', {
                 ).appendTo(result);
                 break;
               case this.moduleType.RAIN:
-                var type = 'Rain';
-                var value = module.dashboard_data[type];
+                type = 'Rain';
+                value = module.dashboard_data[type];
                 $('<div/>').addClass(type).append(
                   $('<div/>').addClass('large light bright').append(value)
                 ).append(
@@ -382,8 +378,8 @@ Module.register('netatmo', {
               case this.moduleType.OUTDOOR:
                 break;
               case this.moduleType.WIND:
-                var type = 'WindAngle';
-                var value = module.dashboard_data[type];
+                type = 'WindAngle';
+                value = module.dashboard_data[type];
 
                 $('<div/>').addClass(type).append(
                   $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
