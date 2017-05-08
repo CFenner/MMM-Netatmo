@@ -14,6 +14,7 @@ Module.register('netatmo', {
     animationSpeed: 1000,
     design: 'classic', //bubbles
     hideLoadTimer: false,
+    showlastSeenAfter: 600, // in seconds (10 minutes)
     api: {
       base: 'https://api.netatmo.com/',
       authEndpoint: 'oauth2/token',
@@ -535,15 +536,17 @@ Module.register('netatmo', {
             return this.addData(parent, 'WiFi', module.wifi_status);
           },
           addLastSeen: function(parent, module){
-            var duration = Date.now() - 1000*module.last_message;
-            return $('<div/>')
-              .addClass('small' + (duration > 600000?' flash':''))
-              .append(
-                translator.bind(that)("LAST_MESSAGE")
-                + ': '
-                + moment.unix(module.last_message).fromNow()
-              )
-              .appendTo(parent);
+            var duration = Date.now() / 1000 - module.last_message;
+            if(duration > that.config.showlastSeenAfter){
+              $('<div/>')
+                .addClass('small flash')
+                .append(
+                  translator.bind(that)("LAST_MESSAGE")
+                  + ': '
+                  + moment.unix(module.last_message).fromNow()
+                )
+                .appendTo(parent);
+            }
           },
           addData: function(parent, type, value){
             return $('<div/>')
