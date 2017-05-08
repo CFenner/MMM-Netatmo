@@ -1,4 +1,3 @@
-/* eslint-disable no-extend-native */
 // add string format method
 if (!String.prototype.format) {
   String.prototype.format = function() {
