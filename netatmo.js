@@ -109,74 +109,8 @@ Module.register('netatmo', {
     /* eslint-disable new-cap */
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
-    // Log.info(this.name + " data loaded, updated "+moment(new Date(1000*device.dashboard_data.time_utc)).fromNow());
-
-
-    device.modules.push({
-      "type": "NAModule2",
-      "dashboard_data": {
-          "WindAngle": 221,
-          "WindStrength": 2,
-          "GustAngle": 208,
-          "GustStrength": 4,
-          "time_utc": 1462745962,
-          "WindHistoric": [{
-              "WindStrength": 5,
-              "WindAngle": 43,
-              "time_utc": 1462742585
-          }, {
-              "WindStrength": 5,
-              "WindAngle": 174,
-              "time_utc": 1462742886
-          }, {
-              "WindStrength": 10,
-              "WindAngle": 315,
-              "time_utc": 1462743136
-          }
-          ],
-          "date_max_wind_str": 1462742283,
-          "date_max_temp": 1462687491,
-          "date_min_temp": 1462687491,
-          "min_temp": 0,
-          "max_temp": 0,
-          "max_wind_angle": 44,
-          "max_wind_str": 20
-      },
-      "data_type": ["Wind"],
-      "battery_vp": 5613,
-      "battery_percent": 79,
-      "rf_status": 79,
-      "_id": "",
-      "last_message": 1462745975,
-      "last_seen": 1462745949,
-      "last_setup": 1448382569,
-      "module_name": "Windsensor",
-      "firmware": 43
-    });
-    device.modules.push({
-      "_id": "",
-      "last_message": 1462745975,
-      "last_seen": 1462745949,
-      "last_setup": 1448382569,
-      "module_name": "Regensensor",
-      "firmware": 43,
-      "battery_vp": 5613,
-      "battery_percent": 79,
-      "rf_status": 79,
-      "type": "NAModule3",
-      "dashboard_data": {
-          "time_utc": 1462745962,
-          "Rain": 20,
-          "sum_rain_24": 40,
-          "sum_rain_1": 5
-      },
-      "data_type": ["Rain"]
-    });
-
-
     // render modules
     this.dom = this.getDesign(this.config.design).render(device);
-    //this.dom = this.renderModules(device);
     this.updateDom(this.config.animationSpeed);
     return Q({});
     /* eslint-enable new-cap */
