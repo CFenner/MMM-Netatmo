@@ -14,8 +14,8 @@ Module.register('netatmo', {
     animationSpeed: 1000,
     design: 'classic', //bubbles
     hideLoadTimer: false,
-    lastSeenThreshold: 600, // in seconds (10 minutes)
-    showlastMessage: true,
+    lastMessageThreshold: 600, // in seconds (10 minutes)
+    showLastMessage: true,
     showBattery: true,
     showRadio: true,
     showWiFi: true,
@@ -547,7 +547,7 @@ Module.register('netatmo', {
           },
           addLastSeen: function(parent, module){
             var duration = Date.now() / 1000 - module.last_message;
-            if(that.config.showlastMessage && duration > that.config.lastMessageThreshold){
+            if(that.config.showLastMessage && duration > that.config.lastMessageThreshold){
               $('<div/>')
                 .addClass('small flash')
                 .append(
