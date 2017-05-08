@@ -150,7 +150,7 @@ Module.register('netatmo', {
       "last_message": 1462745975,
       "last_seen": 1462745949,
       "last_setup": 1448382569,
-      "module_name": "Wind",
+      "module_name": "Windsensor",
       "firmware": 43
     });
     device.modules.push({
@@ -158,7 +158,7 @@ Module.register('netatmo', {
       "last_message": 1462745975,
       "last_seen": 1462745949,
       "last_setup": 1448382569,
-      "module_name": "Rain",
+      "module_name": "Regensensor",
       "firmware": 43,
       "battery_vp": 5613,
       "battery_percent": 79,
