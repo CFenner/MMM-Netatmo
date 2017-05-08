@@ -10,9 +10,9 @@
   "SUM_RAIN_1": "Rain (1h)",
   "SUM_RAIN_24": "Rain (24h)",
   "WINDSTRENGTH": "Wind",
-  "WINDANGLE": "Wind",
+  "WINDANGLE": "Wind (direction)",
   "GUSTSTRENGTH": "Gusts",
-  "GUSTANGLE": "Gusts",
+  "GUSTANGLE": "Gusts (direction)",
 
   "UP": "rising",
   "STABLE": "stable",

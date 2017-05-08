@@ -10,9 +10,9 @@
   "SUM_RAIN_1": "Niederschlag (1h)",
   "SUM_RAIN_24": "Niederschlag (24h)",
   "WINDSTRENGTH": "Wind",
-  "WINDANGLE": "Wind",
+  "WINDANGLE": "Wind (Richtung)",
   "GUSTSTRENGTH": "Böen",
-  "GUSTANGLE": "Böen",
+  "GUSTANGLE": "Böen (Richtung)",
 
   "UP": "steigend",
   "STABLE": "stabil",
