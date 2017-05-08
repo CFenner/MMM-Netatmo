@@ -200,7 +200,7 @@ Module.register('netatmo', {
     var formatter = this.formatter;
     var translator = this.translate;
     return {
-      classic: function(formatter, translator, that){
+      classic: (function(formatter, translator, that){
         return {
           render: function(device){
             var sResult = $('<div/>').addClass('modules');
@@ -269,8 +269,8 @@ Module.register('netatmo', {
             );
           }
         };
-      }(formatter, translator, that),
-      bubbles: function(formatter, translator, that){
+      })(formatter, translator, that),
+      bubbles: (function(formatter, translator, that){
         return {
           moduleType: {
             MAIN: "NAMain",
@@ -499,7 +499,7 @@ Module.register('netatmo', {
               .appendTo(parent);
           }
         };
-      }(formatter, translator, that)
+      })(formatter, translator, that)
     }[design]
   },
   getScripts: function() {
