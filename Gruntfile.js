@@ -11,7 +11,7 @@ module.exports = function(grunt) {
       options: {
         formatter: 'prose',
         format: true,
-        indent: 2,
+        indent: 2
       }
     },
     yamllint: {
@@ -26,8 +26,7 @@ module.exports = function(grunt) {
         formatters: [
           {id: 'lint-xml', dest: 'report/csslint.jslint.xml'},
           {id: 'csslint-xml', dest: 'report/csslint.xml'}
-        ],
-        import: 2
+        ]
       }
     }
   });
