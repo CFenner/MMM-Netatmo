@@ -375,8 +375,6 @@ Module.register('netatmo', {
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
                 ).appendTo(result);
                 break;
-              case this.moduleType.OUTDOOR:
-                break;
               case this.moduleType.WIND:
                 type = 'WindAngle';
                 value = module.dashboard_data[type];
@@ -387,8 +385,8 @@ Module.register('netatmo', {
                   $('<div/>').addClass('small value').append(formatter.value(type, value))
                 ).appendTo(result);
                 break;
+              case this.moduleType.OUTDOOR:
               case this.moduleType.RAIN:
-                break;
               default:
                 break;
             }
