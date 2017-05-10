@@ -203,7 +203,7 @@ Module.register('netatmo', {
       classic: (function(formatter, translator, that){
         return {
           render: function(device){
-            var sResult = $('<div/>').addClass('modules');
+            var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
             var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
               that.config.moduleOrder :
               null;
@@ -280,7 +280,7 @@ Module.register('netatmo', {
             WIND: "NAModule2"
           },
           render: function(device){
-            var sResult = $('<div/>').addClass('modules');
+            var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
             var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
               that.config.moduleOrder :
               null;
@@ -523,7 +523,7 @@ Module.register('netatmo', {
     };
   },
   getDom: function() {
-    var dom = $('<div/>').addClass('netatmo').addClass(this.config.design);
+    var dom = $('<div/>').addClass('netatmo');
     if(this.dom){
       dom.append(
         this.dom
