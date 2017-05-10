@@ -153,7 +153,7 @@ Module.register('netatmo', {
       }
     },
     direction: function(value){
-      if(value < 11.25)return 'N';
+      if(value < 11.25) return 'N';
       if(value < 33.75) return 'NNE';
       if(value < 56.25) return 'NE';
       if(value < 78.75) return 'ENE';
@@ -175,6 +175,7 @@ Module.register('netatmo', {
       return '';
     },
     clazz: function(dataType) {
+      /* unused
       switch (dataType) {
         case 'CO2':
           return 'wi-na';
@@ -192,7 +193,8 @@ Module.register('netatmo', {
           return 'wi-na';
         default:
           return '';
-      }
+      }*/
+      return '';
     }
   },
   getDesign: function(design){
