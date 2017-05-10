@@ -19,7 +19,7 @@
   "DOWN": "fallend",
   "UNDEFINED": "nicht verfügbar",
 
-  "WIFI": "WiFi",
+  "WIFI": "WLan",
   "RADIO": "Funksignal",
   "BATTERY": "Batterie",
   "LAST_MESSAGE": "letzter Kontakt"
