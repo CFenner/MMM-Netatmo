@@ -46,24 +46,24 @@
   display: inline-block;
 }
 .netatmo .classic .module {
-  overflow: hidden;
-  margin: .125em .25em;
-  border-radius: .25em;
   border: 1px solid #ffffff;
+  border-radius: .25em;
+  margin: .125em .25em;
+  overflow: hidden;
 }
 .netatmo .classic .module .name {
-  color: #000000;
-  text-align: center;
-  padding: .125em .25em;
   background: #ffffff;
+  color: #000000;
+  padding: .125em .25em;
+  text-align: center;
 }
 .netatmo .classic .module .data {
   padding: .125em .25em;
 }
 .xxlarge {
   font-size: 95px;
-  line-height: 95px;
   letter-spacing: -3px;
+  line-height: 95px;
 }
 .netatmo .bubbles .module .name {
   text-align: left;
@@ -78,23 +78,23 @@
   width: 5em;
 }
 .netatmo .bubbles .module .secondary .CO2 .visual {
-  width: .1em;
-  height: .1em;
-  margin: 1.5em auto;
   border-radius: 1em;
   box-shadow: 0 0 .9em 1em;
+  height: .1em;
+  margin: 1.5em auto;
+  width: .1em;
 }
 .netatmo .bubbles .module .secondary .CO2 .good {
-  color: #32cd32;
   background-color: #32cd32;
+  color: #32cd32;
 }
 .netatmo .bubbles .module .secondary .CO2 .average {
-  color: #ffa500;
   background-color: #ffa500;
+  color: #ffa500;
 }
 .netatmo .bubbles .module .secondary .CO2 .bad {
-  color: #ff0000;
   background-color: #ff0000;
+  color: #ff0000;
 }
 .netatmo .bubbles .module .secondary .WindAngle .visual {
   display: inline-block;
