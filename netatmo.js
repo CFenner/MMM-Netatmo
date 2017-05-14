@@ -13,6 +13,7 @@ Module.register('netatmo', {
     animationSpeed: 1000,
     design: 'classic', //bubbles
     hideLoadTimer: false,
+    horizontal: true,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
     showBattery: true,
@@ -206,6 +207,8 @@ Module.register('netatmo', {
         return {
           render: function(device){
             var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
+            if(that.config.horizontal)
+              sResult.addClass('horizontal');
             var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
               that.config.moduleOrder :
               null;
