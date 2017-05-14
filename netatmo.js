@@ -13,6 +13,7 @@ Module.register('netatmo', {
     animationSpeed: 1000,
     design: 'classic', //bubbles
     hideLoadTimer: false,
+    horizontal: true,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
     showBattery: true,
@@ -212,11 +213,11 @@ Module.register('netatmo', {
             if (aOrderedModuleList) {
               for (var moduleName of aOrderedModuleList) {
                 if (device.module_name === moduleName) {
-                  sResult.append(this.renderModule(device));
+                  sResult.append(this.renderModule(device, that.config));
                 } else {
                   for (var module of device.modules) {
                     if (module.module_name === moduleName) {
-                      sResult.append(this.renderModule(module));
+                      sResult.append(this.renderModule(module, that.config));
                       break;
                     }
                   }
@@ -224,20 +225,23 @@ Module.register('netatmo', {
               }
             } else {
               // render station data (main station)
-              sResult.append(this.renderModule(device));
+              sResult.append(this.renderModule(device, that.config));
               // render module data (connected modules)
               for (var cnt = 0; cnt < device.modules.length; cnt++) {
-                sResult.append(this.renderModule(device.modules[cnt]));
+                sResult.append(this.renderModule(device.modules[cnt], that.config));
               }
             }
             return sResult;
           },
-          renderModule: function(oModule) {
-            return $('<div/>').addClass('module').append(
+          renderModule: function(oModule, config) {
+            var sResult = $('<div/>').addClass('module').append(
               $('<div>').addClass('data').append(this.renderSensorData(oModule))
             ).append(
               $('<div>').addClass('name small').append(oModule.module_name)
             );
+            if(config.horizontal)
+              sResult.addClass('horizontal');
+            return sResult;
           },
           renderSensorData: function(oModule) {
             var sResult = $('<table/>');
