@@ -5,7 +5,7 @@ if (!String.prototype.format) {
     return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] === 'undefined' ?
         match :
-        args[number]
+        args[number]+'test'
       ;
     });
   };
