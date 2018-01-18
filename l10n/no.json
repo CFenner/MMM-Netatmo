@@ -1,0 +1,26 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Noise",
+  "HUMIDITY": "Humidity",
+  "PRESSURE": "Pressure",
+  "PRESSURE_TREND": "Pressure (trend)",
+  "TEMPERATURE": "Temperature",
+  "TEMP_TREND": "Temperature (trend)",
+  "RAIN": "Rain",
+  "SUM_RAIN_1": "Rain (1h)",
+  "SUM_RAIN_24": "Rain (24h)",
+  "WINDSTRENGTH": "Wind",
+  "WINDANGLE": "Wind (direction)",
+  "GUSTSTRENGTH": "Gusts",
+  "GUSTANGLE": "Gusts (direction)",
+
+  "UP": "rising",
+  "STABLE": "stable",
+  "DOWN": "falling",
+  "UNDEFINED": "not available",
+
+  "WIFI": "WiFi",
+  "RADIO": "Radio signal",
+  "BATTERY": "Battery",
+  "LAST_MESSAGE": "last contact"
+}
