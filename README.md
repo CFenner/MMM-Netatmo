@@ -8,7 +8,7 @@
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
-![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/master/.github/preview.png)
+![Netatmo visualisation](https://raw.githubusercontent.com/AgP42/MMM-Netatmo/master/Netatmo_NEW.png)
 
 ## Usage
 
@@ -19,7 +19,11 @@ _Prerequisites_
 
 To use this module with the **old module system**, use this branch: https://github.com/CFenner/MagicMirror-Netatmo-Module/tree/rel-1.0
 
-To use this module, just clone this repository to your __modules__ folder of your MagicMirror: `git clone https://github.com/CFenner/MagicMirror-Netatmo-Module.git netatmo`
+To use this module, clone this repository to your __modules__ folder of your MagicMirror:
+
+`cd ~/MagicMirror/modules`
+
+`git clone https://github.com/AgP42/MMM-Netatmo.git netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
@@ -51,27 +55,6 @@ The POST request will return the following data:
 
 The REFRESH_TOKEN will be needed in the [config entries](#configuration).
 
-##### Hurl.it
-
-You can also send a POST request with [Hurl.it](https://www.hurl.it)([Git](https://github.com/defunkt/hurl)) to the Netatmo auth url: https://api.netatmo.com/oauth2/token
-
-Also you need to provide the following data (add as parameters):
-
-- grant_type: password
-- client_id: [APP_ID]
-- client_secret: [APP_SECRET]
-- username: [USER_MAIL]
-- password: [USER_PASSWORD]
-- scope: read_station
-
-The POST request will return the following data:
-
-- access_token: [ACCESS_TOKEN]
-- expires_in: 10800
-- refresh_token: [REFRESH_TOKEN]
-
-The REFRESH_TOKEN will be needed in the [config entries](#configuration).
-
 ### Configuration
 
 The module needs the default configuration block in your config.js to work.
@@ -80,10 +63,19 @@ The module needs the default configuration block in your config.js to work.
 {
 	module: 'netatmo',
 	position: 'bottom_left', // the location where the module should be displayed
+	header: 'Netatmo',
 	config: {
+		location: 'germany/berlin', //for AirQuality
+		lang: 'fr', 
+		updateIntervalAirQuality: 600, //in secondes
+		
 		clientId: '', // your app id
 		clientSecret: '', // your app secret
 		refreshToken: '' // your generated refresh token
+		
+		updatesIntervalDisplay: 60, //en sec. Delais pour aller voir si besoin d'actualiser netatmo et airquality
+    		animationSpeed: 1000,
+		moduleOrder: ["Extérieur", "Chambre"]
 	}
 }
 ```
@@ -95,6 +87,8 @@ The following properties can be configured:
 |clientId|The ID of your Netatmo [application](https://dev.netatmo.com/dev/listapps).<br><br>This value is **REQUIRED**|
 |clientSecret|The app secret of your Netatmo [application](https://dev.netatmo.com/dev/listapps).<br><br>This value is **REQUIRED**|
 |refreshToken|The generated refresh token you got from the POST request to the auth api.<br><br>This value is **REQUIRED**|
-|refreshInterval|How often does the content needs to be updated? (Minutes)<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `3`|
+|updatesIntervalDisplay|How often to check if netatmo datas needs to be updated? (Minutes) No Netatmo server request with this value. Netatmo request minimum every 11 min.<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `1`|
 |moduleOrder|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.|
-|dataOrder|The rendering order of the data types of a module, ommit a data type to hide the output.<br><br>**Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`|
+|location|For AirQuality display. Use the part behind http://aqicn.org/city/ for your location. For example http://aqicn.org/city/netherland/utrecht/griftpark/<br><br>**Example:** `'germany/berlin'`|
+|lang|To display AirQuality result. Not all languages may be supported (see: http://aqicn.org/faq/2015-07-28/air-quality-widget-new-improved-feed/).<br><br>**Example:** `'fr'`|
+|updateIntervalAirQuality|Value in secondes. If last request to AirQuality server is bigger that this value, a new request to made. AirQuality serveur update is approx every hour. <br><br>**Example:** `600`|
