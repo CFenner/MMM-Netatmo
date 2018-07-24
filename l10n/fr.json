@@ -5,6 +5,8 @@
   "PRESSURE": "pression",
   "PRESSURE_TREND": "pression",
   "TEMPERATURE": "température",
+  "MIN_TEMP": "température min",
+  "MAX_TEMP": "température max",
   "TEMP_TREND": "température",
   "RAIN": "pluie",
   "SUM_RAIN_1": "pluie (1h)",
