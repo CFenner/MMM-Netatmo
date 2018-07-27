@@ -17,8 +17,6 @@ _Prerequisites_
 - requires MagicMirror v2.0.0
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
 
-To use this module with the **old module system**, use this branch: https://github.com/CFenner/MagicMirror-Netatmo-Module/tree/rel-1.0
-
 To use this module, clone this repository to your __modules__ folder of your MagicMirror:
 
 `cd ~/MagicMirror/modules`
