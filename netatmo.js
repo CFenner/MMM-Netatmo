@@ -45,9 +45,10 @@ Module.register('netatmo', {
     Log.info('Starting module: ' + this.name);//AgP - 1 fois au lancement du miroir
  		
 	// run upload for the first time, chacun va memoriser sa date d'upload
- //   this.updateLoad();
- //   this.loadAirQuality();
+    this.updateLoad();
+    this.loadAirQuality();
  //sert à rien car appelé par resume et les valeurs des dates ont pas le temps de se mémoriser avant...
+ //si ca sert, parce que resume est pas toujours appelé au démarrage...
 		
 	//defini un timer pour aller gerer les uploads et les affichages seon présence ou non	
 	this.config.updatesIntervalDisplayID = setInterval(() => { 
