@@ -401,7 +401,7 @@ Module.register('netatmo', {
                 var valuePressure = module.dashboard_data['Pressure'];
                 var valueNoise = module.dashboard_data['Noise'];
                              
-                var statusCO2 = valueCO2 > 1600?'bad':valueCO2 > 800?'average':'good';
+                var statusCO2 = valueCO2 > 2000?'bad':valueCO2 > 1000?'average':'good';
                 
 				//j'en sais rien moi ce qu'est une bonne pression atmospherique...
 				if (valuePressure >= 1010 && valuePressure <= 1030){
