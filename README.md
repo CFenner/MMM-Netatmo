@@ -8,7 +8,7 @@
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
-![Netatmo visualisation](https://raw.githubusercontent.com/AgP42/MMM-Netatmo/master/Netatmo_NEW.png)
+![Netatmo visualisation](https://raw.githubusercontent.com/haywirecoder/MMM-Netatmo/master/Netatmo.png)
 
 ## Usage
 
@@ -21,7 +21,7 @@ To use this module, clone this repository to your __modules__ folder of your Mag
 
 `cd ~/MagicMirror/modules`
 
-`git clone https://github.com/AgP42/MMM-Netatmo.git netatmo`
+`git clone https://github.com/haywirecoder/MMM-Netatmo.git netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
@@ -59,21 +59,20 @@ The module needs the default configuration block in your config.js to work.
 
 ```
 {
-	module: 'netatmo',
+	module: 'MMM-Netatmo',
 	position: 'bottom_left', // the location where the module should be displayed
 	header: 'Netatmo',
 	config: {
 		location: 'germany/berlin', //for AirQuality
-		lang: 'fr', 
 		updateIntervalAirQuality: 600, //in secondes
 		
 		clientId: '', // your app id
 		clientSecret: '', // your app secret
 		refreshToken: '' // your generated refresh token
 		
-		updatesIntervalDisplay: 60, //en sec. Delais pour aller voir si besoin d'actualiser netatmo et airquality
+		updatesIntervalDisplay: 60, //refresh internal
     		animationSpeed: 1000,
-		moduleOrder: ["Extérieur", "Chambre"]
+		moduleOrder: ["Wind","Rain","Backyard","Main", "Master]
 	}
 }
 ```
