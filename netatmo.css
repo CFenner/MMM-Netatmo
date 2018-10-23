@@ -1,4 +1,4 @@
-.netatmo {
+.netatmo .weathericon {
   display: inline-block;
 }
 .netatmo .loading,
@@ -8,6 +8,12 @@
 }
 .netatmo .textgreen {
   color: #32cd32;
+}
+.netatmo .textyellow {
+  color: #cacd32;
+}
+.netatmo .textblue {
+  color: #5b32cd;
 }
 .netatmo .textorange {
   color: #ffa500;
@@ -28,6 +34,7 @@
 }
 
 .module .displayTemp {
+
   text-align: left;
 }
 .netatmo .bubbles .module .visual {
@@ -94,10 +101,9 @@
   display: inline-block;
 }
 
-.xxlarge {
-  font-size: 95px;
-  letter-spacing: -3px;
-  line-height: 95px;
+.x-medium {
+  
+  font-size:170%;
 }
 .netatmo .bubbles .module .name {
   text-align: left;
