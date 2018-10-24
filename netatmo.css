@@ -12,14 +12,17 @@
 .netatmo .textyellow {
   color: #cacd32;
 }
-.netatmo .textblue {
-  color: #5b32cd;
+.netatmo .textpurple {
+  color: #361b80;
 }
 .netatmo .textorange {
   color: #ffa500;
 }
 .netatmo .textred {
   color: #ff0000;
+}
+ .netatmo .textdeepred {
+  color: #6e0202;
 }
 
 .line {

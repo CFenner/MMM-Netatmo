@@ -226,10 +226,12 @@ Module.register('MMM-Netatmo', {
         case 'Humidity':
           return value.toFixed(0) + '%';
         case 'Rain':
-          return value.toFixed(0);
+          if (value > 0) return value.toFixed(0) + ' in/h';
+          return 'NA';
         case 'Wind':
         case 'WindStrength':
-          return value.toFixed(0);
+          if (value > 0) return value.toFixed(0) + ' mph';
+          return 'NA';
         case 'WindAngle':
           var tailval = ' | ' + value + '°';
           if(value < 11.25)return 'N' + tailval;
@@ -417,7 +419,7 @@ Module.register('MMM-Netatmo', {
                 valueMax = module.dashboard_data['max_temp'];
                 valueTrend = module.dashboard_data['temp_trend'];
                 
-                Log.log("getDesign - Temperature : " + value + ' C');
+                // Log.log("getDesign - Temperature : " + value + ' C');
                 
                 if (valueTrend == 'up'){
                   TrendIcon = 'fa fa-arrow-up';
@@ -472,7 +474,7 @@ Module.register('MMM-Netatmo', {
               .append(
               $('<div/>').addClass('fa fa-tint').addClass(status)
               ).append(
-              $('<span/>').addClass('small value').append('  Hum: '+ formatter.value(type, value))
+              $('<span/>').addClass('small value').append('  Humidity: '+ formatter.value(type, value))
               ).appendTo(result);
               
               break;
@@ -514,9 +516,14 @@ Module.register('MMM-Netatmo', {
               break;
             
               case this.moduleType.OUTDOOR:
-              // Display the AirQuality
-              
-              var statusAirQuality = AirQualityValue < 51?'textgreen':AirQualityValue < 101?'textorange':'textred';                         
+              // Display the AirQuality base on Air Quality and Pollution Measurement. 
+              var statusAirQuality = AirQualityValue < 51?'textgreen'
+              :AirQualityValue < 101?'textyellow'
+              :AirQualityValue < 151?'textorange'
+              :AirQualityValue < 201?'textred'
+              :AirQualityValue < 301?'textpurple'
+              :'textdeepred';
+          
               $('<div/>').addClass('').append(
 					    $('<div/>').addClass('medium light').append(AirQualityImpact)
               ).append(
@@ -543,22 +550,22 @@ Module.register('MMM-Netatmo', {
 				        var statusWiFi = valueWiFi < 40?'textred':'';
                     
                 //70dB vacuum cleaner. 40dB: library 
-				        var statusNoise = valueNoise > 65?'fa fa-volume-up':valueNoise > 45?'fa fa-volume-down':'fa fa-volume-off';
-                var statusNoiseQuality =  valueNoise > 65?'textred':valueNoise > 45?'textorange':'textgreen';
+				        var statusNoise = valueNoise > 70?'fa fa-volume-up':valueNoise > 50?'fa fa-volume-down':'fa fa-volume-off';
+                var statusNoiseQuality =  valueNoise > 70?'textred':valueNoise > 50?'textorange':'';
 
 				        // print information
 				        $('<td/>').addClass('').append(
                   $('<span/>').addClass('fa fa-wifi').addClass(statusWiFi)
                 ).append(
-                  $('<span/>').addClass('updated xsmall').append(' WiFi : ' + formatter.value('WiFi', valueWiFi) + '  ')
+                  $('<span/>').addClass('updated xsmall').append(' WiFi: ' + formatter.value('WiFi', valueWiFi) + '  ')
                 ).append(
                   $('<span/>').addClass('fa fa-thermometer-half')
                 ).append( 
-                  $('<span/>').addClass('updated xsmall').append('Pressure :' + formatter.value('Pressure', valuePressure )+ ' - ')
+                  $('<span/>').addClass('updated xsmall').append(' Pressure: ' + formatter.value('Pressure', valuePressure ) + ' ')
                 ).append(
                   $('<span/>').addClass(statusNoise).addClass(statusNoiseQuality)
                 ).append(
-                  $('<span/>').addClass('updated xsmall').append('Noise :' + formatter.value('Noise', valueNoise))
+                  $('<span/>').addClass('updated xsmall').append(' Noise: ' + formatter.value('Noise', valueNoise))
                 ) .appendTo(result);   
                     
               break;
@@ -576,7 +583,7 @@ Module.register('MMM-Netatmo', {
                 var statusHum;
                 // Set humidity status color
                 if (valueHum >= 40 && valueHum <= 60){
-                  statusHum = 'textgreen';
+                  statusHum = '';
                   }else if (valueHum < 40 && valueHum > 30 || valueHum < 70 && valueHum > 60){
                   statusHum = 'textorange';
                   }else if (valueHum <= 30 || valueHum >= 70){
@@ -587,11 +594,11 @@ Module.register('MMM-Netatmo', {
                 $('<td/>').addClass('').append(
                   $('<span/>').addClass(statusBattery)
                 ).append(
-                  $('<span/>').addClass('updated xsmall').append(valueBattery +'%  ')
+                  $('<span/>').addClass('updated xsmall').append(formatter.value('Battery', valueBattery) + ' ')
                 ).append(
                   $('<span/>').addClass('fa fa-signal fa-fw').addClass(statusRadio)
                 ).append(
-                  $('<span/>').addClass('updated xsmall').append('Radio : ' + valueRadio + '%')
+                  $('<span/>').addClass('updated xsmall').append(' Radio: ' + formatter.value('Radio', valueRadio) + ' ')
                 ).append(
                   $('<span/>').addClass('fa fa-tint').addClass(statusHum)
                 ).append(
@@ -616,7 +623,7 @@ Module.register('MMM-Netatmo', {
                 var statusHum;
 
                 if (valueHum >= 40 && valueHum <= 60){
-                  statusHum = 'textgreen';
+                  statusHum = '';
                   }else if (valueHum < 40 && valueHum > 30 || valueHum < 70 && valueHum > 60){
                   statusHum = 'textorange';
                   }else if (valueHum <= 30 || valueHum >= 70){
@@ -627,11 +634,11 @@ Module.register('MMM-Netatmo', {
                 $('<div/>').addClass('').append(
                   $('<span/>').addClass(statusBattery)
                 ).append(
-                  $('<span/>').addClass('updated xsmall').append(valueBattery +'%  ')
+                  $('<span/>').addClass('updated xsmall').append(formatter.value('Battery', valueBattery) + ' ')
                 ).append(
                   $('<span/>').addClass('fa fa-signal fa-fw').addClass(statusRadio)
                 ).append(
-                  $('<span/>').addClass('updated xsmall').append('Radio : ' + valueRadio + '%')
+                  $('<span/>').addClass('updated xsmall').append(' Radio: ' + formatter.value('Radio', valueRadio) + ' ')
                 ).append(
                    $('<span/>').addClass('fa fa-tint').addClass(statusHum)
                 ).append(
@@ -643,18 +650,18 @@ Module.register('MMM-Netatmo', {
                         .append(
                           $('<span/>').addClass('wi wi-rain')
                         ).append(
-                          $('<span/>').addClass('updated xsmall').append('Rain : ' + RainValue + ' in/h')
+                          $('<span/>').addClass('updated xsmall').append('Rain: ' + formatter.value('Rain',RainValue ) + ' ')
                         ).append(
                           $('<span/>').addClass('wi wi-strong-wind')
                         ).append(
-                          $('<span/>').addClass('updated xsmall').append('Wind : ' + WindValue + ' mph ')
+                          $('<span/>').addClass('updated xsmall').append('Wind: ' + formatter.value('Wind',WindValue ) + ' ')
                         ).append(
                            $('<span/>').addClass('updated xsmall').append(formatter.value('WindAngle', WindAngleValue))
                       )//finsh tr
                     )//finsh table
                   )//finsh div
                 ).append(
-                  $('<div/>').addClass('line')
+                  $('<div/>').addClass('line')  
                 )
                 .appendTo(result);                                     
               break;
