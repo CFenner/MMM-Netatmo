@@ -463,7 +463,7 @@ Module.register('MMM-Netatmo', {
               var value = module.dashboard_data[type];			
 				
 				      if (value >= 40 && value <= 60){
-					      status = 'textgreen';
+					      status = '';
 				      }else if (value < 40 && value > 30 || value < 70 && value > 60){
 					      status = 'textorange';
 				      }else if (value <= 30 || value >= 70){
