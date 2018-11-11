@@ -21,7 +21,7 @@ To use this module, clone this repository to your __modules__ folder of your Mag
 
 `cd ~/MagicMirror/modules`
 
-`git clone https://github.com/haywirecoder/MMM-Netatmo.git netatmo`
+`git clone https://github.com/haywirecoder/MMM-Netatmo.git MMM-Netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
