@@ -517,7 +517,8 @@ Module.register('MMM-Netatmo', {
             
               case this.moduleType.OUTDOOR:
               // Display the AirQuality base on Air Quality and Pollution Measurement. 
-              var statusAirQuality = AirQualityValue < 51?'textgreen'
+              var statusAirQuality = isNaN(AirQualityValue)?'textgray'
+              :AirQualityValue < 51?'textgreen'
               :AirQualityValue < 101?'textyellow'
               :AirQualityValue < 151?'textorange'
               :AirQualityValue < 201?'textred'
@@ -529,7 +530,7 @@ Module.register('MMM-Netatmo', {
               ).append(
 					    $('<span/>').addClass('fa fa-leaf').addClass(statusAirQuality)
 				      ).append(
-					    $('<span/>').addClass('small value').append(' ' + AirQualityValue)
+					    $('<span/>').addClass('small value').append(' AQI: ' + AirQualityValue)
     
              ).appendTo(result);
                             

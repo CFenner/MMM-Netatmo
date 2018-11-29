@@ -24,6 +24,9 @@
  .netatmo .textdeepred {
   color: #6e0202;
 }
+.netatmo .textgray {
+  color: #666;
+}
 
 .line {
   border-bottom: 1px solid #666;
