@@ -1,0 +1,26 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Støy",
+  "HUMIDITY": "Luftfuktigheit",
+  "PRESSURE": "Lufttrykk",
+  "PRESSURE_TREND": "Lufttrykk (trend)",
+  "TEMPERATURE": "Temperatur",
+  "TEMP_TREND": "Temperatur (trend)",
+  "RAIN": "Regn",
+  "SUM_RAIN_1": "Regn (1h)",
+  "SUM_RAIN_24": "Regn (24h)",
+  "WINDSTRENGTH": "Vind",
+  "WINDANGLE": "Vind (retning)",
+  "GUSTSTRENGTH": "Vindkast",
+  "GUSTANGLE": "Vindkast (retning)",
+
+  "UP": "Aukande",
+  "STABLE": "Stabilt",
+  "DOWN": "Fallande",
+  "UNDEFINED": "Ikkje tilgjengeleg",
+
+  "WIFI": "WiFi",
+  "RADIO": "Radio signal",
+  "BATTERY": "Batteri",
+  "LAST_MESSAGE": "Sist kontakt"
+}
