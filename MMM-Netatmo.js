@@ -145,7 +145,7 @@ Module.register('MMM-Netatmo', {
 		//We memorize the date of our data upload
 		DateUpdateDataAirQuality = Date.now() / 1000;
 		
-		Log.log("renderAirQuality at "+ moment.unix(DateUpdateDataAirQuality).format('dd - HH:mm:ss') +" - value : " + AirQualityValue + ' - impact : '+ AirQualityImpact);
+		//Log.log("renderAirQuality at "+ moment.unix(DateUpdateDataAirQuality).format('dd - HH:mm:ss') +" - value : " + AirQualityValue + ' - impact : '+ AirQualityImpact);
 
 	},
 
@@ -233,6 +233,7 @@ Module.register('MMM-Netatmo', {
           if (value > 0) return value.toFixed(0) + ' mph';
           return 'NA';
         case 'WindAngle':
+          if (value < 0) return " ";
           var tailval = ' | ' + value + '°';
           if(value < 11.25)return 'N' + tailval;
           if(value < 33.75) return 'NNE'+ tailval;
@@ -325,6 +326,8 @@ Module.register('MMM-Netatmo', {
                 } else {
                   for (var module of device.modules) 
                   {
+                    //Log.log(module.module_name);
+                    //Log.log(module.type);
                     if (module.module_name === moduleName)
                     {
                       switch(module.type)
@@ -336,14 +339,20 @@ Module.register('MMM-Netatmo', {
                         break;
       
                         case this.moduleType.WIND:
-                          
+                          if (module.dashboard_data === undefined) {
+                            break;
+                          }
                           WindValue = module.dashboard_data['WindStrength'];
                           WindAngleValue = module.dashboard_data['WindAngle'];
                           
                         break;
                   
                         case this.moduleType.RAIN:
+                          if (module.dashboard_data === undefined) {
+                              break;
+                          }
                           RainValue = module.dashboard_data['Rain'];
+                          
                         break; 
                       } 
 
@@ -367,13 +376,18 @@ Module.register('MMM-Netatmo', {
                   break;
 
                   case this.moduleType.WIND:
-                    
-                    WindValue = device.modules[cnt].dashboard_data['WindStrength'];
-                    WindAngleValue = device.modules[cnt].dashboard_data['WindAngle'];
+                    if (device.modules[cnt].dashboard_data === undefined) {
+                      break;
+                    }
+                   WindValue = device.modules[cnt].dashboard_data['WindStrength'];
+                   WindAngleValue = device.modules[cnt].dashboard_data['WindAngle'];
                     
                   break;
             
                   case this.moduleType.RAIN:
+                    if (device.modules[cnt].dashboard_data === undefined) {
+                        break;
+                     }
                     RainValue = device.modules[cnt].dashboard_data['Rain'];
                   break; 
                 }  
@@ -414,13 +428,22 @@ Module.register('MMM-Netatmo', {
               case this.moduleType.MAIN:
               case this.moduleType.OUTDOOR:
                 type = 'Temperature';
-                value = module.dashboard_data[type];
-                valueMin = module.dashboard_data['min_temp'];
-                valueMax = module.dashboard_data['max_temp'];
-                valueTrend = module.dashboard_data['temp_trend'];
+                if (module.dashboard_data === undefined) {
+                  value = "NA";
+                  valueMin = "NA";
+                  valueMax = "NA";
+                  valueTrend = "";
+                }
+                else
+                {
+                 value = module.dashboard_data[type];
+                 valueMin = module.dashboard_data['min_temp'];
+                 valueMax = module.dashboard_data['max_temp'];
+                 valueTrend = module.dashboard_data['temp_trend'];
+                }
                 
                 // Log.log("getDesign - Temperature : " + value + ' C');
-                
+
                 if (valueTrend == 'up'){
                   TrendIcon = 'fa fa-arrow-up';
                 }else if (valueTrend == 'stable'){
@@ -442,10 +465,16 @@ Module.register('MMM-Netatmo', {
               break;
               case this.moduleType.INDOOR:
                   type = 'Temperature';
-                  value = module.dashboard_data[type];
+                  if (module.dashboard_data === undefined)
+                    value = "NA";
+                  else
+                    value = module.dashboard_data[type];
+                    
                   $('<div/>').addClass(type).append(                 
                     $('<div/>').addClass('x-medium light bright').append(formatter.value(type, value))
                   ).appendTo(result);
+                  
+                
               break; 
               default:
             }
@@ -454,13 +483,16 @@ Module.register('MMM-Netatmo', {
 
           displayHum: function(module){
             var result;
-           
+            var value = "";
             var type = 'Humidity'; 
             switch(module.type){
               case this.moduleType.MAIN:             
              
               result = $('<div/>').addClass('displayHum');
-              var value = module.dashboard_data[type];			
+              if (module.dashboard_data === undefined)
+                value = "NA";
+              else
+                value = module.dashboard_data[type];			
 				
 				      if (value >= 40 && value <= 60){
 					      status = '';
@@ -488,9 +520,13 @@ Module.register('MMM-Netatmo', {
 
           displayExtra: function(module){
             var result = $('<td/>').addClass('displayExtra');
+            var valueCO2 = 0;
             switch(module.type){
               case this.moduleType.MAIN:
-                var valueCO2 = module.dashboard_data['CO2'];      
+                if (module.dashboard_data === undefined)
+                  valueCO2 = 1000;
+                else
+                  valueCO2 = module.dashboard_data['CO2'];      
                 var statusCO2 = valueCO2 > 2000?'bad':valueCO2 > 1000?'average':'good';
 
                 $('<div/>').addClass('').append(
@@ -503,14 +539,17 @@ Module.register('MMM-Netatmo', {
               break;
                     
               case this.moduleType.INDOOR:
-
-                var valueCO2 = module.dashboard_data['CO2'];
+                var valueCO2 = 0;
+                if (module.dashboard_data === undefined)
+                  valueCO2 = 1000;
+                else
+                  valueCO2 = module.dashboard_data['CO2'];     
                 var statusCO2 = valueCO2 > 2000?'bad':valueCO2 > 1000?'average':'good';
 
                 $('<div/>').addClass('').append(
                   $('<div/>').addClass('small value').append('CO² : ' + formatter.value('CO2', valueCO2))
                 ).append(
-                  $('<div/>').addClass('visual small').addClass(statusCO2)  
+                  $('<div/>').addClass('visual-s small').addClass(statusCO2)  
                 ).appendTo(result);                  
                 
               break;
@@ -542,12 +581,22 @@ Module.register('MMM-Netatmo', {
           
           displayInfos: function(module){ //add additional information module at the bottom
             var result = $('<td/>').addClass('');
+            var valuePressure = 0;
+            var valueNoise = 0;
             switch(module.type){
               case this.moduleType.MAIN: //the main interior module
 
-				        var valueWiFi = module.wifi_status;
-                var valuePressure = module.dashboard_data['Pressure'];
-                var valueNoise = module.dashboard_data['Noise'];
+                var valueWiFi = module.wifi_status;
+                if (module.dashboard_data === undefined)
+                {
+                  valuePressure = 0;
+                  valueNoise = 0;
+                }
+                else
+                {
+                  valuePressure = module.dashboard_data['Pressure'];
+                  valueNoise = module.dashboard_data['Noise'];
+                }
 				        var statusWiFi = valueWiFi < 40?'textred':'';
                     
                 //70dB vacuum cleaner. 40dB: library 
@@ -567,6 +616,8 @@ Module.register('MMM-Netatmo', {
                   $('<span/>').addClass(statusNoise).addClass(statusNoiseQuality)
                 ).append(
                   $('<span/>').addClass('updated xsmall').append(' Noise: ' + formatter.value('Noise', valueNoise))
+                ).append(
+                    $('<div/>').addClass('line')
                 ) .appendTo(result);   
                     
               break;
@@ -575,12 +626,16 @@ Module.register('MMM-Netatmo', {
                                           
                 var valueBattery = module.battery_percent;
                 var valueRadio = module.rf_status;
+                var valueHum = 0;
        
                 // Set battery and radio status color
                 var statusBattery = valueBattery < 30?'textred fa fa-battery-1 fa-fw':valueBattery < 70?'fa fa-battery-2 fa-fw':'fa fa-battery-4 fa-fw';
                 var statusRadio = valueRadio < 30?'textred':'';
+                if (module.dashboard_data === undefined)
+                  valueHum = 0;
+                else
+                  valueHum = module.dashboard_data['Humidity'];
 
-                var valueHum = module.dashboard_data['Humidity'];
                 var statusHum;
                 // Set humidity status color
                 if (valueHum >= 40 && valueHum <= 60){
@@ -614,13 +669,17 @@ Module.register('MMM-Netatmo', {
                                           
                 var valueBattery = module.battery_percent;
                 var valueRadio = module.rf_status;
-                
+                var valueHum = 0;
                 // Set battery and radio status color
                 var statusBattery = valueBattery < 30?'textred fa fa-battery-1 fa-fw':valueBattery < 70?'fa fa-battery-2 fa-fw':'fa fa-battery-4 fa-fw';
                 var statusRadio = valueRadio < 30?'textred':'';
 
                  // Set humidity status color
-                var valueHum = module.dashboard_data['Humidity'];
+                 if (module.dashboard_data === undefined)
+                  valueHum = 0;
+                else
+                  valueHum = module.dashboard_data['Humidity'];
+
                 var statusHum;
 
                 if (valueHum >= 40 && valueHum <= 60){
