@@ -1,12 +1,12 @@
-/* Magic Mirror
- * Module: Netatmo
- *
+/* Magic Mirror Module: Netatmo
+ * inspired
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
+
  /* global $, Q, moment, Module, Log */
  
-// Mmanage the PIR and the module.hidden at the same time
+// Manage the PIR and the module.hidden at the same time
 var UserPresence = true; // by default we are present (no PIR sensor to cut)
 var ModuleNetatmoHidden = false; /// by default  display the module (if no carousel module or other)
 
@@ -20,17 +20,14 @@ var AirQualityValue = 0; //Initial air quality
 Module.register('MMM-Netatmo', {
   // default config,
   defaults: {
-  
-  //for AirQuality
-  lang: 'de',
-	location: 'germany/berlin',
-	updateIntervalAirQuality: 600, // en secondes = every 30 minutes
-
-    
+    //for AirQuality
+    lang: 'de',
+  	location: 'germany/berlin',
+  	updateIntervalAirQuality: 600, // en secondes = every 30 minutes
     refreshToken: null,
     updatesIntervalDisplay: 60, 
     animationSpeed: 1000,
-	updatesIntervalDisplayID: 0,
+	  updatesIntervalDisplayID: 0,
     api: {
       base: 'https://api.netatmo.com/',
       authEndpoint: 'oauth2/token',
@@ -252,6 +249,12 @@ Module.register('MMM-Netatmo', {
           if(value < 326.25) return 'NW'+ tailval;
           if(value < 348.75) return 'NNW'+ tailval;
           return 'N'+ tailval;
+        case 'health_idx': //Air Quality Health Index
+          if(value = 0) return 'Healthy';
+          if(value = 1) return 'Fine';
+          if(value = 2) return 'Fair';
+          if(value = 3) return 'Poor';
+          if(value = 4) return 'Unhealthy';
         case 'Battery':
           return value.toFixed(0) + '%';
         case 'WiFi':
@@ -311,7 +314,8 @@ Module.register('MMM-Netatmo', {
             INDOOR: "NAModule4",
             OUTDOOR: "NAModule1",
             RAIN: "NAModule3",
-            WIND: "NAModule2"
+            WIND: "NAModule2",
+            HEALTH: "NHC",
           },
           render: function(device){
             var sResult = $('<div/>').addClass('modules').addClass('bubbles');
