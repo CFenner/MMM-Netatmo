@@ -478,7 +478,7 @@ Module.register('MMM-Netatmo', {
               break; 
               default:
             }
-            return result.translate;
+            return result;
           },
 
           displayHum: function(module){
@@ -515,7 +515,7 @@ Module.register('MMM-Netatmo', {
               default:
                 break;
             }
-            return result.translate;
+            return result;
           },
 
           displayExtra: function(module){
@@ -576,7 +576,7 @@ Module.register('MMM-Netatmo', {
               default:
                 break;
             }
-            return result.translate;
+            return result;
           },
           
           displayInfos: function(module){ //add additional information module at the bottom
@@ -729,7 +729,7 @@ Module.register('MMM-Netatmo', {
               default:
                 break;
             }
-            return result.translate;
+            return result;
           },
         };
       })(formatter, translator, that) // end of the bubbles design
@@ -754,11 +754,11 @@ Module.register('MMM-Netatmo', {
   getTranslations: function() {
     //Log.log("Netatmo : getTranslations");
     return {
-      en: 'l10n/en.json',
-      de: 'l10n/de.json',
-      fr: 'l10n/fr.json',
-      cs: 'l10n/cs.json',
-      nb: 'l10n/nb.json'
+      en: 'translations/en.json',
+      de: 'translations/de.json',
+      fr: 'translations/fr.json',
+      cs: 'translations/cs.json',
+      nb: 'translations/nb.json'
     };
   },
   
