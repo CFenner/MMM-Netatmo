@@ -226,11 +226,11 @@ Module.register('MMM-Netatmo', {
         case 'Humidity':
           return value.toFixed(0) + '%';
         case 'Rain':
-          if (value > 0) return value.toFixed(0) + ' in/h';
+          if (value > 0) return value.toFixed(0) + ' cm/Std';
           return 'NA';
         case 'Wind':
         case 'WindStrength':
-          if (value > 0) return value.toFixed(0) + ' mph';
+          if (value > 0) return value.toFixed(0) + ' km/Std';
           return 'NA';
         case 'WindAngle':
           if (value < 0) return " ";
@@ -258,12 +258,12 @@ Module.register('MMM-Netatmo', {
         case 'Radio':
           return value.toFixed(0) + '%';
         case 'Pressure':
-          return(value*0.02953).toFixed(0) + ' inHg';
+          return value.toFixed(0) + ' mBar';
         case 'Temperature':
-          return ((value*9)/5+32).toFixed(1) + '°';
+          return value.toFixed(1) + '°C';
         case 'min_temp':
         case 'max_temp':
-          return ((value*9)/5+32).toFixed(1) + '°';
+          return value.toFixed(1) + '°C';
         default:
           return value;
       }
@@ -478,7 +478,7 @@ Module.register('MMM-Netatmo', {
               break; 
               default:
             }
-            return result;
+            return result.translate;
           },
 
           displayHum: function(module){
@@ -515,7 +515,7 @@ Module.register('MMM-Netatmo', {
               default:
                 break;
             }
-            return result;
+            return result.translate;
           },
 
           displayExtra: function(module){
@@ -576,7 +576,7 @@ Module.register('MMM-Netatmo', {
               default:
                 break;
             }
-            return result;
+            return result.translate;
           },
           
           displayInfos: function(module){ //add additional information module at the bottom
@@ -729,7 +729,7 @@ Module.register('MMM-Netatmo', {
               default:
                 break;
             }
-            return result;
+            return result.translate;
           },
         };
       })(formatter, translator, that) // end of the bubbles design
