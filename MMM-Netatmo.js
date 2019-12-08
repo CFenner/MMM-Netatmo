@@ -22,7 +22,7 @@ Module.register('MMM-Netatmo', {
   defaults: {
   
   //for AirQuality
-  lang: null,
+  lang: 'de',
 	location: 'germany/berlin',
 	updateIntervalAirQuality: 600, // en secondes = every 30 minutes
 
