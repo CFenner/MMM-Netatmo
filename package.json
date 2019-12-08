@@ -2,20 +2,20 @@
   "name": "netatmo",
   "version": "2.0.0",
   "description": "",
-  "main": "netatmo.js",
+  "main": "MMM-Netatmo.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CFenner/MagicMirror-Netatmo-Module.git"
+    "url": "git+https://github.com/QBseventy/MMM-Netatmo.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CFenner/MagicMirror-Netatmo-Module/issues"
+    "url": "https://github.com/QBseventy/MMM-Netatmo/issues"
   },
-  "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
+  "homepage": "https://github.com/QBseventy/MMM-Netatmo#readme",
   "devDependencies": {
     "eslint": "^2.7.0",
     "grunt": "^1.0.1",
