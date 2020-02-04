@@ -140,6 +140,7 @@ Module.register('netatmo', {
         case 'Temperature':
           return value.toFixed(1) + '°';
         case 'Rain':
+        case 'Reachable':
         case 'sum_rain_24':
         case 'sum_rain_1':
           return value.toFixed(1) + ' mm/h';
@@ -248,7 +249,7 @@ Module.register('netatmo', {
               that.config.dataOrder :
               oModule.data_type;
             for (var dataType of aDataTypeList) {
-              if ($.inArray(dataType, oModule.data_type) > -1) {
+              if ($.inArray(dataType, oModule.data_type) > -1 && oModule.reachable) {
                 sResult.append(
                   this.renderData(
                     formatter.clazz(dataType),
@@ -257,8 +258,11 @@ Module.register('netatmo', {
                 );
               }
             }
-            if(oModule.battery_percent){
+            if (typeof oModule.battery_percent !== 'undefined') {
               sResult.append(this.renderData(formatter.clazz(dataType), 'Battery', oModule.battery_percent));
+            }
+            if (typeof oModule.reachable !== 'undefined') {
+              sResult.append(this.renderData(formatter.clazz(dataType), 'Reachable', oModule.reachable));
             }
             return sResult;
           },
