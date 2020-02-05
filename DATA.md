@@ -32,7 +32,8 @@ All module have the following data:
     "dashboard_data": {},
     "data_type": [],
     "module_name": "Outdoor",
-    "firmware": 43
+    "firmware": 43,
+    "reachable": true,
 }
 ```
 

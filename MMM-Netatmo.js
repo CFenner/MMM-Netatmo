@@ -4,7 +4,7 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
- /* global $, Q, moment, Module, Log */
+/* global $, Q, moment, Module, Log */
 Module.register('MMM-Netatmo', {
   // default config,
   defaults: {
@@ -20,6 +20,7 @@ Module.register('MMM-Netatmo', {
     showRadio: true,
     showWiFi: true,
     showTrend: true,
+    showReachable: true,
     api: {
       base: 'https://api.netatmo.com/',
       authEndpoint: 'oauth2/token',
@@ -29,7 +30,7 @@ Module.register('MMM-Netatmo', {
     }
   },
   // init method
-  start: function() {
+  start: function () {
     Log.info('Starting module: ' + this.name);
     this.α = 0;
     // set interval for reload timer
@@ -37,7 +38,7 @@ Module.register('MMM-Netatmo', {
     // run timer
     this.updateLoad();
   },
-  updateLoad: function() {
+  updateLoad: function () {
     // Log.info(this.name + " refresh triggered");
     var that = this;
     return Q.fcall(
@@ -52,7 +53,7 @@ Module.register('MMM-Netatmo', {
       this.updateWait.bind(that)
     );
   },
-  updateWait: function() {
+  updateWait: function () {
     this.α++;
     this.α %= 360;
     var r = (this.α * Math.PI / 180);
@@ -60,9 +61,9 @@ Module.register('MMM-Netatmo', {
     var y = Math.cos(r) * -125;
     var mid = (this.α > 180) ? 1 : 0;
     var anim = 'M 0 0 v -125 A 125 125 1 ' +
-       mid + ' 1 ' +
-       x + ' ' +
-       y + ' z';
+      mid + ' 1 ' +
+      x + ' ' +
+      y + ' z';
 
     var loader = $('.netatmo .loadTimer .loader');
     if (loader.length > 0) {
@@ -81,17 +82,17 @@ Module.register('MMM-Netatmo', {
     }
   },
   load: {
-    token: function() {
+    token: function () {
       return Q($.ajax({
         type: 'POST',
         url: this.config.api.base + this.config.api.authEndpoint,
         data: this.config.api.authPayload.format(
-            this.config.refreshToken,
-            this.config.clientId,
-            this.config.clientSecret)
+          this.config.refreshToken,
+          this.config.clientId,
+          this.config.clientSecret)
       }));
     },
-    data: function(data) {
+    data: function (data) {
       // Log.info(this.name + " token loaded "+data.access_token);
       this.config.refreshToken = data.refresh_token;
       // call for station data
@@ -101,7 +102,7 @@ Module.register('MMM-Netatmo', {
       }));
     }
   },
-  renderAll: function(data) {
+  renderAll: function (data) {
     var device = data.body.devices[0];
     this.lastUpdate = device.dashboard_data.time_utc;
     // render modules
@@ -109,7 +110,7 @@ Module.register('MMM-Netatmo', {
     this.updateDom(this.config.animationSpeed);
     return Q({});
   },
-  renderError: function(reason) {
+  renderError: function (reason) {
     /* eslint-disable no-console */
     console.log("error " + reason);
     /* eslint-enable no-console */
@@ -122,8 +123,8 @@ Module.register('MMM-Netatmo', {
     */
   },
   formatter: {
-    value: function(dataType, value) {
-      if(!value)
+    value: function (dataType, value) {
+      if (!value)
         return value;
       switch (dataType) {
         case 'CO2':
@@ -132,7 +133,6 @@ Module.register('MMM-Netatmo', {
           return value.toFixed(0) + ' dB';
         case 'Humidity':
         case 'Battery':
-	/* case 'Reachable': */
         case 'WiFi':
         case 'Radio':
           return value.toFixed(0) + '%';
@@ -154,29 +154,29 @@ Module.register('MMM-Netatmo', {
           return value;
       }
     },
-    direction: function(value){
-      if(value < 11.25) return 'N';
-      if(value < 33.75) return 'NNE';
-      if(value < 56.25) return 'NE';
-      if(value < 78.75) return 'ENE';
-      if(value < 101.25) return 'E';
-      if(value < 123.75) return 'ESE';
-      if(value < 146.25) return 'SE';
-      if(value < 168.75) return 'SSE';
-      if(value < 191.25) return 'S';
-      if(value < 213.75) return 'SSW';
-      if(value < 236.25) return 'SW';
-      if(value < 258.75) return 'WSW';
-      if(value < 281.25) return 'W';
-      if(value < 303.75) return 'WNW';
-      if(value < 326.25) return 'NW';
-      if(value < 348.75) return 'NNW';
+    direction: function (value) {
+      if (value < 11.25) return 'N';
+      if (value < 33.75) return 'NNE';
+      if (value < 56.25) return 'NE';
+      if (value < 78.75) return 'ENE';
+      if (value < 101.25) return 'E';
+      if (value < 123.75) return 'ESE';
+      if (value < 146.25) return 'SE';
+      if (value < 168.75) return 'SSE';
+      if (value < 191.25) return 'S';
+      if (value < 213.75) return 'SSW';
+      if (value < 236.25) return 'SW';
+      if (value < 258.75) return 'WSW';
+      if (value < 281.25) return 'W';
+      if (value < 303.75) return 'WNW';
+      if (value < 326.25) return 'NW';
+      if (value < 348.75) return 'NNW';
       return 'N';
     },
-    rain: function(){
+    rain: function () {
       return '';
     },
-    clazz: function(dataType) {
+    clazz: function (dataType) {
       /* unused
       switch (dataType) {
         case 'CO2':
@@ -199,16 +199,16 @@ Module.register('MMM-Netatmo', {
       return '';
     }
   },
-  getDesign: function(design){
+  getDesign: function (design) {
     var that = this;
     var formatter = this.formatter;
     var translator = this.translate;
     return {
-      classic: (function(formatter, translator, that){
+      classic: (function (formatter, translator, that) {
         return {
-          render: function(device){
+          render: function (device) {
             var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
-            if(that.config.horizontal)
+            if (that.config.horizontal)
               sResult.addClass('horizontal');
             var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
               that.config.moduleOrder :
@@ -236,14 +236,14 @@ Module.register('MMM-Netatmo', {
             }
             return sResult;
           },
-          renderModule: function(oModule) {
+          renderModule: function (oModule) {
             return $('<div/>').addClass('module').append(
               $('<div>').addClass('data').append(this.renderSensorData(oModule))
             ).append(
               $('<div>').addClass('name small').append(oModule.module_name)
             );
           },
-          renderSensorData: function(oModule) {
+          renderSensorData: function (oModule) {
             var sResult = $('<table/>');
             var aDataTypeList = that.config.dataOrder && that.config.dataOrder.length > 0 ?
               that.config.dataOrder :
@@ -258,15 +258,15 @@ Module.register('MMM-Netatmo', {
                 );
               }
             }
-	    if (typeof oModule.battery_percent !== 'undefined') {
+            if (typeof oModule.battery_percent !== 'undefined' && (that.config.showBattery)) {
               sResult.append(this.renderData(formatter.clazz(dataType), 'Battery', oModule.battery_percent));
             }
-	    if (typeof oModule.reachable !== 'undefined') {
+            if (typeof oModule.reachable !== 'undefined' && (that.config.showReachable)) {
               sResult.append(this.renderData(formatter.clazz(dataType), 'Reachable', oModule.reachable));
             }
             return sResult;
           },
-          renderData: function(clazz, dataType, value) {
+          renderData: function (clazz, dataType, value) {
             return $('<tr/>').append(
               $('<td/>').addClass('small').append(
                 translator.bind(that)(dataType.toUpperCase())
@@ -279,7 +279,7 @@ Module.register('MMM-Netatmo', {
           }
         };
       })(formatter, translator, that),
-      bubbles: (function(formatter, translator, that){
+      bubbles: (function (formatter, translator, that) {
         return {
           moduleType: {
             MAIN: "NAMain",
@@ -288,7 +288,7 @@ Module.register('MMM-Netatmo', {
             RAIN: "NAModule3",
             WIND: "NAModule2"
           },
-          render: function(device){
+          render: function (device) {
             var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
             var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
               that.config.moduleOrder :
@@ -317,7 +317,7 @@ Module.register('MMM-Netatmo', {
             }
             return sResult;
           },
-          module: function(module){
+          module: function (module) {
             var result = $('<div/>').addClass('module').append(
               $('<div/>').addClass('name small').append(module.module_name)
             ).append(
@@ -333,11 +333,11 @@ Module.register('MMM-Netatmo', {
             );
             return result[0].outerHTML;
           },
-          primary: function(module){
+          primary: function (module) {
             var result = $('<td/>').addClass('primary');
             var type;
             var value;
-            switch(module.type){
+            switch (module.type) {
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
               case this.moduleType.OUTDOOR:
@@ -369,14 +369,14 @@ Module.register('MMM-Netatmo', {
             }
             return result;
           },
-          secondary: function(module){
+          secondary: function (module) {
             var result = $('<td/>').addClass('secondary');
-            switch(module.type){
+            switch (module.type) {
               case this.moduleType.MAIN:
               case this.moduleType.INDOOR:
                 var type = 'CO2';
                 var value = module.dashboard_data[type];
-                var status = value > 1600?'bad':value > 800?'average':'good';
+                var status = value > 1600 ? 'bad' : value > 800 ? 'average' : 'good';
 
                 $('<div/>').addClass(type).append(
                   $('<div/>').addClass('visual').addClass(status)
@@ -401,9 +401,9 @@ Module.register('MMM-Netatmo', {
             }
             return result;
           },
-          data: function(module){
+          data: function (module) {
             var result = $('<td/>').addClass('data');
-            switch(module.type){
+            switch (module.type) {
               case this.moduleType.MAIN:
                 this.addTemperatureTrend(result, module);
                 this.addHumidity(result, module);
@@ -447,44 +447,44 @@ Module.register('MMM-Netatmo', {
             }
             return result;
           },
-          addTemperatureTrend: function(parent, module){
+          addTemperatureTrend: function (parent, module) {
             var value = module.dashboard_data['temp_trend'];
-            if(!value)
+            if (!value)
               value = 'UNDEFINED'
-            if(that.config.showTrend)
+            if (that.config.showTrend)
               this.addData(parent, 'temp_trend', translator.bind(that)(value.toUpperCase()));
           },
-          addPressure: function(parent, module){
+          addPressure: function (parent, module) {
             return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
           },
-          addPressureTrend: function(parent, module){
+          addPressureTrend: function (parent, module) {
             var value = module.dashboard_data['pressure_trend'];
-            if(!value)
+            if (!value)
               value = 'UNDEFINED'
-            if(that.config.showTrend)
+            if (that.config.showTrend)
               this.addData(parent, 'pressure_trend', translator.bind(that)(value.toUpperCase()));
           },
-          addHumidity: function(parent, module){
+          addHumidity: function (parent, module) {
             return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
           },
-          addNoise: function(parent, module){
+          addNoise: function (parent, module) {
             return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
           },
-          addBattery: function(parent, module){
-            if(that.config.showBattery)
+          addBattery: function (parent, module) {
+            if (that.config.showBattery)
               this.addData(parent, 'Battery', module.battery_percent);
           },
-          addRadio: function(parent, module){
-            if(that.config.showRadio)
+          addRadio: function (parent, module) {
+            if (that.config.showRadio)
               this.addData(parent, 'Radio', module.rf_status);
           },
-          addWiFi: function(parent, module){
-            if(that.config.showWiFi)
+          addWiFi: function (parent, module) {
+            if (that.config.showWiFi)
               this.addData(parent, 'WiFi', module.wifi_status);
           },
-          addLastSeen: function(parent, module){
+          addLastSeen: function (parent, module) {
             var duration = Date.now() / 1000 - module.last_message;
-            if(that.config.showLastMessage && duration > that.config.lastMessageThreshold){
+            if (that.config.showLastMessage && duration > that.config.lastMessageThreshold) {
               $('<div/>')
                 .addClass('small flash')
                 .append(
@@ -495,7 +495,7 @@ Module.register('MMM-Netatmo', {
                 .appendTo(parent);
             }
           },
-          addData: function(parent, type, value){
+          addData: function (parent, type, value) {
             return $('<div/>')
               .addClass('small')
               .append(
@@ -509,7 +509,7 @@ Module.register('MMM-Netatmo', {
       })(formatter, translator, that)
     }[design]
   },
-  getScripts: function() {
+  getScripts: function () {
     return [
       'String.format.js',
       '//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js',
@@ -517,12 +517,12 @@ Module.register('MMM-Netatmo', {
       'moment.js'
     ];
   },
-  getStyles: function() {
+  getStyles: function () {
     return [
       'netatmo.css'
     ];
   },
-  getTranslations: function() {
+  getTranslations: function () {
     return {
       en: 'l10n/en.json',
       de: 'l10n/de.json',
@@ -532,9 +532,9 @@ Module.register('MMM-Netatmo', {
       nn: 'l10n/nn.json'
     };
   },
-  getDom: function() {
+  getDom: function () {
     var dom = $('<div/>').addClass('netatmo');
-    if(this.dom){
+    if (this.dom) {
       dom.append(
         this.dom
       ).append(
@@ -542,7 +542,7 @@ Module.register('MMM-Netatmo', {
           .addClass('updated xsmall')
           .append(moment.unix(this.lastUpdate).fromNow())
       );
-      if(!this.config.hideLoadTimer){
+      if (!this.config.hideLoadTimer) {
         dom.append($(
           '<svg class="loadTimer" viewbox="0 0 250 250">' +
           '  <path class="border" transform="translate(125, 125)"/>' +
@@ -550,7 +550,7 @@ Module.register('MMM-Netatmo', {
           '</svg>'
         ));
       }
-    }else{
+    } else {
       dom.append($(
         '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">' +
         '  <circle class="outer"></circle>' +
