@@ -132,7 +132,6 @@ Module.register('netatmo', {
           return value.toFixed(0) + ' dB';
         case 'Humidity':
         case 'Battery':
-	/* case 'Reachable': */
         case 'WiFi':
         case 'Radio':
           return value.toFixed(0) + '%';
@@ -249,7 +248,7 @@ Module.register('netatmo', {
               that.config.dataOrder :
               oModule.data_type;
             for (var dataType of aDataTypeList) {
-              if ($.inArray(dataType, oModule.data_type) > -1 && oModule.reachable) {
+              if ($.inArray(dataType, oModule.data_type) > -1) {
                 sResult.append(
                   this.renderData(
                     formatter.clazz(dataType),
@@ -258,11 +257,8 @@ Module.register('netatmo', {
                 );
               }
             }
-	    if (typeof oModule.battery_percent !== 'undefined') {
+            if(oModule.battery_percent){
               sResult.append(this.renderData(formatter.clazz(dataType), 'Battery', oModule.battery_percent));
-            }
-	    if (typeof oModule.reachable !== 'undefined') {
-              sResult.append(this.renderData(formatter.clazz(dataType), 'Reachable', oModule.reachable));
             }
             return sResult;
           },

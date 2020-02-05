@@ -5,7 +5,7 @@
  * MIT Licensed.
  */
  /* global $, Q, moment, Module, Log */
-Module.register('netatmo', {
+Module.register('MMM-Netatmo', {
   // default config,
   defaults: {
     refreshToken: null,
