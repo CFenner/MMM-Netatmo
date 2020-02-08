@@ -17,33 +17,13 @@
   },
   "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
   "devDependencies": {
-    "eslint": "^4.18.2",
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-csslint": "^2.0.0",
-    "grunt-contrib-eslint": "0.0.5",
-    "grunt-contrib-uglify": "^2.3.0",
-    "grunt-jsonlint": "^1.1.0",
-    "grunt-yamllint": "^0.3.0",
-    "gruntify-eslint": "^4.0.0"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "browser": true,
-      "es6": true,
-      "node": true
-    },
-    "ecmaFeatures": {
-      "modules": true,
-      "jsx": true
-    },
-    "parser": "espree",
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "ecmaFeatures": {
-        "globalReturn": true
-      }
-    }
+    "grunt": "latest",
+    "grunt-eslint": "latest",
+    "grunt-jsonlint": "latest",
+    "grunt-markdownlint": "latest",
+    "grunt-stylelint": "latest",
+    "grunt-yamllint": "latest",
+    "stylelint": "latest",
+    "stylelint-config-standard": "latest"
   }
-}
+ }
