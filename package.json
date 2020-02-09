@@ -25,5 +25,8 @@
     "grunt-yamllint": "latest",
     "stylelint": "latest",
     "stylelint-config-standard": "latest"
+  },
+  "dependencies": {
+    "grunt": "^1.0.4"
   }
 }
