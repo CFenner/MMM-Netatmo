@@ -21,6 +21,7 @@
 
   "WIFI": "WiFi",
   "RADIO": "Radio signal",
+  "REACHABLE": "Nås",
   "BATTERY": "Batteri",
   "LAST_MESSAGE": "Sist kontakt"
 }

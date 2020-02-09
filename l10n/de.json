@@ -21,6 +21,7 @@
 
   "WIFI": "WLan",
   "RADIO": "Funksignal",
+  "REACHABLE": "Erreichbar",
   "BATTERY": "Batterie",
   "LAST_MESSAGE": "letzter Kontakt"
 }

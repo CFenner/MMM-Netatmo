@@ -13,12 +13,15 @@
   "WINDANGLE": "Vítr (směr)",
   "GUSTSTRENGTH": "Poryvy",
   "GUSTANGLE": "Poryvy (směr)",
+
   "UP": "stoupá",
   "STABLE": "stály",
   "DOWN": "klesá",
   "UNDEFINED": "nedostupné",
+
   "WIFI": "WiFi",
   "RADIO": "Radio signal",
+  "REACHABLE": "dosažitelný",
   "BATTERY": "Baterie",
   "LAST_MESSAGE": "poslední kontakt"
 }

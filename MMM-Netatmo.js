@@ -21,13 +21,15 @@ Module.register("MMM-Netatmo", {
 		showWiFi: true,
 		showTrend: true,
 		showReachable: true,
+		notPresentValue: "--",
 		api: {
 			base: "https://api.netatmo.com/",
 			authEndpoint: "oauth2/token",
 			authPayload: "grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}",
 			dataEndpoint: "api/getstationsdata",
 			dataPayload: "access_token={0}"
-		}
+		},
+		notPresentValue: "--",
 	},
 	// init method
 	start: function () {
@@ -123,8 +125,10 @@ Module.register("MMM-Netatmo", {
     */
 	},
 	formatter: {
+		notPresentValue: "--",
 		value: function (dataType, value) {
-			if (typeof value === "undefined") {
+			var translator = this.translate;
+			if (typeof value === "undefined" || value === this.notPresentValue) {
 				return value;
 			}
 			switch (dataType) {
@@ -142,9 +146,10 @@ Module.register("MMM-Netatmo", {
 				case "Temperature":
 					return value.toFixed(1) + "°";
 				case "Rain":
+					return value.toFixed(1) + " mm/h";
 				case "sum_rain_24":
 				case "sum_rain_1":
-					return value.toFixed(1) + " mm/h";
+					return value.toFixed(1) + " mm";
 				case "WindStrength":
 				case "GustStrength":
 					return value.toFixed(0) + " m/s";
@@ -154,7 +159,7 @@ Module.register("MMM-Netatmo", {
 				case "Reachable":
 					return value.toString();
 				case "NotPresent":
-					return "--";
+					return this.notPresentValue;
 				default:
 					return value;
 			}
@@ -179,28 +184,6 @@ Module.register("MMM-Netatmo", {
 			return "N";
 		},
 		rain: function () {
-			return "";
-		},
-		clazz: function (dataType) {
-			/* unused
-      switch (dataType) {
-        case 'CO2':
-          return 'wi-na';
-        case 'Noise':
-          return 'wi-na';
-        case 'Humidity':
-          return 'wi-humidity';
-        case 'Pressure':
-          return 'wi-barometer';
-        case 'Temperature':
-          return 'wi-thermometer';
-        case 'Rain':
-          return 'wi-raindrops';
-        case 'Wind':
-          return 'wi-na';
-        default:
-          return '';
-      }*/
 			return "";
 		}
 	},
@@ -253,25 +236,24 @@ Module.register("MMM-Netatmo", {
 							that.config.dataOrder :
 							oModule.data_type;
 						for (var dataType of aDataTypeList) {
-							//if ($.inArray(dataType, oModule.data_type) > -1 && oModule.reachable) {
-							if ($.inArray(dataType, oModule.data_type) > -1 && typeof oModule.dashboard_data !== "undefined") {
+							if ($.inArray(dataType, oModule.data_type) > -1) {
+								let value = typeof oModule.dashboard_data !== "undefined" ? oModule.dashboard_data[dataType] : that.config.notPresentValue;
 								sResult.append(
 									this.renderData(
-										formatter.clazz(dataType),
 										dataType,
-										oModule.dashboard_data[dataType])
+										value)
 								);
 							}
 						}
-						if (typeof oModule.battery_percent !== "undefined" && (that.config.showBattery)) {
-							sResult.append(this.renderData(formatter.clazz(dataType), "Battery", oModule.battery_percent));
+						if (that.config.showBattery && typeof oModule.battery_percent !== "undefined") {
+							sResult.append(this.renderData("Battery", oModule.battery_percent));
 						}
-						if (typeof oModule.reachable !== "undefined" && (that.config.showReachable)) {
-							sResult.append(this.renderData(formatter.clazz(dataType), "Reachable", oModule.reachable));
+						if (that.config.showReachable && typeof oModule.showReachable !== "undefined") {
+							sResult.append(this.renderData("Reachable", oModule.showReachable));
 						}
 						return sResult;
 					},
-					renderData: function (clazz, dataType, value) {
+					renderData: function (dataType, value) {
 						return $("<tr/>").append(
 							$("<td/>").addClass("small").append(
 								translator.bind(that)(dataType.toUpperCase())
@@ -341,7 +323,7 @@ Module.register("MMM-Netatmo", {
 					primary: function (module) {
 						let result = $("<td/>").addClass("primary");
 						let type = typeof module.dashboard_data === "undefined" ? "NotPresent" : "";
-						let value = "--";
+						let value = that.config.notPresentValue;
 						switch (module.type) {
 							case this.moduleType.MAIN:
 							case this.moduleType.INDOOR:
@@ -383,7 +365,7 @@ Module.register("MMM-Netatmo", {
 					secondary: function (module) {
 						let result = $("<td/>").addClass("secondary");
 						let type = typeof module.dashboard_data === "undefined" ? "NotPresent" : "";
-						let value = "--";
+						let value = that.config.notPresentValue;
 						switch (module.type) {
 							case this.moduleType.MAIN:
 							case this.moduleType.INDOOR:
@@ -446,15 +428,15 @@ Module.register("MMM-Netatmo", {
 								this.addLastSeen(result, module);
 								break;
 							case this.moduleType.WIND:
-								this.addData(result, "GustStrength", module.dashboard_data["GustStrength"]);
-								this.addData(result, "GustAngle", module.dashboard_data["GustAngle"]);
+								this.addGustStrength(result, module);
+								this.addGustAngle(result, module);
 								this.addBattery(result, module);
 								this.addRadio(result, module);
 								this.addLastSeen(result, module);
 								break;
 							case this.moduleType.RAIN:
-								this.addData(result, "sum_rain_1", module.dashboard_data["sum_rain_1"]);
-								this.addData(result, "sum_rain_24", module.dashboard_data["sum_rain_24"]);
+								this.addSumRain1(result, module);
+								this.addSumRain24(result, module);
 								this.addBattery(result, module);
 								this.addRadio(result, module);
 								this.addLastSeen(result, module);
@@ -464,34 +446,85 @@ Module.register("MMM-Netatmo", {
 						}
 						return result;
 					},
+					getValue: function (module, datatype, isDashboardData, translate) {
+						let value;
+						if (isDashboardData) {
+							value = typeof module.dashboard_data !== "undefined" ? (module.dashboard_data[datatype]) : that.config.notPresentValue;
+						}
+						else {
+							value = typeof module[datatype] !== "undefined" ? (module[datatype]) : that.config.notPresentValue;
+						}
+						return value = (translate) ? translator.bind(that)(value.toUpperCase()) : value;
+					},
 					addTemperatureTrend: function (parent, module) {
-						var value = module.dashboard_data["temp_trend"];
-						var value = (module.reachable) ? module.dashboard_data["temp_trend"] : "UNDEFINED";
-						if (!value) { value = "UNDEFINED"; }
-						if (that.config.showTrend) { this.addData(parent, "temp_trend", translator.bind(that)(value.toUpperCase())); }
+						if (that.config.showTrend) {
+							let datatype = "temp_trend";
+							let value = this.getValue(module, datatype, true, true);
+							this.addData(parent, datatype, value);
+						}
 					},
 					addPressure: function (parent, module) {
-						return this.addData(parent, "Pressure", module.dashboard_data["Pressure"]);
+						let datatype = "Pressure";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
 					},
 					addPressureTrend: function (parent, module) {
-						var value = module.dashboard_data["pressure_trend"];
-						if (!value) { value = "UNDEFINED"; }
-						if (that.config.showTrend) { this.addData(parent, "pressure_trend", translator.bind(that)(value.toUpperCase())); }
+						if (that.config.showTrend) {
+							let datatype = "pressure_trend";
+							let value = this.getValue(module, datatype, true, true);
+							this.addData(parent, datatype, value);
+						}
 					},
 					addHumidity: function (parent, module) {
-						return this.addData(parent, "Humidity", module.dashboard_data["Humidity"]);
+						let datatype = "Humidity";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
 					},
 					addNoise: function (parent, module) {
-						return this.addData(parent, "Noise", module.dashboard_data["Noise"]);
+						let datatype = "Noise";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
+					},
+					addGustStrength: function (parent, module) {
+						let datatype = "GustStrength";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
+					},
+					addGustAngle: function (parent, module) {
+						let datatype = "GustAngle";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
+					},
+					addSumRain1: function (parent, module) {
+						let datatype = "sum_rain_1";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
+					},
+					addSumRain24: function (parent, module) {
+						let datatype = "sum_rain_24";
+						let value = this.getValue(module, datatype, true, false);
+						return this.addData(parent, datatype, value);
 					},
 					addBattery: function (parent, module) {
-						if (that.config.showBattery) { this.addData(parent, "Battery", module.battery_percent); }
+						if (that.config.showBattery) {
+							let datatype = "Battery";
+							let value = this.getValue(module, "battery_percent", false, false);
+							this.addData(parent, datatype, value);
+						}
 					},
 					addRadio: function (parent, module) {
-						if (that.config.showRadio) { this.addData(parent, "Radio", module.rf_status); }
+						if (that.config.showRadio) {
+							let datatype = "Radio";
+							let value = this.getValue(module, "rf_status", false, false);
+							this.addData(parent, datatype, value);
+						}
 					},
 					addWiFi: function (parent, module) {
-						if (that.config.showWiFi) { this.addData(parent, "WiFi", module.wifi_status); }
+						if (that.config.showWiFi) {
+							let datatype = "WiFi";
+							let value = this.getValue(module, "wifi_status", false, false);
+							this.addData(parent, datatype, value);
+						}
 					},
 					addLastSeen: function (parent, module) {
 						var duration = Date.now() / 1000 - module.last_message;
@@ -540,6 +573,7 @@ Module.register("MMM-Netatmo", {
 			fr: "l10n/fr.json",
 			cs: "l10n/cs.json",
 			nb: "l10n/nb.json",
+			nl: "l10n/nl.json",
 			nn: "l10n/nn.json"
 		};
 	},

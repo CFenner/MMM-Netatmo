@@ -21,6 +21,7 @@
 
   "WIFI": "WiFi",
   "RADIO": "signal radio",
+  "REACHABLE": "accessible",
   "BATTERY": "batterie",
   "LAST_MESSAGE": "connexion dernière"
 }
