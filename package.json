@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
   "devDependencies": {
-    "grunt-cli": "latest",
+    "grunt-cli": "^1.3.2",
     "grunt-eslint": "latest",
     "grunt-jsonlint": "latest",
     "grunt-markdownlint": "latest",
