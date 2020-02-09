@@ -10,6 +10,7 @@
   height: .6em;
   width: .6em;
 }
+/* csslint ignore:start */
 .netatmo svg.loading circle {
   cx: 50;
   cy: 50;
@@ -17,6 +18,7 @@
   r: 40;
   stroke-linecap: round;
 }
+/* csslint ignore:end */
 .netatmo svg.loading .inner {
   stroke: #ffffff;
   stroke-width: 6;
