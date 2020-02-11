@@ -334,9 +334,9 @@ Module.register("MMM-Netatmo", {
 								}
 								$("<div/>").addClass(type).append(
 									$("<div/>").addClass("large light bright").append(formatter.value(type, value))
-								)
-									.append($("<div/>").addClass("up")
-									).appendTo(result);
+								).append($("<div/>").addClass("secondary CO2").append(
+									$("<div/>").addClass("visual").addClass("average")
+								)).appendTo(result);
 								break;
 							case this.moduleType.WIND:
 								if (type !== "NotPresent") {
@@ -357,7 +357,7 @@ Module.register("MMM-Netatmo", {
 								$("<div/>").addClass(type).append(
 									$("<div/>").addClass("large light bright").append(value)
 								).append(
-									$("<div/>").addClass("xsmall").append("mm/h")
+									$("<div/>").addClass("xsmall").append("mm/h <i class='up></i>")
 								).appendTo(result);
 								break;
 							default:
@@ -378,8 +378,12 @@ Module.register("MMM-Netatmo", {
 
 									$("<div/>").addClass(type).append(
 										$("<div/>").addClass("visual").addClass(status)
-									).append(
+									).append($("<div/>").addClass("CO2").append(
+										$("<div/>").addClass("visual").addClass("average")
+									)).append(
 										$("<div/>").addClass("small value").append(formatter.value(type, value))
+									).append(
+										$("<div/>").append("<p>Up arrow: <i class='up'></i></p>")
 									).appendTo(result);
 								}
 								break;
@@ -547,8 +551,9 @@ Module.register("MMM-Netatmo", {
 							.append(
 								translator.bind(that)(type.toUpperCase())
 								+ ": "
-								+ formatter.value(type, value)
+								+ formatter.value(type, value) + ":: " + "&#10514;"
 							)
+							.append($("<i/>").addClass("up"))
 							.appendTo(parent);
 					}
 				};

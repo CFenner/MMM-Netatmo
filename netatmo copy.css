@@ -75,39 +75,26 @@
 .netatmo .bubbles .module .data {
   text-align: left;
 }
-.netatmo .bubbles .module .primary .Temperature{
-  display: flex;
-
-  flex-direction: row;
-  align-items: baseline;
-  /*align-content: space-between;*/
-  /*display: inline-block;vertical-align: bottom;*/
+.netatmo .bubbles .module .primary .CO2 .visual {
+  border-radius: 1em;
+  box-shadow: 0 0 .9em 1em;
+  height: .1em;
+  margin: 1.5em auto;
+  width: .1em;
 }
-.netatmo .bubbles .module .primary .Temperature .up {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 30px solid red;
+.netatmo .bubbles .module .primary .CO2 .good {
+  background-color: #32cd32;
+  color: #32cd32;
 }
-.netatmo .bubbles .module .primary .Temperature .down {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 30px solid red;
-}
-.netatmo .bubbles .module .primary .Temperature .stable {
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-left: 30px solid red;
-  border-bottom: 15px solid transparent;
+.netatmo .bubbles .module .primary .CO2 .average {
+  background-color: #1100ff;
+  color: #1100ff;
 }
 .netatmo .bubbles .module .primary .CO2 .bad {
   background-color: #ff0000;
   color: #ff0000;
 }
+
 .netatmo .bubbles .module .secondary {
   text-align: center;
   width: 5em;
@@ -124,13 +111,14 @@
   color: #32cd32;
 }
 .netatmo .bubbles .module .secondary .CO2 .average {
-  background-color: #ffa500;
-  color: #ffa500;
+  background-color: #00ffdd;
+  color: #00ffdd;
 }
 .netatmo .bubbles .module .secondary .CO2 .bad {
   background-color: #ff0000;
   color: #ff0000;
 }
+
 .netatmo .bubbles .module .secondary .WindAngle .visual {
   display: inline-block;
 }
@@ -140,8 +128,46 @@
 .netatmo .bubbles .module .data .flash {
   animation: flasher 1s linear infinite;
 }
+.netatmo .bubbles .module .data .square {
+  height: 50px;
+  width: 50px;
+  background-color: red;
+}
+.netatmo .bubbles .module .data i {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.netatmo .bubbles .module .data .right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.netatmo .bubbles .module .data .left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.netatmo .bubbles .module .data .up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.netatmo .bubbles .module .data .down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
 @keyframes flasher {
   50% {
     opacity: 0;
   }
+}
+
+i {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
 }

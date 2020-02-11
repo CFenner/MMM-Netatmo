@@ -1,5 +1,5 @@
 @good: limegreen;
-@average: orange;
+@average: rgb(255, 0, 255);
 @bad: red;
 
 .xxlarge{
@@ -8,6 +8,32 @@
   line-height: 95px;
 }
 
+.i {
+  border: solid red;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
 .netatmo{
   .bubbles{
     .module{
@@ -17,11 +43,85 @@
       .primary, .secondary, .data{
         text-align: left;
       }
-      .primary{     }
+      .primary{ 
+        .CO2{
+          .visual{
+            border-radius: 1em;
+            box-shadow: 0 0 .9em 1em;
+            height: .1em;
+            margin: 1.5em auto;
+            width: .1em;
+          }
+          .good{
+            background-color: @good;
+            color: @good;
+          }
+          .average{
+            background-color: @average;
+            color: @average;
+          }
+          .bad{
+            background-color: @bad;
+            color: @bad;
+          }
+        }
+        .i {
+        border: solid red;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+      }
+      
+      .right {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+      }
+      
+      .left {
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
+      }
+      
+      .up {
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+      }
+      
+      .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }}
       .secondary{
         text-align: center;
         width: 5em;
-
+        .CO{
+        .i {
+          border: solid red;
+          border-width: 0 3px 3px 0;
+          display: inline-block;
+          padding: 3px;
+        }
+        
+        .right {
+          transform: rotate(-45deg);
+          -webkit-transform: rotate(-45deg);
+        }
+        
+        .left {
+          transform: rotate(135deg);
+          -webkit-transform: rotate(135deg);
+        }
+        
+        .up {
+          transform: rotate(-135deg);
+          -webkit-transform: rotate(-135deg);
+        }
+        
+        .down {
+          transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
+        }
+      }
         .CO2{
           .visual{
             border-radius: 1em;
