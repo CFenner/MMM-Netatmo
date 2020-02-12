@@ -19,7 +19,8 @@ Module.register("MMM-Netatmo", {
 		showBattery: true,
 		showRadio: true,
 		showWiFi: true,
-		showTrend: true,
+		showMinMaxTemp: true,
+		showTrend: ["Icon"], // Icon: trend with icons, Text: Trend in Text, None: don't show
 		showReachable: true,
 		notPresentValue: "--",
 		api: {
@@ -142,8 +143,10 @@ Module.register("MMM-Netatmo", {
 				case "Radio":
 					return value.toFixed(0) + "%";
 				case "Pressure":
-					return value.toFixed(0) + " mbar";
+					return value.toFixed(0) + " mbar ";
 				case "Temperature":
+				case "min_temp":
+				case "max_temp":
 					return value.toFixed(1) + "°";
 				case "Rain":
 					return value.toFixed(1) + " mm/h";
@@ -186,6 +189,17 @@ Module.register("MMM-Netatmo", {
 		rain: function () {
 			return "";
 		}
+	},
+	inArrayCaseInsensitive: function (needle, haystackArray) {
+		//Iterates over an array of items to return the index of the first item that matches the provided val ('needle') in a case-insensitive way.  Returns -1 if no match found.
+		var defaultResult = -1;
+		var result = defaultResult;
+		$.each(haystackArray, function (index, value) {
+			if (result == defaultResult && value.toLowerCase() == needle.toLowerCase()) {
+				result = index;
+			}
+		});
+		return result;
 	},
 	getDesign: function (design) {
 		var that = this;
@@ -236,7 +250,7 @@ Module.register("MMM-Netatmo", {
 							that.config.dataOrder :
 							oModule.data_type;
 						for (var dataType of aDataTypeList) {
-							if ($.inArray(dataType, oModule.data_type) > -1) {
+							if (that.inArrayCaseInsensitive(dataType, oModule.data_type) > -1) {
 								let value = typeof oModule.dashboard_data !== "undefined" ? oModule.dashboard_data[dataType] : that.config.notPresentValue;
 								sResult.append(
 									this.renderData(
@@ -320,41 +334,66 @@ Module.register("MMM-Netatmo", {
 						);
 						return result[0].outerHTML;
 					},
+					getValue: function (module, datatype, isDashboardData, translate) {
+						let value;
+						if (isDashboardData) {
+							value = typeof module.dashboard_data !== "undefined" ? (module.dashboard_data[datatype]) : that.config.notPresentValue;
+						}
+						else {
+							value = typeof module[datatype] !== "undefined" ? (module[datatype]) : that.config.notPresentValue;
+						}
+						return value = (translate) ? translator.bind(that)(value.toUpperCase()) : value;
+					},
 					primary: function (module) {
 						let result = $("<td/>").addClass("primary");
-						let type = typeof module.dashboard_data === "undefined" ? "NotPresent" : "";
+						let datatype = typeof module.dashboard_data === "undefined" ? "NotPresent" : "";
 						let value = that.config.notPresentValue;
 						switch (module.type) {
 							case this.moduleType.MAIN:
 							case this.moduleType.INDOOR:
 							case this.moduleType.OUTDOOR:
-								if (type !== "NotPresent") {
-									type = "Temperature";
-									value = module.dashboard_data[type];
+								if (datatype !== "NotPresent") {
+									datatype = "Temperature";
+									value = this.getValue(module, datatype, true, false);
 								}
-								$("<div/>").addClass(type).append(
-									$("<div/>").addClass("large light bright").append(formatter.value(type, value))
-								)
-									.append($("<div/>").addClass("up")
-									).appendTo(result);
+								let temperature = $("<div/>").addClass(datatype);
+								let temp = $("<div/>").addClass("temp").append(
+									$("<div/>").addClass("large light bright").append(formatter.value(datatype, value))
+								);
+								if (that.inArrayCaseInsensitive("Icon", that.config.showTrend) > -1 && that.inArrayCaseInsensitive("None", that.config.showTrend) < 0) {
+									let value = this.getValue(module, "temp_trend", true, false);
+									$("<div/>").addClass(value).appendTo(temp);
+								}
+								temp.appendTo(temperature);
+								if (that.config.showMinMaxTemp && value !== that.config.notPresentValue) {
+									//Temp min max
+									let tempMinMax = $("<div/>").addClass("small bright");
+									let minDataType = "min_temp";
+									let maxDataType = "max_temp";
+									let minValue = this.getValue(module, minDataType, true, false);
+									let maxValue = this.getValue(module, maxDataType, true, false);
+									$("<div/>").append("&#10515;" + formatter.value(minDataType, minValue)).append(" &#10514;" + formatter.value(maxDataType, maxValue)).appendTo(tempMinMax);
+									tempMinMax.appendTo(temperature);
+								}
+								temperature.appendTo(result);
 								break;
 							case this.moduleType.WIND:
-								if (type !== "NotPresent") {
-									type = "WindStrength";
-									value = module.dashboard_data[type];
+								if (datatype !== "NotPresent") {
+									datatype = "WindStrength";
+									value = this.getValue(module, datatype, true, false);
 								}
-								$("<div/>").addClass(type).append(
+								$("<div/>").addClass(datatype).append(
 									$("<div/>").addClass("large light bright").append(value)
 								).append(
 									$("<div/>").addClass("xsmall").append("m/s")
 								).appendTo(result);
 								break;
 							case this.moduleType.RAIN:
-								if (type !== "NotPresent") {
-									type = "Rain";
-									value = module.dashboard_data[type];
+								if (datatype !== "NotPresent") {
+									datatype = "Rain";
+									value = this.getValue(module, datatype, true, false);
 								}
-								$("<div/>").addClass(type).append(
+								$("<div/>").addClass(datatype).append(
 									$("<div/>").addClass("large light bright").append(value)
 								).append(
 									$("<div/>").addClass("xsmall").append("mm/h")
@@ -366,32 +405,32 @@ Module.register("MMM-Netatmo", {
 					},
 					secondary: function (module) {
 						let result = $("<td/>").addClass("secondary");
-						let type = typeof module.dashboard_data === "undefined" ? "NotPresent" : "";
+						let datatype = typeof module.dashboard_data === "undefined" ? "NotPresent" : "";
 						let value = that.config.notPresentValue;
 						switch (module.type) {
 							case this.moduleType.MAIN:
 							case this.moduleType.INDOOR:
-								if (type !== "NotPresent") {
-									type = "CO2";
-									value = module.dashboard_data[type];
+								if (datatype !== "NotPresent") {
+									datatype = "CO2";
+									value = this.getValue(module, datatype, true, false);
 									let status = value <= 800 ? "good" : value <= 1600 ? "average" : "bad";
 
-									$("<div/>").addClass(type).append(
+									$("<div/>").addClass(datatype).append(
 										$("<div/>").addClass("visual").addClass(status)
 									).append(
-										$("<div/>").addClass("small value").append(formatter.value(type, value))
+										$("<div/>").addClass("small value").append(formatter.value(datatype, value))
 									).appendTo(result);
 								}
 								break;
 							case this.moduleType.WIND:
-								if (type !== "NotPresent") {
-									type = "WindAngle";
-									value = module.dashboard_data[type];
+								if (datatype !== "NotPresent") {
+									datatype = "WindAngle";
+									value = value = this.getValue(module, datatype, true, false);
 
-									$("<div/>").addClass(type).append(
+									$("<div/>").addClass(datatype).append(
 										$("<div/>").addClass("visual xlarge wi wi-direction-up").css("transform", "rotate(" + value + "deg)")
 									).append(
-										$("<div/>").addClass("small value").append(formatter.value(type, value))
+										$("<div/>").addClass("small value").append(formatter.value(datatype, value))
 									).appendTo(result);
 								}
 								break;
@@ -448,18 +487,8 @@ Module.register("MMM-Netatmo", {
 						}
 						return result;
 					},
-					getValue: function (module, datatype, isDashboardData, translate) {
-						let value;
-						if (isDashboardData) {
-							value = typeof module.dashboard_data !== "undefined" ? (module.dashboard_data[datatype]) : that.config.notPresentValue;
-						}
-						else {
-							value = typeof module[datatype] !== "undefined" ? (module[datatype]) : that.config.notPresentValue;
-						}
-						return value = (translate) ? translator.bind(that)(value.toUpperCase()) : value;
-					},
 					addTemperatureTrend: function (parent, module) {
-						if (that.config.showTrend) {
+						if (that.inArrayCaseInsensitive("Text", that.config.showTrend) > -1 && that.inArrayCaseInsensitive("None", that.config.showTrend) < 0) {
 							let datatype = "temp_trend";
 							let value = this.getValue(module, datatype, true, true);
 							this.addData(parent, datatype, value);
@@ -468,10 +497,19 @@ Module.register("MMM-Netatmo", {
 					addPressure: function (parent, module) {
 						let datatype = "Pressure";
 						let value = this.getValue(module, datatype, true, false);
-						return this.addData(parent, datatype, value);
+						if (that.inArrayCaseInsensitive("Icon", that.config.showTrend) > -1 && that.inArrayCaseInsensitive("None", that.config.showTrend) < 0) {
+							let pressureResult = $("<div/>").addClass("trend");
+							this.addData(pressureResult, datatype, value);
+							let trendValue = this.getValue(module, "pressure_trend", true, false);
+							$("<div/>").addClass(trendValue).appendTo(pressureResult);
+							pressureResult.appendTo(parent);
+						}
+						else {
+							return this.addData(parent, datatype, value);
+						}
 					},
 					addPressureTrend: function (parent, module) {
-						if (that.config.showTrend) {
+						if (that.inArrayCaseInsensitive("Text", that.config.showTrend) > -1 && that.inArrayCaseInsensitive("None", that.config.showTrend) < 0) {
 							let datatype = "pressure_trend";
 							let value = this.getValue(module, datatype, true, true);
 							this.addData(parent, datatype, value);

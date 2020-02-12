@@ -75,33 +75,31 @@
 .netatmo .bubbles .module .data {
   text-align: left;
 }
-.netatmo .bubbles .module .primary .Temperature{
+.netatmo .bubbles .module .primary .temp{
   display: flex;
 
   flex-direction: row;
   align-items: baseline;
-  /*align-content: space-between;*/
-  /*display: inline-block;vertical-align: bottom;*/
 }
-.netatmo .bubbles .module .primary .Temperature .up {
+.netatmo .bubbles .module .primary .temp .up {
   width: 0;
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-bottom: 30px solid red;
+  border-bottom: 30px solid #fff; /*bright*/
 }
-.netatmo .bubbles .module .primary .Temperature .down {
+.netatmo .bubbles .module .primary .temp .down {
   width: 0;
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-top: 30px solid red;
+  border-top: 30px solid #fff; /*bright*/
 }
-.netatmo .bubbles .module .primary .Temperature .stable {
+.netatmo .bubbles .module .primary .temp .stable {
   width: 0;
   height: 0;
   border-top: 15px solid transparent;
-  border-left: 30px solid red;
+  border-left: 30px solid #fff; /*bright*/
   border-bottom: 15px solid transparent;
 }
 .netatmo .bubbles .module .primary .CO2 .bad {
@@ -136,6 +134,35 @@
 }
 .netatmo .bubbles .module .data {
   width: 8em;
+}
+.netatmo .bubbles .module .data .trend{
+  display: flex;
+
+  flex-direction: row;
+  align-items: baseline;
+  /*align-content: space-between;*/
+  /*display: inline-block;vertical-align: bottom;*/
+}
+.netatmo .bubbles .module .data .trend .up {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 12px solid #999; /*normal*/
+}
+.netatmo .bubbles .module .data .trend .down {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 12px solid #999; /*normal*/
+}
+.netatmo .bubbles .module .data .trend .stable {
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-left: 12px solid #999; /*normal*/
+  border-bottom: 6px solid transparent;
 }
 .netatmo .bubbles .module .data .flash {
   animation: flasher 1s linear infinite;
