@@ -8,7 +8,7 @@
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
-![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/master/.github/preview.png)
+![Netatmo visualisation](https://github.com/RaymondMolenaar/MMM-Netatmo/master/MMM-Netatmo.png)
 
 ## Usage
 
@@ -17,9 +17,7 @@ _Prerequisites_
 - requires MagicMirror v2.0.0
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
 
-To use this module with the **old module system**, use this branch: https://github.com/CFenner/MagicMirror-Netatmo-Module/tree/rel-1.0
-
-To use this module, just clone this repository to your __modules__ folder of your MagicMirror: `git clone https://github.com/CFenner/MagicMirror-Netatmo-Module.git netatmo`
+To use this module, just clone this repository to your __modules__ folder of your MagicMirror: `git clone https://github.com/RaymondMolenaar/MMM-Netatmo.git MMM-Netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
@@ -98,3 +96,12 @@ The following properties can be configured:
 |refreshInterval|How often does the content needs to be updated? (Minutes)<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `3`|
 |moduleOrder|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.|
 |dataOrder|The rendering order of the data types of a module, ommit a data type to hide the output.<br><br>**Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`|
+|showBattery| Show batterystatus<br><br>**Default value:** `true`|
+|showRadio| Show Signal status <br><br>**Default value:** `true`|
+|showWiFi| Show WIFI Signal  <br><br>**Default value:** `true`|
+|showMinMaxTemp| Show Minimum and Maximum Temperatue of stations<br><br>**Default value:** `true`|
+|showTrend| Way the temperature or pressure trend is diplayed. It can be not at all [None], IconStyle [Icon] and or [text]. <br><br>**Example value:** `["Icon", "Text"]`<br><br>**Default value:** `["Icon"]`|
+|showReachable| Show station reachable <br><br>**Default value:** `true`|
+
+## About this Fork
+The most important change of this fork, is that even when not all of your Netatmo Modules are in reach (due to empty batteries or whatever), this MM-Module will still display your module, but with empty values. It doesn't hang on the loading circle.
