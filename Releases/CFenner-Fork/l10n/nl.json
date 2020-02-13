@@ -1,0 +1,28 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Geluid",
+  "HUMIDITY": "Vochtigheid",
+  "PRESSURE": "Luchtdruk",
+  "PRESSURE_TREND": "Luchtdruk (trend)",
+  "TEMPERATURE": "Temperatuur",
+  "TEMP_TREND": "Temperatuur (trend)",
+  "RAIN": "Regen",
+  "SUM_RAIN_1": "Regen (1u)",
+  "SUM_RAIN_24": "Regen (24u)",
+  "WIND": "Wind",
+  "WINDSTRENGTH": "Wind",
+  "WINDANGLE": "Wind (richting)",
+  "GUSTSTRENGTH": "Stoten",
+  "GUSTANGLE": "Stoten (richting)",
+
+  "UP": "stijgend",
+  "STABLE": "stabiel",
+  "DOWN": "dalend",
+  "UNDEFINED": "niet beschikbaar",
+
+  "WIFI": "WiFi",
+  "RADIO": "Radio signaal",
+  "REACHABLE": "Bereikbaar",
+  "BATTERY": "Batterij",
+  "LAST_MESSAGE": "laatste contact"
+}

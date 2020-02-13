@@ -1,0 +1,27 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Hluk",
+  "HUMIDITY": "Vlhkost",
+  "PRESSURE": "Tlak",
+  "PRESSURE_TREND": "Tlak (trend)",
+  "TEMPERATURE": "Teplota",
+  "TEMP_TREND": "Teplota (trend)",
+  "RAIN": "Srážky",
+  "SUM_RAIN_1": "Srážky (1h)",
+  "SUM_RAIN_24": "Srážky (24h)",
+  "WINDSTRENGTH": "Vítr",
+  "WINDANGLE": "Vítr (směr)",
+  "GUSTSTRENGTH": "Poryvy",
+  "GUSTANGLE": "Poryvy (směr)",
+
+  "UP": "stoupá",
+  "STABLE": "stály",
+  "DOWN": "klesá",
+  "UNDEFINED": "nedostupné",
+
+  "WIFI": "WiFi",
+  "RADIO": "Radio signal",
+  "REACHABLE": "dosažitelný",
+  "BATTERY": "Baterie",
+  "LAST_MESSAGE": "poslední kontakt"
+}

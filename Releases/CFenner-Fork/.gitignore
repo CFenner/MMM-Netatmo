@@ -1,0 +1,5 @@
+# Ignore all node modules.
+node_modules
+report
+ws.code-workspace
+MMM-Netatmo.js.20200205

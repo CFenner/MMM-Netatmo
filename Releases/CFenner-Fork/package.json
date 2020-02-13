@@ -1,0 +1,34 @@
+{
+  "name": "netatmo",
+  "version": "2.0.0",
+  "description": "",
+  "main": "netatmo.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CFenner/MagicMirror-Netatmo-Module.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CFenner/MagicMirror-Netatmo-Module/issues"
+  },
+  "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
+  "devDependencies": {
+    "grunt-cli": "^1.3.2",
+    "grunt-eslint": "latest",
+    "grunt-jsonlint": "latest",
+    "grunt-markdownlint": "latest",
+    "grunt-stylelint": "latest",
+    "grunt-yamllint": "latest",
+    "stylelint": "^13.1.0",
+    "stylelint-config-standard": "^20.0.0"
+  },
+  "dependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-csslint": "^2.0.0",
+    "gruntify-eslint": "^5.0.0"
+  }
+}

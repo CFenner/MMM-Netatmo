@@ -1,0 +1,174 @@
+.netatmo {
+  display: inline-block;
+}
+.netatmo .loading,
+.netatmo .loadTimer,
+.netatmo .updated {
+  display: inline-block;
+}
+.netatmo svg.loading {
+  height: .6em;
+  width: .6em;
+}
+/* csslint ignore:start */
+.netatmo svg.loading circle {
+  cx: 50;
+  cy: 50;
+  fill: none;
+  r: 40;
+  stroke-linecap: round;
+}
+/* csslint ignore:end */
+.netatmo svg.loading .inner {
+  stroke: #ffffff;
+  stroke-width: 6;
+}
+.netatmo svg.loading .outer {
+  stroke: #aaaaaa;
+  stroke-width: 10;
+}
+.netatmo svg.loadTimer {
+  height: .5em;
+  margin: .2em 0;
+  vertical-align: middle;
+  width: .5em;
+}
+.netatmo svg.loadTimer .loader {
+  fill: #000000;
+}
+.netatmo svg.loadTimer .border {
+  fill: #aaaaaa;
+}
+.netatmo .updated {
+  margin: .2em 0;
+  padding: 0 .5em;
+  vertical-align: middle;
+}
+.netatmo .horizontal .module {
+  display: inline-block;
+}
+.netatmo .classic .module {
+  border: 1px solid #ffffff;
+  border-radius: .25em;
+  margin: .25em .25em;
+  overflow: hidden;
+}
+.netatmo .classic .module .name {
+  background: #ffffff;
+  color: #000000;
+  padding: .125em .25em;
+  text-align: center;
+}
+.netatmo .classic .module .data {
+  padding: .125em .25em;
+}
+.xxlarge {
+  font-size: 95px;
+  letter-spacing: -3px;
+  line-height: 95px;
+}
+.netatmo .bubbles .module .name {
+  text-align: left;
+}
+.netatmo .bubbles .module .primary,
+.netatmo .bubbles .module .secondary,
+.netatmo .bubbles .module .data {
+  text-align: left;
+}
+.netatmo .bubbles .module .primary .temp{
+  display: flex;
+
+  flex-direction: row;
+  align-items: baseline;
+}
+.netatmo .bubbles .module .primary .temp .up {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 30px solid #fff; /*bright*/
+}
+.netatmo .bubbles .module .primary .temp .down {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 30px solid #fff; /*bright*/
+}
+.netatmo .bubbles .module .primary .temp .stable {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-left: 30px solid #fff; /*bright*/
+  border-bottom: 15px solid transparent;
+}
+.netatmo .bubbles .module .primary .CO2 .bad {
+  background-color: #ff0000;
+  color: #ff0000;
+}
+.netatmo .bubbles .module .secondary {
+  text-align: center;
+  width: 5em;
+}
+.netatmo .bubbles .module .secondary .CO2 .visual {
+  border-radius: 1em;
+  box-shadow: 0 0 .9em 1em;
+  height: .1em;
+  margin: 1.5em auto;
+  width: .1em;
+}
+.netatmo .bubbles .module .secondary .CO2 .good {
+  background-color: #32cd32;
+  color: #32cd32;
+}
+.netatmo .bubbles .module .secondary .CO2 .average {
+  background-color: #ffa500;
+  color: #ffa500;
+}
+.netatmo .bubbles .module .secondary .CO2 .bad {
+  background-color: #ff0000;
+  color: #ff0000;
+}
+.netatmo .bubbles .module .secondary .WindAngle .visual {
+  display: inline-block;
+}
+.netatmo .bubbles .module .data {
+  width: 8em;
+}
+.netatmo .bubbles .module .data .trend{
+  display: flex;
+
+  flex-direction: row;
+  align-items: baseline;
+  /*align-content: space-between;*/
+  /*display: inline-block;vertical-align: bottom;*/
+}
+.netatmo .bubbles .module .data .trend .up {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 12px solid #999; /*normal*/
+}
+.netatmo .bubbles .module .data .trend .down {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 12px solid #999; /*normal*/
+}
+.netatmo .bubbles .module .data .trend .stable {
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-left: 12px solid #999; /*normal*/
+  border-bottom: 6px solid transparent;
+}
+.netatmo .bubbles .module .data .flash {
+  animation: flasher 1s linear infinite;
+}
+@keyframes flasher {
+  50% {
+    opacity: 0;
+  }
+}
