@@ -8,7 +8,7 @@
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
-![Netatmo visualisation](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/Releases/CFenner-Fork/MMM-Netatmo.png)
+![Netatmo visualisation](https://raw.githubusercontent.com/haywirecoder/MMM-Netatmo/master/netatmo.PNG)
 
 ## Usage
 
@@ -17,7 +17,11 @@ _Prerequisites_
 - requires MagicMirror v2.0.0
 - a Netatmo weather station at home or at least access to a Netatmo weather station account
 
-To use this module, just clone this repository to your __modules__ folder of your MagicMirror: `git clone https://github.com/RaymondMolenaar/MMM-Netatmo.git MMM-Netatmo`
+To use this module, clone this repository to your __modules__ folder of your MagicMirror:
+
+`cd ~/MagicMirror/modules`
+
+`git clone https://github.com/haywirecoder/MMM-Netatmo.git MMM-Netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
@@ -49,39 +53,26 @@ The POST request will return the following data:
 
 The REFRESH_TOKEN will be needed in the [config entries](#configuration).
 
-##### Hurl.it
-
-You can also send a POST request with [Hurl.it](https://www.hurl.it)([Git](https://github.com/defunkt/hurl)) to the Netatmo auth url: https://api.netatmo.com/oauth2/token
-
-Also you need to provide the following data (add as parameters):
-
-- grant_type: password
-- client_id: [APP_ID]
-- client_secret: [APP_SECRET]
-- username: [USER_MAIL]
-- password: [USER_PASSWORD]
-- scope: read_station
-
-The POST request will return the following data:
-
-- access_token: [ACCESS_TOKEN]
-- expires_in: 10800
-- refresh_token: [REFRESH_TOKEN]
-
-The REFRESH_TOKEN will be needed in the [config entries](#configuration).
-
 ### Configuration
 
 The module needs the default configuration block in your config.js to work.
 
 ```
 {
-	module: 'netatmo',
+	module: 'MMM-Netatmo',
 	position: 'bottom_left', // the location where the module should be displayed
+	header: 'Netatmo',
 	config: {
+		location: 'germany/berlin', //for AirQuality
+		updateIntervalAirQuality: 600, //in secondes
+		
 		clientId: '', // your app id
 		clientSecret: '', // your app secret
 		refreshToken: '' // your generated refresh token
+		
+		updatesIntervalDisplay: 60, //refresh internal
+    		animationSpeed: 1000,
+		moduleOrder: ["Wind","Rain","Backyard","Main", "Master]
 	}
 }
 ```
@@ -93,15 +84,8 @@ The following properties can be configured:
 |clientId|The ID of your Netatmo [application](https://dev.netatmo.com/dev/listapps).<br><br>This value is **REQUIRED**|
 |clientSecret|The app secret of your Netatmo [application](https://dev.netatmo.com/dev/listapps).<br><br>This value is **REQUIRED**|
 |refreshToken|The generated refresh token you got from the POST request to the auth api.<br><br>This value is **REQUIRED**|
-|refreshInterval|How often does the content needs to be updated? (Minutes)<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `3`|
+|updatesIntervalDisplay|How often to check if netatmo datas needs to be updated? (Minutes) No Netatmo server request with this value. Netatmo request minimum every 11 min.<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `1`|
 |moduleOrder|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.|
-|dataOrder|The rendering order of the data types of a module, ommit a data type to hide the output.<br><br>**Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`|
-|showBattery| Show batterystatus<br><br>**Default value:** `true`|
-|showRadio| Show Signal status <br><br>**Default value:** `true`|
-|showWiFi| Show WIFI Signal  <br><br>**Default value:** `true`|
-|showMinMaxTemp| Show Minimum and Maximum Temperatue of stations<br><br>**Default value:** `true`|
-|showTrend| Way the temperature or pressure trend is diplayed. It can be not at all [None], IconStyle [Icon] and or [text]. <br><br>**Example value:** `["Icon", "Text"]`<br><br>**Default value:** `["Icon"]`|
-|showReachable| Show station reachable <br><br>**Default value:** `true`|
-
-## About this Fork
-The most important change of this fork, is that even when not all of your Netatmo Modules are in reach (due to empty batteries or whatever), this MM-Module will still display your module, but with empty values. It doesn't hang on the loading circle.
+|location|For AirQuality display. Use the part behind http://aqicn.org/city/ for your location. For example http://aqicn.org/city/netherland/utrecht/griftpark/<br><br>**Example:** `'germany/berlin'`|
+|lang|To display AirQuality result. Not all languages may be supported (see: http://aqicn.org/faq/2015-07-28/air-quality-widget-new-improved-feed/).<br><br>**Example:** `'fr'`|
+|updateIntervalAirQuality|Value in secondes. If last request to AirQuality server is bigger that this value, a new request to made. AirQuality serveur update is approx every hour. <br><br>**Example:** `600`|

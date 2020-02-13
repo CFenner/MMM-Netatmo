@@ -1,10 +1,71 @@
-.netatmo {
+.netatmo .weathericon {
   display: inline-block;
 }
 .netatmo .loading,
 .netatmo .loadTimer,
 .netatmo .updated {
   display: inline-block;
+}
+.netatmo .textgreen {
+  color: #32cd32;
+}
+.netatmo .textyellow {
+  color: #cacd32;
+}
+.netatmo .textpurple {
+  color: #361b80;
+}
+.netatmo .textorange {
+  color: #ffa500;
+}
+.netatmo .textred {
+  color: #ff0000;
+}
+ .netatmo .textdeepred {
+  color: #6e0202;
+}
+.netatmo .textgray {
+  color: #666;
+}
+
+.line {
+  border-bottom: 1px solid #666;
+  line-height: 15px;
+  color: #999;
+}
+
+.netatmo .bubbles .module {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.module .displayTemp {
+
+  text-align: left;
+}
+.netatmo .bubbles .module .visual {
+  border-radius: 1em;
+  box-shadow: 0 0 .9em 1em;
+  height: .1em;
+  margin: 1.5em auto;
+  width: .1em;
+}
+.netatmo .bubbles .module .good {
+  background-color: #32cd32;
+  color: #32cd32;
+}
+.netatmo .bubbles .module .average {
+  background-color: #ffa500;
+  color: #ffa500;
+}
+.netatmo .bubbles .module .bad {
+  background-color: #ff0000;
+  color: #ff0000;
+}
+
+.netatmo .bubbles .module .humidity {
+  text-align: center;
+  width: 5em;
 }
 .netatmo svg.loading {
   height: .6em;
@@ -40,96 +101,39 @@
   fill: #aaaaaa;
 }
 .netatmo .updated {
-  margin: .2em 0;
+
   padding: 0 .5em;
   vertical-align: middle;
 }
 .netatmo .horizontal .module {
   display: inline-block;
 }
-.netatmo .classic .module {
-  border: 1px solid #ffffff;
-  border-radius: .25em;
-  margin: .25em .25em;
-  overflow: hidden;
-}
-.netatmo .classic .module .name {
-  background: #ffffff;
-  color: #000000;
-  padding: .125em .25em;
-  text-align: center;
-}
-.netatmo .classic .module .data {
-  padding: .125em .25em;
-}
-.xxlarge {
-  font-size: 95px;
-  letter-spacing: -3px;
-  line-height: 95px;
+
+.x-medium {
+  
+  font-size:170%;
 }
 .netatmo .bubbles .module .name {
   text-align: left;
 }
-.netatmo .bubbles .module .primary,
-.netatmo .bubbles .module .secondary,
 .netatmo .bubbles .module .data {
-  text-align: left;
+  text-align: center;
 }
-.netatmo .bubbles .module .primary .temp{
-  display: flex;
-
-  flex-direction: row;
-  align-items: baseline;
-}
-.netatmo .bubbles .module .primary .temp .up {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 30px solid #fff; /*bright*/
-}
-.netatmo .bubbles .module .primary .temp .down {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 30px solid #fff; /*bright*/
-}
-.netatmo .bubbles .module .primary .temp .stable {
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-left: 30px solid #fff; /*bright*/
-  border-bottom: 15px solid transparent;
-}
-.netatmo .bubbles .module .primary .CO2 .bad {
-  background-color: #ff0000;
-  color: #ff0000;
-}
-.netatmo .bubbles .module .secondary {
+.netatmo .bubbles .module .displayHum {
   text-align: center;
   width: 5em;
 }
-.netatmo .bubbles .module .secondary .CO2 .visual {
-  border-radius: 1em;
-  box-shadow: 0 0 .9em 1em;
-  height: .1em;
-  margin: 1.5em auto;
-  width: .1em;
+.netatmo .bubbles .module .displayExtra {
+  text-align: center;
+  width: 5em;
 }
-.netatmo .bubbles .module .secondary .CO2 .good {
-  background-color: #32cd32;
-  color: #32cd32;
+.netatmo .bubbles .module .displayInfos {
+  padding: 0 .5em;
+  text-align: left;
+  width: 5em;
 }
-.netatmo .bubbles .module .secondary .CO2 .average {
-  background-color: #ffa500;
-  color: #ffa500;
-}
-.netatmo .bubbles .module .secondary .CO2 .bad {
-  background-color: #ff0000;
-  color: #ff0000;
-}
-.netatmo .bubbles .module .secondary .WindAngle .visual {
+
+.netatmo .bubbles .module .displayHum .WindAngle .visual {
   display: inline-block;
 }
 .netatmo .bubbles .module .data {
