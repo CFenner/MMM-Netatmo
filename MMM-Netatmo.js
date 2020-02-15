@@ -16,6 +16,12 @@ var DateUpdateDataAirQuality = 0; // The last date we updated the info Air Quali
 var AirQualityImpact = "Wait..";
 var AirQualityValue = 0; //Initial air quality
 
+//Mapping Modules and order. This way they can be referenced from any function.
+let ModuleMap = new Map();
+// Map devicenames to Devicetypes
+let ModuleTypeMap = new Map();
+let NAValue = "--";
+
 Module.register("MMM-Netatmo", {
 	// default config,
 	defaults: {
@@ -27,6 +33,7 @@ Module.register("MMM-Netatmo", {
 		updatesIntervalDisplay: 60,
 		animationSpeed: 1000,
 		updatesIntervalDisplayID: 0,
+		NAValue: "--",
 		api: {
 			base: "https://api.netatmo.com/",
 			authEndpoint: "oauth2/token",
@@ -315,93 +322,88 @@ Module.register("MMM-Netatmo", {
 						HEALTH: "NHC",
 					},
 					render: function (device) {
+						ModuleMap = new Map();
+						if (that.config.NAValue && that.config.moduleOrder.length > 0) { NAValue = that.config.NAValue; }
+
 						var sResult = $("<div/>").addClass("modules").addClass("bubbles");
-						let aOrderedModuleList = [];
 						if (that.config.moduleOrder && that.config.moduleOrder.length > 0) {
-							aOrderedModuleList = that.config.moduleOrder;
-						}
-						else {
-							aOrderedModuleList = device.modules.map(item => item.module_name);
-							// add main station to top of array
-							aOrderedModuleList.unshift(device.module_name);
-						}
-						Log.log("Modulelist: " + aOrderedModuleList);
-						if (aOrderedModuleList) {
-							for (var moduleName of aOrderedModuleList) {
+							for (var moduleName of that.config.moduleOrder) {
 								if (device.module_name.toUpperCase() === moduleName.toUpperCase()) {
-									Log.log("Device will be added: " + device.module_name);
-									sResult.append(this.module(device));
+									Log.log("Device will be mapped: " + device.module_name);
+									ModuleMap.set(device.module_name, device);
+									ModuleTypeMap.set(device.type, device.module_name);
 								} else {
 									for (var module of device.modules) {
-										Log.log(module.module_name);
-
 										if (module.module_name.toUpperCase() === moduleName.toUpperCase()) {
-											Log.log("Module will be added: " + module.module_name);
-											switch (module.type) {
-												case this.moduleType.MAIN:
-												case this.moduleType.INDOOR:
-												case this.moduleType.OUTDOOR:
-													sResult.append(this.module(module));
-													break;
-
-												case this.moduleType.WIND:
-													if (module.dashboard_data === undefined) {
-														break;
-													}
-													//if wind is rendered after OUTDOOR, value will never be displayed
-													WindValue = module.dashboard_data["WindStrength"];
-													WindAngleValue = module.dashboard_data["WindAngle"];
-
-													break;
-
-												case this.moduleType.RAIN:
-													if (module.dashboard_data === undefined) {
-														break;
-													}
-													//if rain is rendered after OUTDOOR, value will never be displayed
-													RainValue = module.dashboard_data["Rain"];
-
-													break;
+											Log.log("Module will be mapped: " + module.module_name);
+											ModuleMap.set(module.module_name, module);
+											if (module.type === this.moduleType.INDOOR) {
+												let indoor = [];
+												if (ModuleTypeMap.has(this.moduleType.INDOOR)) { let indoor = ModuleTypeMap.has(this.moduleType.INDOOR); }
+												indoor.push(module.module_name);
+												ModuleTypeMap.set(module.type, indoor);
 											}
-
-											break;
+											else {
+												ModuleTypeMap.set(module.type, module.module_name);
+											}
 										}
 									}
 								}
 							}
 						}
-						//else {
-						// 	// render station data (main station)
-						// 	sResult.append(this.module(device));
-						// 	// render module data (connected modules)
-						// 	for (var cnt = 0; cnt < device.modules.length; cnt++) {
-						// 		Log.log(device.modules[cnt].module_name);
-						// 		Log.log(device.modules[cnt].type);
-						// 		switch (device.modules[cnt].type) {
-						// 			case this.moduleType.MAIN:
-						// 			case this.moduleType.INDOOR:
-						// 			case this.moduleType.OUTDOOR:
-						// 				sResult.append(this.module(device.modules[cnt]));
-						// 				break;
+						else {
+							Log.log("Device will be mapped: " + device.module_name);
+							ModuleMap.set(device.module_name, device);
+							//ModuleTypeMap.set(device.type, device.module_name);
+							for (var cnt = 0; cnt < device.modules.length; cnt++) {
+								Log.log("Module will be mapped: " + device.modules[cnt].module_name);
+								ModuleMap.set(device.modules[cnt].module_name, device.modules[cnt]);
+								if (device.modules[cnt].type === this.moduleType.INDOOR) {
+									let indoor = [];
+									if (ModuleTypeMap.has(this.moduleType.INDOOR)) { let indoor = ModuleTypeMap.has(this.moduleType.INDOOR); }
+									indoor.push(device.modules[cnt].module_name);
+									ModuleTypeMap.set(device.modules[cnt].type, indoor);
+								}
+								else {
+									ModuleTypeMap.set(device.modules[cnt].type, device.modules[cnt].module_name);
+								}
+							}
+						}
 
-						// 			case this.moduleType.WIND:
-						// 				if (device.modules[cnt].dashboard_data === undefined) {
-						// 					break;
-						// 				}
-						// 				WindValue = device.modules[cnt].dashboard_data["WindStrength"];
-						// 				WindAngleValue = device.modules[cnt].dashboard_data["WindAngle"];
+						if (ModuleMap && ModuleMap.size > 0) {
+							for (let [moduleName, module] of ModuleMap) {
+								switch (module.type) {
+									case this.moduleType.MAIN:
+									case this.moduleType.INDOOR:
+									case this.moduleType.OUTDOOR:
+										sResult.append(this.module(module));
+										break;
 
-						// 				break;
+									case this.moduleType.WIND:
+										if (module.dashboard_data === undefined) {
+											break;
+										}
+										//if wind is rendered after OUTDOOR, value will never be displayed
+										WindValue = module.dashboard_data["WindStrength"];
+										WindAngleValue = module.dashboard_data["WindAngle"];
 
-						// 			case this.moduleType.RAIN:
-						// 				if (device.modules[cnt].dashboard_data === undefined) {
-						// 					break;
-						// 				}
-						// 				RainValue = device.modules[cnt].dashboard_data["Rain"];
-						// 				break;
-						// 		}
-						// 	}
-						// }
+										break;
+
+									case this.moduleType.RAIN:
+										if (module.dashboard_data === undefined) {
+											break;
+										}
+										//if rain is rendered after OUTDOOR, value will never be displayed
+										RainValue = module.dashboard_data["Rain"];
+
+										break;
+								}
+							}
+						}
+						Log.log("ModuleTypeMap: " + ModuleTypeMap.size);
+						for (let [key, value] of ModuleTypeMap) {
+							Log.log(key + " = " + value);
+						}
 						return sResult;
 					},
 
@@ -681,6 +683,25 @@ Module.register("MMM-Netatmo", {
 									statusHum = "textorange";
 								} else if (valueHum <= 30 || valueHum >= 70) {
 									statusHum = "textred";
+								}
+
+								Log.log("RainValue: " + formatter.value("Rain", RainValue));
+								if (ModuleMap === undefined) {
+									Log.log("Cannot access ModuleMap");
+								} else {
+									Log.log("ModuleMap size : " + ModuleMap.size);
+								}
+								if (ModuleMap.get("Rain") === undefined) {
+									Log.log("Cannot access ModuleMap.Rain");
+								}
+								else {
+									if (ModuleMap.get("Rain").dashboard_data["Rain"] === undefined) {
+										Log.log("Cannot access ModuleMap.Rain Data");
+									}
+									else {
+										let RainValueMap = ModuleMap.get("Rain").dashboard_data["Rain"];
+										Log.log("RainValueMap: " + formatter.value("Rain", RainValueMap));
+									}
 								}
 
 								// print information
