@@ -119,6 +119,11 @@
 .netatmo .bubbles .module .data {
   text-align: center;
 }
+
+.netatmo .bubbles .module .displaySecondary {
+  text-align: center;
+  width: 5em;
+}
 .netatmo .bubbles .module .displayHum {
   text-align: center;
   width: 5em;

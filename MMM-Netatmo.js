@@ -323,12 +323,29 @@ Module.register("MMM-Netatmo", {
 						HEALTH: "NHC",
 					},
 					dataType: {
+						BATTERY: "battery_percent",
+						CO2: "CO2",
+						GUST_STRENGTH: "GustStrength",
+						GUST_ANGLE: "GustAngle",
+						HUMIDITY: "Humidity",
+						LAST_MESSAGE: "last_message",
+						LAST_SEEN: "last_seen",
+						NOISE: "Noise",
+						PRESSURE: "Pressure",
+						PRESSURE_TREND: "pressure_trend",
+						PRESSURE_ABSOLUTE: "AbsolutePressure",
+						RAIN: "Rain",
+						RADIO: "rf_status",
+						SUM_RAIN_1: "sum_rain_1",
+						SUM_RAIN_24: "sum_rain_24",
 						TEMPERATURE: "Temperature",
 						TEMP_MIN: "min_temp",
 						TEMP_MAX: "max_temp",
 						TEMP_TREND: "temp_trend",
-						WIND: "NAModule2",
-						HEALTH: "NHC",
+						WIFI: "wifi_status",
+						WIND: "Wind",
+						WIND_STRENGTH: "WindStrength",
+						WIND_ANGLE: "WindAngle",
 					},
 					getValue: function (module, datatype, isDashboardData, translate) {
 						let value;
@@ -396,6 +413,8 @@ Module.register("MMM-Netatmo", {
 										sResult.append(this.moduleMain(module));
 										break;
 									case this.moduleType.INDOOR:
+										sResult.append(this.moduleIndoor(module));
+										break;
 									case this.moduleType.OUTDOOR:
 										sResult.append(this.module(module));
 										break;
@@ -429,6 +448,29 @@ Module.register("MMM-Netatmo", {
 					},
 
 					moduleMain: function (module) {
+						var type;
+						var value;
+						var result = $("<div/>").addClass("module").append(
+							$("<div/>").addClass("name small").append(module.module_name)
+						).append(
+							$("<div/>").append(
+								$("<table/>").append(
+									$("<tr/>").append(
+										this.displayTemp(module)
+									).append(
+										this.displayMainSecondary(module)
+									)//finsh tr
+								)//finsh table
+							)//finsh div
+						).append(
+							$("<div/>").addClass("align-left").append(this.displayInfos(module))
+						).append(
+							$("<div/>").addClass("line")
+						);
+						return result[0].outerHTML;
+					},
+
+					moduleIndoor: function (module) {
 						var type;
 						var value;
 						var result = $("<div/>").addClass("module").append(
@@ -477,7 +519,7 @@ Module.register("MMM-Netatmo", {
 
 					displayTemp: function (module) {
 						var result = $("<td/>").addClass("displayTemp");
-						let type = this.dataType.TEMPERATURE;
+						let datatype = this.dataType.TEMPERATURE;
 						let TrendIcon = "fa fa-question";
 						value = this.getValue(module, this.dataType.TEMPERATURE, true, false);
 						valueMin = this.getValue(module, this.dataType.TEMP_MIN, true, false);
@@ -499,12 +541,12 @@ Module.register("MMM-Netatmo", {
 								break;
 						}
 
-						$("<div/>").addClass(type).append(
-							$("<div/>").addClass("x-medium light bright").append(formatter.value(type, value))
+						$("<div/>").addClass(datatype).append(
+							$("<div/>").addClass("x-medium light bright").append(formatter.value(datatype, value))
 						).append(
 							$("<span/>").addClass("updated xsmall").addClass(TrendIcon)
 						).append(
-							$("<span/>").addClass("small light").append(" " + formatter.value(type, valueMin) + " - " + formatter.value(type, valueMax))
+							$("<span/>").addClass("small light").append(" " + formatter.value(datatype, valueMin) + " - " + formatter.value(datatype, valueMax))
 						)
 							.appendTo(result);
 						return result;
@@ -542,6 +584,66 @@ Module.register("MMM-Netatmo", {
 							default:
 								break;
 						}
+						return result;
+					},
+
+					displayCO2: function (module) {
+
+						let dataType = this.dataType.CO2;
+						let result = $("<div/>").addClass(dataType);
+						let value = this.getValue(module, this.dataType.CO2, true, false);
+						//let status = value > 2000 ? "bad" : value > 1000 ? "average" : "good";
+						let status = value <= 800 ? "good" : value <= 1600 ? "average" : "bad";
+
+						$("<div/>").addClass("small value").append("CO² : " + formatter.value("CO2", value))
+							.append(
+								$("<div/>").addClass("visual small").addClass(status)
+							).appendTo(result);
+
+						return result;
+					},
+
+					displayPressure: function (module) {
+						var result;
+						var value = "";
+						var type = "Humidity";
+						switch (module.type) {
+							case this.moduleType.MAIN:
+
+								result = $("<div/>").addClass("displayHum");
+								if (module.dashboard_data === undefined) { value = "NA"; }
+								else { value = module.dashboard_data[type]; }
+
+								if (value >= 40 && value <= 60) {
+									status = "";
+								} else if (value < 40 && value > 30 || value < 70 && value > 60) {
+									status = "textorange";
+								} else if (value <= 30 || value >= 70) {
+									status = "textred";
+								}
+
+								$("<div/>").addClass(type)
+									.append(
+										$("<div/>").addClass("fa fa-tint").addClass(status)
+									).append(
+										$("<span/>").addClass("small value").append("  Humidity: " + formatter.value(type, value))
+									).appendTo(result);
+
+								break;
+							case this.moduleType.OUTDOOR:
+							case this.moduleType.INDOOR:
+							default:
+								break;
+						}
+						return result;
+					},
+
+					displayMainSecondary: function (module) {
+						let result = $("<td/>").addClass("Secondary");
+						this.displayCO2(module).appendTo(result);
+
+						//TODO: ADD Humidity
+						//TODO: Add Pressure trend
 						return result;
 					},
 
