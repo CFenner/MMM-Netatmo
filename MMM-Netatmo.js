@@ -20,7 +20,8 @@ var AirQualityValue = 0; //Initial air quality
 let ModuleMap = new Map();
 // Map devicenames to Devicetypes
 let ModuleTypeMap = new Map();
-let NAValue = "--";
+//let NAValue = "--";
+let NAValue = "NA";
 
 Module.register("MMM-Netatmo", {
 	// default config,
@@ -321,6 +322,24 @@ Module.register("MMM-Netatmo", {
 						WIND: "NAModule2",
 						HEALTH: "NHC",
 					},
+					dataType: {
+						TEMPERATURE: "Temperature",
+						TEMP_MIN: "min_temp",
+						TEMP_MAX: "max_temp",
+						TEMP_TREND: "temp_trend",
+						WIND: "NAModule2",
+						HEALTH: "NHC",
+					},
+					getValue: function (module, datatype, isDashboardData, translate) {
+						let value;
+						if (isDashboardData) {
+							value = typeof module.dashboard_data !== "undefined" ? (module.dashboard_data[datatype]) : NAValue;
+						}
+						else {
+							value = typeof module[datatype] !== "undefined" ? (module[datatype]) : NAValue;
+						}
+						return value = (translate) ? translator.bind(that)(value.toUpperCase()) : value;
+					},
 					render: function (device) {
 						ModuleMap = new Map();
 						if (that.config.NAValue && that.config.moduleOrder.length > 0) { NAValue = that.config.NAValue; }
@@ -374,6 +393,8 @@ Module.register("MMM-Netatmo", {
 							for (let [moduleName, module] of ModuleMap) {
 								switch (module.type) {
 									case this.moduleType.MAIN:
+										sResult.append(this.moduleMain(module));
+										break;
 									case this.moduleType.INDOOR:
 									case this.moduleType.OUTDOOR:
 										sResult.append(this.module(module));
@@ -407,6 +428,29 @@ Module.register("MMM-Netatmo", {
 						return sResult;
 					},
 
+					moduleMain: function (module) {
+						var type;
+						var value;
+						var result = $("<div/>").addClass("module").append(
+							$("<div/>").addClass("name small").append(module.module_name)
+						).append(
+							$("<div/>").append(
+								$("<table/>").append(
+									$("<tr/>").append(
+										this.displayTemp(module)
+									).append(
+										this.displayExtra(module)
+									)//finsh tr
+								)//finsh table
+							)//finsh div
+						).append(
+							$("<div/>").addClass("align-left").append(this.displayInfos(module))
+						).append(
+							$("<div/>").addClass("line")
+						);
+						return result[0].outerHTML;
+					},
+
 					//Defined the overall structure of the display of each element of the module (indoor, outdoor). The last line being in the getDom
 					module: function (module) {
 						var type;
@@ -433,58 +477,36 @@ Module.register("MMM-Netatmo", {
 
 					displayTemp: function (module) {
 						var result = $("<td/>").addClass("displayTemp");
-						var type;
-						var value;
-						switch (module.type) {
-							case this.moduleType.MAIN:
-							case this.moduleType.OUTDOOR:
-								type = "Temperature";
-								if (module.dashboard_data === undefined) {
-									value = "NA";
-									valueMin = "NA";
-									valueMax = "NA";
-									valueTrend = "";
-								}
-								else {
-									value = module.dashboard_data[type];
-									valueMin = module.dashboard_data["min_temp"];
-									valueMax = module.dashboard_data["max_temp"];
-									valueTrend = module.dashboard_data["temp_trend"];
-								}
+						let type = this.dataType.TEMPERATURE;
+						let TrendIcon = "fa fa-question";
+						value = this.getValue(module, this.dataType.TEMPERATURE, true, false);
+						valueMin = this.getValue(module, this.dataType.TEMP_MIN, true, false);
+						valueMax = this.getValue(module, this.dataType.TEMP_MAX, true, false);
+						valueTrend = this.getValue(module, this.dataType.TEMP_TREND, true, false);
 
-								// Log.log("getDesign - Temperature : " + value + ' C');
-
-								if (valueTrend == "up") {
-									TrendIcon = "fa fa-arrow-up";
-								} else if (valueTrend == "stable") {
-									TrendIcon = "fa fa-arrow-right";
-								} else if (valueTrend == "down") {
-									TrendIcon = "fa fa-arrow-down";
-								} else {
-									TrendIcon = "fa fa-question";
-								}
-
-								$("<div/>").addClass(type).append(
-									$("<div/>").addClass("large light bright").append(formatter.value(type, value))
-								).append(
-									$("<span/>").addClass("updated xsmall").addClass(TrendIcon)
-								).append(
-									$("<span/>").addClass("small light").append(" " + formatter.value(type, valueMin) + " - " + formatter.value(type, valueMax))
-								)
-									.appendTo(result);
+						switch (valueTrend) {
+							case "up":
+								TrendIcon = "fa fa-arrow-up";
 								break;
-							case this.moduleType.INDOOR:
-								type = "Temperature";
-								if (module.dashboard_data === undefined) { value = "NA"; }
-								else { value = module.dashboard_data[type]; }
-
-								$("<div/>").addClass(type).append(
-									$("<div/>").addClass("x-medium light bright").append(formatter.value(type, value))
-								).appendTo(result);
-
+							case "down":
+								TrendIcon = "fa fa-arrow-down";
+								break;
+							case "stable":
+								TrendIcon = "fa fa-arrow-right";
 								break;
 							default:
+								TrendIcon = "fa fa-question";
+								break;
 						}
+
+						$("<div/>").addClass(type).append(
+							$("<div/>").addClass("x-medium light bright").append(formatter.value(type, value))
+						).append(
+							$("<span/>").addClass("updated xsmall").addClass(TrendIcon)
+						).append(
+							$("<span/>").addClass("small light").append(" " + formatter.value(type, valueMin) + " - " + formatter.value(type, valueMax))
+						)
+							.appendTo(result);
 						return result;
 					},
 
