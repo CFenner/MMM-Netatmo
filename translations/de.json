@@ -1,7 +1,7 @@
 {
   "CO2": "CO<sub>2</sub>",
   "NOISE": "Lautstärke",
-  "HUMIDITY": "Feuchtigkeit",
+  "HUMIDITY": "Feuchtigkeit in {procentvalue}",
   "PRESSURE": "Luftdruck",
   "PRESSURE_TREND": "Luftdruck (Tendenz)",
   "TEMPERATURE": "Temperatur",
