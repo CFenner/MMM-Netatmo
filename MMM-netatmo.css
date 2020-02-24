@@ -118,7 +118,7 @@
 }
 .MMM-netatmo .bubbles .module .primary {
   grid-column: 1 / 7;
-  border: 2px solid darkblue;
+  /*border: 2px solid darkblue; */
 }
 .MMM-netatmo .bubbles .module .secondary {
   grid-row: 1 / 3;
@@ -128,7 +128,7 @@
 
 .MMM-netatmo .bubbles .module > div {
   grid-column : 1 / -1;
-  border: 1px solid yellow;
+  /*border: 1px solid yellow; */
 }
 
 .MMM-netatmo .bubbles .data_container {
@@ -139,7 +139,7 @@
 }
 .MMM-netatmo .bubbles .data_container .data_left {
   line-height: .8 ;
-  border: 2px solid white;
+  /*border: 2px solid white; */
 
 }
 .MMM-netatmo .bubbles .data_container .data_right {
@@ -149,15 +149,15 @@
 
 }
 .MMM-netatmo .bubbles .data_container .data_right .data_right_up {
-  background-color: #96ceb4;	
+  /*background-color: #96ceb4;	 */
   line-height: .8 ;
 
 }
 
 .MMM-netatmo .bubbles .data_container .data_right .data_right_down {
   margin-top: auto;
-  background-color: #ff6f69;
   line-height: .8 ;
+  /*background-color: #ff6f69; */
 }
 
 
@@ -169,14 +169,10 @@
   text-align: left;
 }
 
-.MMM-netatmo .bubbles .module .displaySecondary {
-  text-align: center;
-  width: 5em;
+.MMM-netatmo .bubbles .module .displayData {
+  display: flex;
 }
-.MMM-netatmo .bubbles .module .displayHum {
-  text-align: center;
-  width: 5em;
-}
+
 .MMM-netatmo .bubbles .module .displayExtra {
   text-align: center;
   width: 5em;

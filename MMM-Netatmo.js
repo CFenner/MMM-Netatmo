@@ -223,11 +223,11 @@ Module.register("MMM-Netatmo", {
 			if (!value) { return value; }
 			switch (dataType) {
 				case "CO2":
-					return value.toFixed(0) + " ppm";
+					return value.toFixed(0);
 				case "Noise":
-					return value.toFixed(0) + " dB";
+					return value.toFixed(0);
 				case "Humidity":
-					return value.toFixed(0) + "%";
+					return value.toFixed(0);
 				case "Rain":
 				case "sum_rain_24":
 				case "sum_rain_1":
@@ -269,7 +269,7 @@ Module.register("MMM-Netatmo", {
 				case "Radio":
 					return value.toFixed(0) + "%";
 				case "Pressure":
-					return value.toFixed(0) + " mBar";
+					return value.toFixed(0);
 				case "Temperature":
 					//return value.toFixed(1) + "°";
 					return value.toFixed(1);
@@ -645,7 +645,19 @@ Module.register("MMM-Netatmo", {
 					},
 					addSecondary: function (module) {
 						Log.log("MMM-Netatmo addSecondary module: " + module.module_name);
-						let result = $("<div/>").addClass("secondary").append("Second");
+						let result = $("<div/>").addClass("secondary");
+						switch (module.type) {
+							case this.moduleType.MAIN:
+								result.append(this.displayCO2Nieuw(module));
+								break;
+							case this.moduleType.INDOOR:
+							case this.moduleType.OUTDOOR:
+							case this.moduleType.WIND:
+							case this.moduleType.RAIN:
+							default:
+								break;
+
+						}
 						/*
 						this.displayCO2(module).appendTo(result);
 						this.displayHum(module).appendTo(result);
@@ -655,7 +667,21 @@ Module.register("MMM-Netatmo", {
 					},
 					addData: function (module) {
 						Log.log("MMM-Netatmo addData module: " + module.module_name);
-						let result = $("<div/>").addClass("data").append("data1");
+						let result = $("<div/>").addClass("displayData");
+						switch (module.type) {
+							case this.moduleType.MAIN:
+								result.append(this.displayHumNieuw(module));
+								result.append(this.displayPressureNieuw(module));
+								result.append(this.displayNoise(module));
+								
+								break;
+							case this.moduleType.INDOOR:
+							case this.moduleType.OUTDOOR:
+							case this.moduleType.WIND:
+							case this.moduleType.RAIN:
+							default:
+								break;
+						}
 						/*
 						this.displayCO2(module).appendTo(result);
 						this.displayHum(module).appendTo(result);
@@ -694,7 +720,6 @@ Module.register("MMM-Netatmo", {
 								$("<div/>").addClass("data_left").addClass("x-medium light bright").append(formatter.value(datatype, value))
 							).append(
 								$("<div/>").addClass("data_right").append(
-									//$("<div/>").addClass("x-medium light bright").addClass("data_right_up").addClass(unit)
 									$("<div/>").addClass("small light bright").addClass("data_right_up").append(formatter.unit(datatype))
 								).append(
 									$("<div/>").addClass("medium light bright").addClass("data_right_down").addClass(TrendIcon)
@@ -704,25 +729,106 @@ Module.register("MMM-Netatmo", {
 							$("<span/>").addClass("updated small").addClass(TrendIcon)
 						).append(
 							$("<span/>").addClass("small light").append(" " + formatter.value(datatype, valueMin) + " - " + formatter.value(datatype, valueMax))
-						)
-							.appendTo(result);
+						).appendTo(result);
+						return result;
+					},
 
-						// $("<div/>").addClass(datatype).append(
-						// 	$("<div/>").addClass("data_container").addClass("x-medium light bright").append(
-						// 		$("<div/>").addClass("data_left").append(formatter.value(datatype, value))
+					displayCO2Nieuw: function (module) {
+
+						let dataType = this.dataType.CO2;
+						let result = $("<div/>").addClass("displayCO2");
+						let value = this.getValue(module, this.dataType.CO2, true, false);
+						//let status = value > 2000 ? "bad" : value > 1000 ? "average" : "good";
+						let status = value <= 800 ? "good" : value <= 1600 ? "average" : "bad";
+
+						$("<div/>").addClass(dataType).append(
+							$("<div/>").addClass("visual").addClass(status)
+						).append(
+							$("<div/>").addClass("small value").append(formatter.value(dataType, value) + formatter.unit(dataType, value))
+						).appendTo(result);
+
+						return result;
+					},
+
+					displayHumNieuw: function (module) {
+						var result = $("<div/>").addClass("displayHum");
+						let datatype = this.dataType.HUMIDITY;
+						let value = this.getValue(module, datatype, true, false);
+
+						if (value >= 40 && value <= 60) {
+							status = "";
+						} else if (value < 40 && value > 30 || value < 70 && value > 60) {
+							status = "textorange";
+						} else if (value <= 30 || value >= 70) {
+							status = "textred";
+						}
+
+						$("<div/>").addClass(datatype).append(
+							$("<div/>").addClass("data_container").append(
+								$("<div/>").addClass("data_left").addClass("small light bright").append(formatter.value(datatype, value))
+							).append(
+								$("<div/>").addClass("data_right").append(
+									$("<div/>").addClass("xsmall light bright").addClass("data_right_up").append(formatter.unit(datatype))
+								)
+							)
+						).appendTo(result);
+						var humword = translator.bind(that)("HUMIDITY", { "procentvalue": value });
+
+						// $("<div/>").addClass(datatype).addClass("small value")
+						// 	.append(
+						// 		$("<div/>").addClass("wi wi-humidity").addClass(status)
 						// 	).append(
-						// 		$("<div/>").addClass("data_right").append(
-						// 			$("<div/>").addClass("data_right_up").append("°")
-						// 			).append(
-						// 				$("<div/>").addClass("data_right_down").append("^^")
-						// 			)
-						// 	)
-						// ).append(
-						// 	$("<span/>").addClass("updated small").addClass(TrendIcon)
-						// ).append(
-						// 	$("<span/>").addClass("small light").append(" " + formatter.value(datatype, valueMin) + " - " + formatter.value(datatype, valueMax))
-						// )
-						// 	.appendTo(result);
+						// 		$("<span/>").append(" " + humword + ": " + formatter.value(datatype, value))
+						// 	).appendTo(result);
+						return result;
+					},
+
+					displayPressureNieuw: function (module) {
+						var result = $("<div/>").addClass("displayPressure");
+						let datatype = this.dataType.PRESSURE;
+						let value = this.getValue(module, datatype, true, false);
+
+						$("<div/>").addClass(datatype).append(
+							$("<div/>").addClass("data_container").append(
+								$("<div/>").addClass("data_left").addClass("small light bright").append(formatter.value(datatype, value))
+							).append(
+								$("<div/>").addClass("data_right").append(
+									$("<div/>").addClass("xsmall light bright").addClass("data_right_up").append(formatter.unit(datatype))
+								)
+							)
+						).appendTo(result);
+
+						// $("<div/>").addClass(datatype).addClass("small value")
+						// 	.append(
+						// 		$("<div/>").addClass("wi wi-barometer")
+						// 	).append(
+						// 		$("<span/>").append("  Pressure: " + formatter.value(datatype, value))
+						// 	).appendTo(result);
+
+						return result;
+					},
+
+					displayNoise: function (module) {
+						var result = $("<div/>").addClass("displayNoise");
+						let datatype = this.dataType.NOISE;
+						let value = this.getValue(module, datatype, true, false);
+
+						$("<div/>").addClass(datatype).append(
+							$("<div/>").addClass("data_container").append(
+								$("<div/>").addClass("data_left").addClass("small light bright").append(formatter.value(datatype, value))
+							).append(
+								$("<div/>").addClass("data_right").append(
+									$("<div/>").addClass("xsmall light bright").addClass("data_right_up").append(formatter.unit(datatype))
+								)
+							)
+						).appendTo(result);
+
+						// $("<div/>").addClass(datatype).addClass("small value")
+						// 	.append(
+						// 		$("<div/>").addClass("wi wi-barometer")
+						// 	).append(
+						// 		$("<span/>").append("  Pressure: " + formatter.value(datatype, value))
+						// 	).appendTo(result);
 
 						return result;
 					},
