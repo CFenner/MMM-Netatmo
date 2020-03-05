@@ -186,6 +186,12 @@
   justify-content: space-between;
 }
 
+.MMM-netatmo .bubbles .module .displayStatus {
+  display: flex;
+  text-align:left;
+  justify-content: space-between;
+}
+
 .MMM-netatmo .bubbles .module .displayExtra {
   text-align: center;
   width: 5em;

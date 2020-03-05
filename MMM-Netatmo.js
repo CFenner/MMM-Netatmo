@@ -36,6 +36,7 @@ Module.register("MMM-Netatmo", {
 		updatesIntervalDisplayID: 0,
 		showDataIcon: true,
 		showDataHeader: true,
+		showModuleStatus: true,
 		NAValue: "--",
 		api: {
 			base: "https://api.netatmo.com/",
@@ -441,6 +442,7 @@ Module.register("MMM-Netatmo", {
 					DataType: {
 						BATTERY: "battery_percent",
 						CO2: "CO2",
+						FIRMWARE: "firmware",
 						GUST_STRENGTH: "GustStrength",
 						GUST_ANGLE: "GustAngle",
 						HUMIDITY: "Humidity",
@@ -668,16 +670,26 @@ Module.register("MMM-Netatmo", {
 						Log.log("MMM-Netatmo add module: " + module.module_name);
 						var result = $("<div/>").addClass("module").append(
 							$("<div/>").addClass("title name small").append(module.module_name)
-						).append(
-							this.addPrimary(module)
-						).append(
-							this.addSecondary(module)
-						).append(
-							this.addData(module)
-						).append(
-							$("<div/>").addClass("line")
-						);
+						)
+						this.addPrimary(module).appendTo(result);
+						this.addSecondary(module).appendTo(result);
+						this.addData(module).appendTo(result);
+						if(that.config.showModuleStatus) {this.addStatus(module).appendTo(result);}
+						$("<div/>").addClass("line").appendTo(result);
 						return result[0].outerHTML;
+
+						// var result = $("<div/>").addClass("module").append(
+						// 	$("<div/>").addClass("title name small").append(module.module_name)
+						// ).append(
+						// 	this.addPrimary(module)
+						// ).append(
+						// 	this.addSecondary(module)
+						// ).append(
+						// 	this.addData(module)
+						// ).append(
+						// 	$("<div/>").addClass("line")
+						// );
+						// return result[0].outerHTML;
 					},
 
 					addPrimary: function (module) {
@@ -730,21 +742,11 @@ Module.register("MMM-Netatmo", {
 						switch (module.type) {
 							case this.moduleType.MAIN:
 								Log.log("MMM-Netatmo addData module HUMIDITY" );
-								this.displayDataNieuw(module, this.DataType.HUMIDITY).appendTo(result);
+								this.displayData(module, this.DataType.HUMIDITY, true).appendTo(result);
 								Log.log("MMM-Netatmo addData module NOISE" );
-								this.displayDataNieuw(module, this.DataType.NOISE).appendTo(result);
+								this.displayData(module, this.DataType.NOISE, true).appendTo(result);
 								Log.log("MMM-Netatmo addData module PRESSURE" );
-								this.displayDataNieuw(module, this.DataType.PRESSURE).appendTo(result);
-								//result.append(this.displayHumNieuw(module));
-								//this.displayData(module, this.DataType.HUMIDITY).appendTo(result);
-								//this.displayPressureNieuw(module).appendTo(result);
-								//result.append(this.displayNoise(module));
-
-
-
-
-
-
+								this.displayData(module, this.DataType.PRESSURE, true).appendTo(result);
 								break;
 							case this.moduleType.INDOOR:
 							case this.moduleType.OUTDOOR:
@@ -760,7 +762,34 @@ Module.register("MMM-Netatmo", {
 						*/
 						return result;
 					},
-
+					addStatus: function (module) {
+						Log.log("MMM-Netatmo addData module: " + module.module_name);
+						let result = $("<div/>").addClass("displayStatus");
+						switch (module.type) {
+							case this.moduleType.MAIN:
+								Log.log("MMM-Netatmo addData module WIFI" );
+								this.displayData(module, this.DataType.WIFI, false).appendTo(result);
+								Log.log("MMM-Netatmo addData module RADIO" );
+								this.displayData(module, this.DataType.RADIO, false).appendTo(result);
+								Log.log("MMM-Netatmo addData module BATT" );
+								this.displayData(module, this.DataType.BATTERY, false).appendTo(result);
+								Log.log("MMM-Netatmo addData module FIRM" );
+								this.displayData(module, this.DataType.FIRMWARE, false).appendTo(result);
+								break;
+							case this.moduleType.INDOOR:
+							case this.moduleType.OUTDOOR:
+							case this.moduleType.WIND:
+							case this.moduleType.RAIN:
+							default:
+								break;
+						}
+						/*
+						this.displayCO2(module).appendTo(result);
+						this.displayHum(module).appendTo(result);
+						this.displayPressure(module).appendTo(result);
+						*/
+						return result;
+					},
 					displayTempNieuw: function (module) {
 						var result = $("<div/>").addClass("displayTemp");
 						let datatype = this.DataType.TEMPERATURE;
@@ -813,13 +842,12 @@ Module.register("MMM-Netatmo", {
 						return result;
 					},
 
-					displayDataNieuw: function (module, datatype) {
-
+					displayData: function (module, datatype, isDashboardData) {
 						Log.log("displayData datatype: " + datatype);
 						let displayclass = "display" + datatype;
 						Log.log("displayData displayclass: " + displayclass);
 						let result = $("<div/>").addClass(displayclass);
-						let value = this.getValue(module, datatype, true, false);
+						let value = this.getValue(module, datatype, isDashboardData, false);
 						let dataIcon = formatter.icon(datatype);
 						let valueTrend = "";
 						let trendIcon = "";
