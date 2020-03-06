@@ -5,6 +5,8 @@
   "PRESSURE": "Pressure",
   "PRESSURE_TREND": "Pressure (trend)",
   "TEMPERATURE": "Temperature",
+  "MIN_TEMP": "Temperature min",
+  "MAX_TEMP": "Temperature max",
   "TEMP_TREND": "Temperature (trend)",
   "RAIN": "Rain",
   "SUM_RAIN_1": "Rain (1h)",
@@ -21,8 +23,11 @@
   "UNDEFINED": "not available",
 
   "WIFI": "WiFi",
+  "WIFI_STATUS": "WiFi",
   "RADIO": "Radio signal",
+  "RF_STATUS": "Radio signal",
   "REACHABLE": "Reachable",
   "BATTERY": "Battery",
+  "BATTERY_PERCENT": "Battery",
   "LAST_MESSAGE": "last contact"
 }

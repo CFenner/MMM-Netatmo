@@ -5,6 +5,8 @@
   "PRESSURE": "Luchtdruk",
   "PRESSURE_TREND": "Luchtdruk (trend)",
   "TEMPERATURE": "Temperatuur",
+  "MIN_TEMP": "Temperatuur min",
+  "MAX_TEMP": "Temperatuur max",
   "TEMP_TREND": "Temperatuur (trend)",
   "RAIN": "Regen",
   "SUM_RAIN_1": "Regen (1u)",
@@ -21,8 +23,11 @@
   "UNDEFINED": "niet beschikbaar",
 
   "WIFI": "WiFi",
+  "WIFI_STATUS": "WiFi",
   "RADIO": "Radio signaal",
+  "RF_STATUS": "Radio signal",
   "REACHABLE": "Bereikbaar",
   "BATTERY": "Batterij",
+  "BATTERY_PERCENT": "Batterij",
   "LAST_MESSAGE": "laatste contact"
 }

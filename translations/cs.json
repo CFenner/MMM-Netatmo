@@ -5,10 +5,13 @@
   "PRESSURE": "Tlak",
   "PRESSURE_TREND": "Tlak (trend)",
   "TEMPERATURE": "Teplota",
+  "MIN_TEMP": "Teplota min",
+  "MAX_TEMP": "Teplota max",
   "TEMP_TREND": "Teplota (trend)",
   "RAIN": "Srážky",
   "SUM_RAIN_1": "Srážky (1h)",
   "SUM_RAIN_24": "Srážky (24h)",
+  "WIND": "Vítr",
   "WINDSTRENGTH": "Vítr",
   "WINDANGLE": "Vítr (směr)",
   "GUSTSTRENGTH": "Poryvy",
@@ -20,8 +23,11 @@
   "UNDEFINED": "nedostupné",
 
   "WIFI": "WiFi",
+  "WIFI_STATUS": "WiFi",
   "RADIO": "Radio signal",
+  "RF_STATUS": "Radio signal",
   "REACHABLE": "dosažitelný",
   "BATTERY": "Baterie",
+  "BATTERY_PERCENT": "Baterie",
   "LAST_MESSAGE": "poslední kontakt"
 }

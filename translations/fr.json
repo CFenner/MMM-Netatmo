@@ -11,6 +11,7 @@
   "RAIN": "pluie",
   "SUM_RAIN_1": "pluie (1h)",
   "SUM_RAIN_24": "pluie (24h)",
+  "WIND": "vent",
   "WINDSTRENGTH": "vent",
   "WINDANGLE": "vent",
   "GUSTSTRENGTH": "rafale",
@@ -22,8 +23,11 @@
   "UNDEFINED": "non disponible",
 
   "WIFI": "WiFi",
+  "WIFI_STATUS": "WiFi",
   "RADIO": "signal radio",
+  "RF_STATUS": "signal radio",
   "REACHABLE": "accessible",
   "BATTERY": "batterie",
+  "BATTERY_PERCENT": "batterie",
   "LAST_MESSAGE": "connexion dernière"
 }

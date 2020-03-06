@@ -5,10 +5,13 @@
   "PRESSURE": "Lufttrykk",
   "PRESSURE_TREND": "Lufttrykk (trend)",
   "TEMPERATURE": "Temperatur",
+  "MIN_TEMP": "Temperatur min",
+  "MAX_TEMP": "Temperatur max",
   "TEMP_TREND": "Temperatur (trend)",
   "RAIN": "Regn",
   "SUM_RAIN_1": "Regn (1h)",
   "SUM_RAIN_24": "Regn (24h)",
+  "WIND": "Vind",
   "WINDSTRENGTH": "Vind",
   "WINDANGLE": "Vind (retning)",
   "GUSTSTRENGTH": "Vindkast",
@@ -20,8 +23,11 @@
   "UNDEFINED": "Ikkje tilgjengeleg",
 
   "WIFI": "WiFi",
+  "WIFI_STATUS": "WiFi",
   "RADIO": "Radio signal",
+  "RF_STATUS": "Radio signal",
   "REACHABLE": "Nås",
   "BATTERY": "Batteri",
+  "BATTERY_PERCENT": "Batteri",
   "LAST_MESSAGE": "Sist kontakt"
 }

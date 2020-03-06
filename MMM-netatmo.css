@@ -110,11 +110,12 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: auto auto auto auto auto;
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
 .MMM-netatmo .bubbles .module .title {
   grid-column: 1 / 7;
+  line-height: .9 ;
 }
 .MMM-netatmo .bubbles .module .primary {
   grid-column: 1 / 7;
@@ -137,6 +138,14 @@
   border: 2px solid green;
 
 }
+.MMM-netatmo .bubbles .data_container_align {
+  display: flex;  
+  line-height: .8 ;
+  border: 2px solid green;
+  align-items: baseline; 
+  justify-content: space-around;
+
+}
 .MMM-netatmo .bubbles .module .data_icon {
   padding-right: 0.1em;
 }
@@ -149,9 +158,9 @@
 .MMM-netatmo .bubbles .data_container .data_right {
   display: flex;
   flex-flow: column nowrap;
-  
-
+ 
 }
+
 .MMM-netatmo .bubbles .data_container .data_right .data_right_up {
   /*background-color: #96ceb4;	 */
   line-height: .8 ;
@@ -165,6 +174,13 @@
   /*background-color: #ff6f69; */
 }
 
+.MMM-netatmo .bubbles .data_container .data_right .data_right_down_status {
+  margin-top: auto;
+  line-height: .8 ;
+  margin-left: auto;
+  font-size: .1em;
+  /*background-color: #ff6f69; */
+}
 
 .x-medium {
 
