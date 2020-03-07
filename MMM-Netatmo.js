@@ -54,9 +54,11 @@ const NetatmoDataType = {
 	TEMP_MAX: "max_temp",
 	TEMP_TREND: "temp_trend",
 	WIFI: "wifi_status",
-	WIND: "Wind",
-	WIND_STRENGTH: "WindStrength",
+	WIND: "WindStrength",
 	WIND_ANGLE: "WindAngle",
+	WIND_ANGLE_MAX: "max_wind_angle",
+	WIND_STRENGTH: "WindStrength",
+	WIND_STRENGTH_MAX: "max_wind_str",
 	HEALTH_IDX: "health_idx", //Air Quality Health Index
 };
 
@@ -270,30 +272,11 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.SUM_RAIN_1:
 				case NetatmoDataType.SUM_RAIN_24:
 					return value.toFixed(1);
-				case NetatmoDataType.WIND:
-				case NetatmoDataType.WIND_STRENGTH:
-					if (value > 0) { return value.toFixed(0) + " km/Std"; }
-					return "NA";
+				case NetatmoDataType.GUST_ANGLE:
+				case NetatmoDataType.GUST_STRENGTH:
 				case NetatmoDataType.WIND_ANGLE:
-					if (value < 0) { return " "; }
-					var tailval = " | " + value + "°";
-					if (value < 11.25) { return "N" + tailval; }
-					if (value < 33.75) { return "NNE" + tailval; }
-					if (value < 56.25) { return "NE" + tailval; }
-					if (value < 78.75) { return "ENE" + tailval; }
-					if (value < 101.25) { return "E" + tailval; }
-					if (value < 123.75) { return "ESE" + tailval; }
-					if (value < 146.25) { return "SE" + tailval; }
-					if (value < 168.75) { return "SSE" + tailval; }
-					if (value < 191.25) { return "S" + tailval; }
-					if (value < 213.75) { return "SSW" + tailval; }
-					if (value < 236.25) { return "SW" + tailval; }
-					if (value < 258.75) { return "WSW" + tailval; }
-					if (value < 281.25) { return "W" + tailval; }
-					if (value < 303.75) { return "WNW" + tailval; }
-					if (value < 326.25) { return "NW" + tailval; }
-					if (value < 348.75) { return "NNW" + tailval; }
-					return "N" + tailval;
+				case NetatmoDataType.WIND_STRENGTH:
+					return value.toFixed(0);
 				case NetatmoDataType.HEALTH_IDX: //Air Quality Health Index
 					if (value = 0) { return "Healthy"; }
 					if (value = 1) { return "Fine"; }
@@ -333,7 +316,6 @@ Module.register("MMM-Netatmo", {
 					return " 1h";
 				case NetatmoDataType.SUM_RAIN_24:
 					return " 24h";
-				case NetatmoDataType.WIND:
 				case NetatmoDataType.WIND_STRENGTH:
 					return " km/h";
 				case NetatmoDataType.PRESSURE:
@@ -370,29 +352,18 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.SUM_RAIN_1:
 				case NetatmoDataType.SUM_RAIN_24:
 					return "wi wi-raindrop";
-				case NetatmoDataType.WIND:
+				case NetatmoDataType.GUST_STRENGTH:
 				case NetatmoDataType.WIND_STRENGTH:
-					return "";
+					if (value < 0) { return "wi wi-strong-wind"; }
+					let valueBF = this.kmh2Beaufort(value);
+					if (valueBF >= 0) {
+						return "wi wi-wind-beaufort-" + valueBF;
+					}
+					return "wi wi-strong-wind";
+				case NetatmoDataType.GUST_ANGLE:
 				case NetatmoDataType.WIND_ANGLE:
-					if (value < 0) { return " "; }
-					var tailval = " | " + value + "°";
-					if (value < 11.25) { return "N" + tailval; }
-					if (value < 33.75) { return "NNE" + tailval; }
-					if (value < 56.25) { return "NE" + tailval; }
-					if (value < 78.75) { return "ENE" + tailval; }
-					if (value < 101.25) { return "E" + tailval; }
-					if (value < 123.75) { return "ESE" + tailval; }
-					if (value < 146.25) { return "SE" + tailval; }
-					if (value < 168.75) { return "SSE" + tailval; }
-					if (value < 191.25) { return "S" + tailval; }
-					if (value < 213.75) { return "SSW" + tailval; }
-					if (value < 236.25) { return "SW" + tailval; }
-					if (value < 258.75) { return "WSW" + tailval; }
-					if (value < 281.25) { return "W" + tailval; }
-					if (value < 303.75) { return "WNW" + tailval; }
-					if (value < 326.25) { return "NW" + tailval; }
-					if (value < 348.75) { return "NNW" + tailval; }
-					return "N" + tailval;
+					if (value < 0) { return "wi wi-wind from-0-deg"; }
+					return "wi wi-wind from-" + value + "-deg";
 				case NetatmoDataType.PRESSURE:
 					return "wi wi-barometer";
 				case NetatmoDataType.TEMPERATURE:
@@ -433,7 +404,62 @@ Module.register("MMM-Netatmo", {
 				default:
 					return "";
 			}
-		}
+		},
+		kmh2ms: function (kmh) {
+			// https://www.weather.gov/media/epz/wxcalc/windConversion.pdf
+			return 0.277778 * kmh;
+		},
+		kmh2Beaufort: function (kmh) {
+			// https://www.weather.gov/media/epz/wxcalc/windConversion.pdf
+			return this.ms2Beaufort(this.kmh2ms(kmh));
+		},
+		kmh2kts: function (kmh) {
+			// https://www.weather.gov/media/epz/wxcalc/windConversion.pdf
+			return 0.5399568 * kmh;
+		},
+		kmh2mph: function (kmh) {
+			// https://www.weather.gov/media/epz/wxcalc/windConversion.pdf
+			return 0.621371 * kmh;
+		},
+		ms2Beaufort: function (ms) {
+			// https://stackoverflow.com/questions/60001991/how-to-convert-windspeed-between-beaufort-scale-and-m-s-and-vice-versa-in-javasc
+			return Math.ceil(Math.cbrt(Math.pow(ms / 0.836, 2)));
+		},
+		deg2Cardinal: function (deg) {
+			if (deg > 11.25 && deg <= 33.75) {
+				return "NNE";
+			} else if (deg > 33.75 && deg <= 56.25) {
+				return "NE";
+			} else if (deg > 56.25 && deg <= 78.75) {
+				return "ENE";
+			} else if (deg > 78.75 && deg <= 101.25) {
+				return "E";
+			} else if (deg > 101.25 && deg <= 123.75) {
+				return "ESE";
+			} else if (deg > 123.75 && deg <= 146.25) {
+				return "SE";
+			} else if (deg > 146.25 && deg <= 168.75) {
+				return "SSE";
+			} else if (deg > 168.75 && deg <= 191.25) {
+				return "S";
+			} else if (deg > 191.25 && deg <= 213.75) {
+				return "SSW";
+			} else if (deg > 213.75 && deg <= 236.25) {
+				return "SW";
+			} else if (deg > 236.25 && deg <= 258.75) {
+				return "WSW";
+			} else if (deg > 258.75 && deg <= 281.25) {
+				return "W";
+			} else if (deg > 281.25 && deg <= 303.75) {
+				return "WNW";
+			} else if (deg > 303.75 && deg <= 326.25) {
+				return "NW";
+			} else if (deg > 326.25 && deg <= 348.75) {
+				return "NNW";
+			} else {
+				return "N";
+			}
+		},
 
 	},
 
@@ -545,13 +571,14 @@ Module.register("MMM-Netatmo", {
 										break;
 
 									case NetatmoModuleType.WIND:
+										sResult.append(this.module(module));
 										//TODO Wind choose own or in outdoor
-										if (module.dashboard_data === undefined) {
-											break;
-										}
-										//if wind is rendered after OUTDOOR, value will never be displayed
-										WindValue = module.dashboard_data["WindStrength"];
-										WindAngleValue = module.dashboard_data["WindAngle"];
+										// if (module.dashboard_data === undefined) {
+										// 	break;
+										// }
+										// //if wind is rendered after OUTDOOR, value will never be displayed
+										// WindValue = module.dashboard_data["WindStrength"];
+										// WindAngleValue = module.dashboard_data["WindAngle"];
 
 										break;
 
@@ -698,6 +725,8 @@ Module.register("MMM-Netatmo", {
 								result.append(this.displayRain(module));
 								break;
 							case NetatmoModuleType.WIND:
+								result.append(this.displayWind(module));
+								break;
 							default:
 								break;
 
@@ -717,15 +746,15 @@ Module.register("MMM-Netatmo", {
 							case NetatmoModuleType.INDOOR:
 								result.append(this.displayCO2Nieuw(module));
 								break;
-
 							case NetatmoModuleType.OUTDOOR:
 								result.append(this.displayAQI(module));
 								break;
-
 							case NetatmoModuleType.RAIN:
 								result.append(this.displayRainDrops(module));
 								break;
 							case NetatmoModuleType.WIND:
+								result.append(this.displayWindAngle(module));
+								break;
 							default:
 								break;
 
@@ -857,14 +886,14 @@ Module.register("MMM-Netatmo", {
 
 					displayCO2Nieuw: function (module) {
 
-						let dataType = NetatmoDataType.CO2;
+						let datatype = NetatmoDataType.CO2;
 						let result = $("<div/>").addClass("displayCO2");
-						let value = this.getValue(module, NetatmoDataType.CO2, true, false);
+						let value = this.getValue(module, datatype, true, false);
 
-						$("<div/>").addClass(dataType).append(
-							$("<div/>").addClass("small visual").addClass(formatter.status(dataType, value))
+						$("<div/>").addClass(datatype).append(
+							$("<div/>").addClass("small visual").addClass(formatter.status(datatype, value))
 						).append(
-							$("<div/>").addClass("small value").append(formatter.value(dataType, value) + formatter.unit(dataType, value))
+							$("<div/>").addClass("small value").append(formatter.value(datatype, value) + formatter.unit(datatype, value))
 						).appendTo(result);
 
 						return result;
@@ -916,12 +945,101 @@ Module.register("MMM-Netatmo", {
 					},
 					displayRainDrops: function (module) {
 
-						let dataType = NetatmoDataType.RAIN;
+						let datatype = NetatmoDataType.RAIN;
 						let result = $("<div/>").addClass("displayRainDrops");
 
-						$("<div/>").addClass(dataType).append(
+						$("<div/>").addClass(datatype).append(
 							$("<div/>").addClass("xlarge").addClass("wi wi-raindrops")
 						).appendTo(result);
+
+						return result;
+					},
+					displayWind: function (module) {
+						var result = $("<div/>").addClass("displayWind");
+						let datatype = NetatmoDataType.WIND_STRENGTH;
+						let value = this.getValue(module, datatype, true, false);
+						// let valueMin = this.getValue(module, NetatmoDataType.TEMP_MIN, true, false);
+						// let valueMax = this.getValue(module, NetatmoDataType.TEMP_MAX, true, false);
+						// let valueTrend = this.getValue(module, NetatmoDataType.TEMP_TREND, true, false);
+						Log.log("MMM-Netatmo displayWind valuekmh: " + value);
+						let valueMS = formatter.kmh2ms(value);
+						Log.log("MMM-Netatmo displayWind valueMS: " + valueMS);
+						let valueBF = formatter.kmh2Beaufort(value);
+						Log.log("MMM-Netatmo displayWind valueBF: " + valueBF);
+						let valueMPH = formatter.kmh2mph(value);
+						let valueKTS = formatter.kmh2kts(value);
+
+						Log.log("MMM-Netatmo displayWind valueMPH: " + valueMPH);
+						Log.log("MMM-Netatmo displayWind valueKTS: " + valueKTS);
+
+						// MAIN Data
+						let divData = $("<div/>").addClass(datatype);
+						let divDataContainer = $("<div/>").addClass("data_container");
+						let divDataLeft = $("<div/>").addClass("data_left").addClass("large light bright").append(formatter.value(datatype, value));
+						let divDataRight = $("<div/>").addClass("data_right").append(
+							$("<div/>").addClass("small light bright").addClass("data_right_up").append(formatter.unit(datatype))
+						).append(
+							$("<div/>").addClass("medium light bright").addClass("data_right_down").addClass(formatter.icon(NetatmoDataType.WIND_STRENGTH, value))
+						);
+
+						divDataLeft.appendTo(divDataContainer);
+						divDataRight.appendTo(divDataContainer);
+						divDataContainer.appendTo(divData);
+
+						// DATA TEMP MIN MAX
+						// let divDataContainerBottom = $("<div/>").addClass("data_container_align");
+						// let divDCBottomMin = $("<div/>").addClass("data_container");
+						// let divDCBottomMax = $("<div/>").addClass("data_container");
+						// let divDataIconMin = $("<div/>").addClass("data_icon").addClass("small light dimmed").addClass(formatter.icon(NetatmoDataType.TEMP_MIN));
+						// let divDataIconMax = $("<div/>").addClass("data_icon").addClass("small light dimmed").addClass(formatter.icon(NetatmoDataType.TEMP_MAX));
+						// let divDataLeftMin = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(datatype, valueMin));
+						// let divDataRightMin = $("<div/>").addClass("data_right").append(
+						// 	$("<div/>").addClass("xxsmall light bright").addClass("data_right_up").append(formatter.unit(NetatmoDataType.TEMP_MIN))
+						// );
+						// let divDataLeftMax = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(datatype, valueMax));
+						// let divDataRightMax = $("<div/>").addClass("data_right").append(
+						// 	$("<div/>").addClass("xxsmall light bright").addClass("data_right_up").append(formatter.unit(NetatmoDataType.TEMP_MAX))
+						// );
+						// divDataIconMin.appendTo(divDCBottomMin);
+						// divDataLeftMin.appendTo(divDCBottomMin);
+						// divDataRightMin.appendTo(divDCBottomMin);
+						// divDataIconMax.appendTo(divDCBottomMax);
+						// divDataLeftMax.appendTo(divDCBottomMax);
+						// divDataRightMax.appendTo(divDCBottomMax);
+						// divDCBottomMin.appendTo(divDataContainerBottom);
+						// divDCBottomMax.appendTo(divDataContainerBottom);
+						// divDataContainerBottom.appendTo(divData);
+						divData.appendTo(result);
+						return result;
+					},
+					displayWindAngle: function (module) {
+
+						var result = $("<div/>").addClass("displayWindAngle");
+						let datatype = NetatmoDataType.WIND_ANGLE;
+						let value = this.getValue(module, datatype, true, false);
+						Log.log("MMM-Netatmo displayWindAngle : " + value);
+
+						let icon = formatter.icon(datatype, value);
+						Log.log("MMM-Netatmo displayWindAngleIcon : " + icon);
+
+						let formatvalue = formatter.value(datatype, value);
+						Log.log("MMM-Netatmo displayWindAngleformat : " + formatvalue);
+
+						$("<div/>").addClass(datatype).append(
+							$("<div/>").addClass("x-medium").addClass(formatter.icon(datatype, value))
+						).append(
+							//$("<div/>").addClass("small value").append(formatter.value(datatype, value))
+							$("<div/>").addClass("small value").append(translator.bind(that)(formatter.deg2Cardinal(value).toUpperCase()) + " | " + value + formatter.unit(datatype, value))
+						).appendTo(result);
+
+						// return this.deg2Cardinal(value) + " | " + value + "°";
+						// if (value < 0) { return " "; }
+
+						// $("<div/>").addClass(dataType).append(
+						// 	$("<div/>").addClass("large").addClass("wi wi-wind from-270-deg")
+						// ).append(
+						// 	$("<div/>").addClass("x-medium").addClass("wi wi-wind from-280-deg")
+						// ).appendTo(result);
 
 						return result;
 					},
@@ -1679,7 +1797,7 @@ Module.register("MMM-Netatmo", {
 	},
 	getStyles: function () {
 		// Log.log("Netatmo : getStyles");
-		return ["MMM-netatmo.css", "font-awesome.css", "weather-icons.css"];
+		return ["MMM-netatmo.css", "font-awesome.css", "weather-icons.css", "weather-icons-wind.css"];
 	},
 
 	getTranslations: function () {
