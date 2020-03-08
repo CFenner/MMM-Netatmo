@@ -29,5 +29,17 @@
   "REACHABLE": "Bereikbaar",
   "BATTERY": "Batterij",
   "BATTERY_PERCENT": "Batterij",
-  "LAST_MESSAGE": "laatste contact"
+  "LAST_MESSAGE": "laatste contact",
+
+  "DBM": " dBm",
+  "DB": " dB",
+  "%": " %",
+  "PPM": " ppm",
+  "MM": " mm",
+  "1H": " 1u",
+  "24H": " 24u",
+  "KMH": " km/u",
+  "MPH": " mph",
+  "MBAR": " mBar",
+  "°": "°"
 }

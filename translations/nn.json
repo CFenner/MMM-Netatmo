@@ -29,5 +29,17 @@
   "REACHABLE": "Nås",
   "BATTERY": "Batteri",
   "BATTERY_PERCENT": "Batteri",
-  "LAST_MESSAGE": "Sist kontakt"
+  "LAST_MESSAGE": "Sist kontakt",
+
+  "DBM": " dBm",
+  "DB": " dB",
+  "%": " %",
+  "PPM": " ppm",
+  "MM": " mm",
+  "1H": " 1h",
+  "24H": " 24h",
+  "KMH": " km/h",
+  "MPH": " mph",
+  "MBAR": " mBar",
+  "°": "°"
 }

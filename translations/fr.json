@@ -29,5 +29,17 @@
   "REACHABLE": "accessible",
   "BATTERY": "batterie",
   "BATTERY_PERCENT": "batterie",
-  "LAST_MESSAGE": "connexion dernière"
+  "LAST_MESSAGE": "connexion dernière",
+
+  "DBM": " dBm",
+  "DB": " dB",
+  "%": " %",
+  "PPM": " ppm",
+  "MM": " mm",
+  "1H": " 1h",
+  "24H": " 24h",
+  "KMH": " km/h",
+  "MPH": " mph",
+  "MBAR": " mBar",
+  "°": "°"
 }

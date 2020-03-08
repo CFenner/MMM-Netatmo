@@ -29,5 +29,17 @@
   "REACHABLE": "dosažitelný",
   "BATTERY": "Baterie",
   "BATTERY_PERCENT": "Baterie",
-  "LAST_MESSAGE": "poslední kontakt"
+  "LAST_MESSAGE": "poslední kontakt",
+
+  "DBM": " dBm",
+  "DB": " dB",
+  "%": " %",
+  "PPM": " ppm",
+  "MM": " mm",
+  "1H": " 1h",
+  "24H": " 24h",
+  "KMH": " km/h",
+  "MPH": " mph",
+  "MBAR": " mBar",
+  "°": "°"
 }

@@ -250,7 +250,7 @@
   border-left: 12px solid #999; /*normal*/
   border-bottom: 6px solid transparent;
 }
-.MMM-netatmo .bubbles .module .data .flash {
+.MMM-netatmo .bubbles .module .flash {
   animation: flasher 1s linear infinite;
 }
 @keyframes flasher {
