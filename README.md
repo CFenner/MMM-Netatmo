@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/CFenner/MMM-Netatmo.svg?branch=master)](https://travis-ci.org/CFenner/MMM-Netatmo)
-[![Known Vulnerabilities](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module/badge.svg)](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module)
-[![code climate](https://codeclimate.com/github/CFenner/MMM-Netatmo/badges/gpa.svg)](https://codeclimate.com/github/CFenner/MMM-Netatmo)
+[![Build Status](https://travis-ci.org/RaymondMolenaar/MMM-Netatmo.svg?branch=master)](https://travis-ci.org/RaymondMolenaar/MMM-Netatmo)
 [![api](https://img.shields.io/badge/api-Netatmo-orange.svg)](https://dev.netatmo.com/doc)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://choosealicense.com/licenses/mit/)
 
@@ -8,7 +6,7 @@
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
-![Netatmo visualisation](https://raw.githubusercontent.com/haywirecoder/MMM-Netatmo/master/netatmo.PNG)
+![Netatmo visualisation](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_full.png)
 
 ## Usage
 
@@ -21,7 +19,7 @@ To use this module, clone this repository to your __modules__ folder of your Mag
 
 `cd ~/MagicMirror/modules`
 
-`git clone https://github.com/haywirecoder/MMM-Netatmo.git MMM-Netatmo`
+`git clone https://https://github.com/RaymondMolenaar/MMM-Netatmo.git MMM-Netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
