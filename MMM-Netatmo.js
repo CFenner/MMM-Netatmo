@@ -22,6 +22,7 @@ let ModuleMap = new Map();
 let ModuleTypeMap = new Map();
 //let NAValue = "--";
 let NAValue = "NA";
+let WindUnit = "kmh";
 
 const NetatmoModuleType = {
 	MAIN: "NAMain",
@@ -74,6 +75,7 @@ Module.register("MMM-Netatmo", {
 		animationSpeed: 1000,
 		updatesIntervalDisplayID: 0,
 		lastMessageThreshold: 600, // in seconds (10 minutes)
+		windUnit: "kmh", // Possible "KMH", "MPH", "MS", "BFT", "KT"
 		displayWindInOutdoor: false,
 		displayRainInOutdoor: false,
 		showLastMessage: true,
@@ -277,12 +279,25 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.SUM_RAIN_24:
 					return value.toFixed(1);
 				case NetatmoDataType.GUST_ANGLE:
-				case NetatmoDataType.GUST_STRENGTH:
-				case NetatmoDataType.WIND_ANGLE:
-				case NetatmoDataType.WIND_STRENGTH:
 				case NetatmoDataType.WIND_ANGLE_MAX:
-				case NetatmoDataType.WIND_STRENGTH_MAX:
+				case NetatmoDataType.WIND_ANGLE:
 					return value.toFixed(0);
+				case NetatmoDataType.WIND_STRENGTH:
+				case NetatmoDataType.GUST_STRENGTH:
+				case NetatmoDataType.WIND_STRENGTH_MAX:
+					switch (WindUnit.toUpperCase()) {
+						case "BFT":
+							return this.kmh2Beaufort(value);
+						case "MPH":
+							return this.kmh2mph(value).toFixed(0);
+						case "MS":
+							return this.kmh2ms(value).toFixed(1);
+						case "KT":
+							return this.kmh2kt(value).toFixed(1);
+						case "KMH":
+						default:
+							return value.toFixed(0);
+					};
 				case NetatmoDataType.HEALTH_IDX: //Air Quality Health Index
 					if (value = 0) { return "Healthy"; }
 					if (value = 1) { return "Fine"; }
@@ -325,7 +340,7 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.GUST_STRENGTH:
 				case NetatmoDataType.WIND_STRENGTH:
 				case NetatmoDataType.WIND_STRENGTH_MAX:
-					return "KMH";
+					return WindUnit.toUpperCase();
 				case NetatmoDataType.PRESSURE:
 					return "MBAR";
 				case NetatmoDataType.GUST_ANGLE:
@@ -366,9 +381,9 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.WIND_STRENGTH:
 				case NetatmoDataType.WIND_STRENGTH_MAX:
 					if (value < 0) { return "wi wi-strong-wind"; }
-					let valueBF = this.kmh2Beaufort(value);
-					if (valueBF >= 0) {
-						return "wi wi-wind-beaufort-" + valueBF;
+					let valueBFT = this.kmh2Beaufort(value);
+					if (valueBFT >= 0) {
+						return "wi wi-wind-beaufort-" + valueBFT;
 					}
 					return "wi wi-strong-wind";
 				case NetatmoDataType.GUST_ANGLE:
@@ -430,7 +445,7 @@ Module.register("MMM-Netatmo", {
 
 			return beaufort;
 		},
-		kmh2kts: function (kmh) {
+		kmh2kt: function (kmh) {
 			// https://www.weather.gov/media/epz/wxcalc/windConversion.pdf
 			return 0.5399568 * kmh;
 		},
@@ -505,6 +520,7 @@ Module.register("MMM-Netatmo", {
 					render: function (device) {
 						ModuleMap = new Map();
 						if (that.config.NAValue && that.config.moduleOrder.length > 0) { NAValue = that.config.NAValue; }
+						if (that.config.windUnit) { WindUnit = that.config.windUnit; }
 						Log.log("start render");
 						var sResult = $("<div/>").addClass("modules").addClass("bubbles");
 						Log.log("sresult: " + sResult);
@@ -860,8 +876,14 @@ Module.register("MMM-Netatmo", {
 						let valueBF = formatter.kmh2Beaufort(value);
 						Log.log("MMM-Netatmo displayWind valueBF: " + valueBF);
 						let valueMPH = formatter.kmh2mph(value);
-						let valueKTS = formatter.kmh2kts(value);
+						let valueKTS = formatter.kmh2kt(value);
+						let thisUNIT = this.getUnit(datatype);
+						Log.log("MMM-Netatmo displayWind UNIT: " + thisUNIT);
+						let thisvalue = formatter.value(datatype, value);
+						Log.log("MMM-Netatmo displayWind FORMAT: " + thisvalue);
 
+						let thisicon = formatter.icon(NetatmoDataType.WIND_STRENGTH, value);
+						Log.log("MMM-Netatmo displayWind ICON: " + thisicon);
 						Log.log("MMM-Netatmo displayWind valueMPH: " + valueMPH);
 						Log.log("MMM-Netatmo displayWind valueKTS: " + valueKTS);
 

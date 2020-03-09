@@ -38,7 +38,10 @@
   "MM": " mm",
   "1H": " 1h",
   "24H": " 24h",
+  "BFT": " Bft",
   "KMH": " km/h",
+  "KT": " kt",
+  "MS": " m/s",
   "MPH": " mph",
   "MBAR": " mBar",
   "°": "°"
