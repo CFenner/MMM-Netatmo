@@ -1,7 +1,7 @@
 {
   "CO2": "CO<sub>2</sub>",
   "NOISE": "Lautstärke",
-  "HUMIDITY": "Feuchtigkeit in {procentvalue}",
+  "HUMIDITY": "Feuchtigkeit",
   "PRESSURE": "Luftdruck",
   "PRESSURE_TREND": "Luftdruck (Tendenz)",
   "TEMPERATURE": "Temperatur",
@@ -36,6 +36,7 @@
   "%": " %",
   "PPM": " ppm",
   "MM": " mm",
+  "INCH": " zoll",
   "1H": " 1Std",
   "24H": " 24Std",
   "BFT": " Bft",

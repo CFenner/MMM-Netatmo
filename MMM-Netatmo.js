@@ -23,6 +23,7 @@ let ModuleTypeMap = new Map();
 //let NAValue = "--";
 let NAValue = "NA";
 let WindUnit = "kmh";
+let Units = "metric";
 
 const NetatmoModuleType = {
 	MAIN: "NAMain",
@@ -66,6 +67,7 @@ const NetatmoDataType = {
 Module.register("MMM-Netatmo", {
 	// default config,
 	defaults: {
+		units: config.units,
 		//for AirQuality
 		lang: config.language,
 		location: "germany/berlin",
@@ -100,7 +102,7 @@ Module.register("MMM-Netatmo", {
 		// run upload for the first time, everyone will remember their upload date
 		this.updateLoad();
 		this.loadAirQuality();
-		// is useless because called by resume and values ​​of dates have no time to memorize before...
+		// is useless because called by resume and values of dates have no time to memorize before...
 		// if it serves, because resume is not always called at startup ...
 
 		// set a timer to manage uploads and displays whether or not there is a presence
@@ -277,6 +279,9 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.RAIN:
 				case NetatmoDataType.SUM_RAIN_1:
 				case NetatmoDataType.SUM_RAIN_24:
+					if (Units.toUpperCase() === "IMPERIAL") {
+						return this.mm2Inch(value).toFixed(3);
+					}
 					return value.toFixed(1);
 				case NetatmoDataType.GUST_ANGLE:
 				case NetatmoDataType.WIND_ANGLE_MAX:
@@ -311,9 +316,11 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.PRESSURE:
 					return value.toFixed(0);
 				case NetatmoDataType.TEMPERATURE:
-					return value.toFixed(1);
 				case NetatmoDataType.TEMP_MIN:
 				case NetatmoDataType.TEMP_MAX:
+					if (Units.toUpperCase() === "IMPERIAL") {
+						return this.tempC2F(value).toFixed(1);
+					}
 					return value.toFixed(1);
 				default:
 					return value;
@@ -332,6 +339,9 @@ Module.register("MMM-Netatmo", {
 				case NetatmoDataType.WIFI:
 					return "DBM";
 				case NetatmoDataType.RAIN:
+					if (Units.toUpperCase() === "IMPERIAL") {
+						return "INCH";
+					}
 					return "MM";
 				case NetatmoDataType.SUM_RAIN_1:
 					return "1H";
@@ -453,6 +463,12 @@ Module.register("MMM-Netatmo", {
 			// https://www.weather.gov/media/epz/wxcalc/windConversion.pdf
 			return 0.621371 * kmh;
 		},
+		tempC2F: function (c) {
+			return (1.8 * c) + 32;
+		},
+		mm2Inch: function (mm) {
+			return mm / 25.4;
+		},
 		// ms2Beaufort: function (ms) {
 		// 	// https://stackoverflow.com/questions/60001991/how-to-convert-windspeed-between-beaufort-scale-and-m-s-and-vice-versa-in-javasc
 		// 	return Math.ceil(Math.cbrt(Math.pow(ms / 0.836, 2)));
@@ -521,19 +537,18 @@ Module.register("MMM-Netatmo", {
 						ModuleMap = new Map();
 						if (that.config.NAValue && that.config.moduleOrder.length > 0) { NAValue = that.config.NAValue; }
 						if (that.config.windUnit) { WindUnit = that.config.windUnit; }
-						Log.log("start render");
+						if (that.config.units) { Units = that.config.units; }
 						var sResult = $("<div/>").addClass("modules").addClass("bubbles");
-						Log.log("sresult: " + sResult);
 						if (that.config.moduleOrder && that.config.moduleOrder.length > 0) {
 							for (var moduleName of that.config.moduleOrder) {
 								if (device.module_name.toUpperCase() === moduleName.toUpperCase()) {
-									Log.log("Device will be mapped: " + device.module_name);
+									Log.log("MMM-Netatmo Device will be mapped: " + device.module_name);
 									ModuleMap.set(device.module_name, device);
 									ModuleTypeMap.set(device.type, device.module_name);
 								} else {
 									for (var module of device.modules) {
 										if (module.module_name.toUpperCase() === moduleName.toUpperCase()) {
-											Log.log("Module will be mapped: " + module.module_name);
+											Log.log("MMM-Netatmo Module will be mapped: " + module.module_name);
 											ModuleMap.set(module.module_name, module);
 											if (module.type === NetatmoModuleType.INDOOR) {
 												let indoor = [];
@@ -550,11 +565,11 @@ Module.register("MMM-Netatmo", {
 							}
 						}
 						else {
-							Log.log("Device will be mapped: " + device.module_name);
+							Log.log("MMM-Netatmo Device will be mapped: " + device.module_name);
 							ModuleMap.set(device.module_name, device);
 							//ModuleTypeMap.set(device.type, device.module_name);
 							for (var cnt = 0; cnt < device.modules.length; cnt++) {
-								Log.log("Module will be mapped: " + device.modules[cnt].module_name);
+								Log.log("MMM-Netatmo Module will be mapped: " + device.modules[cnt].module_name);
 								ModuleMap.set(device.modules[cnt].module_name, device.modules[cnt]);
 								if (device.modules[cnt].type === NetatmoModuleType.INDOOR) {
 									let indoor = [];
@@ -593,10 +608,10 @@ Module.register("MMM-Netatmo", {
 								}
 							}
 						}
-						Log.log("ModuleTypeMap: " + ModuleTypeMap.size);
-						for (let [key, value] of ModuleTypeMap) {
-							Log.log(key + " = " + value);
-						}
+						// Log.log("ModuleTypeMap: " + ModuleTypeMap.size);
+						// for (let [key, value] of ModuleTypeMap) {
+						// 	Log.log(key + " = " + value);
+						// }
 						return sResult;
 					},
 					//Defined the overall structure of the display of each element of the module (indoor, outdoor). The last line being in the getDom
@@ -617,13 +632,13 @@ Module.register("MMM-Netatmo", {
 						return result[0].outerHTML;
 					},
 					addPrimary: function (module) {
-						Log.log("MMM-Netatmo addPrimary module: " + module.module_name);
+						//Log.log("MMM-Netatmo addPrimary module: " + module.module_name);
 						let result = $("<div/>").addClass("primary");
 						switch (module.type) {
 							case NetatmoModuleType.MAIN:
 							case NetatmoModuleType.INDOOR:
 							case NetatmoModuleType.OUTDOOR:
-								result.append(this.displayTempNieuw(module));
+								result.append(this.displayTemp(module));
 								break;
 							case NetatmoModuleType.RAIN:
 								result.append(this.displayRain(module));
@@ -638,12 +653,12 @@ Module.register("MMM-Netatmo", {
 						return result;
 					},
 					addSecondary: function (module) {
-						Log.log("MMM-Netatmo addSecondary module: " + module.module_name);
+						//Log.log("MMM-Netatmo addSecondary module: " + module.module_name);
 						let result = $("<div/>").addClass("secondary");
 						switch (module.type) {
 							case NetatmoModuleType.MAIN:
 							case NetatmoModuleType.INDOOR:
-								result.append(this.displayCO2Nieuw(module));
+								result.append(this.displayCO2(module));
 								break;
 							case NetatmoModuleType.OUTDOOR:
 								result.append(this.displayAQI(module));
@@ -661,14 +676,13 @@ Module.register("MMM-Netatmo", {
 						return result;
 					},
 					addLastSeen: function (parentresult, module) {
-						Log.log("MMM-Netatmo addLastSeen : " + module.module_name);
+						//Log.log("MMM-Netatmo addLastSeen : " + module.module_name);
 						let displayLastSeen = false;
 						let lastMessage = this.getValue(module, NetatmoDataType.LAST_MESSAGE, false, false);
 						if (lastMessage !== NAValue) {
 							let duration = Date.now() / 1000 - lastMessage;
 							displayLastSeen = that.config.showLastMessage && duration > that.config.lastMessageThreshold;
 						}
-						Log.log("MMM-Netatmo addLastSeen display : " + displayLastSeen);
 						if (displayLastSeen) {
 							$("<div/>").addClass("displayLastSeen")
 								.addClass("small flash")
@@ -682,7 +696,7 @@ Module.register("MMM-Netatmo", {
 						return displayLastSeen;
 					},
 					addData: function (module) {
-						Log.log("MMM-Netatmo addData module: " + module.module_name);
+						//Log.log("MMM-Netatmo addData module: " + module.module_name);
 						let result = $("<div/>").addClass("displayData");
 						switch (module.type) {
 							case NetatmoModuleType.MAIN:
@@ -742,7 +756,7 @@ Module.register("MMM-Netatmo", {
 						}
 						return result;
 					},
-					displayTempNieuw: function (module) {
+					displayTemp: function (module) {
 						var result = $("<div/>").addClass("displayTemp");
 						let datatype = NetatmoDataType.TEMPERATURE;
 						let value = this.getValue(module, NetatmoDataType.TEMPERATURE, true, false);
@@ -791,7 +805,7 @@ Module.register("MMM-Netatmo", {
 						return result;
 					},
 
-					displayCO2Nieuw: function (module) {
+					displayCO2: function (module) {
 
 						let datatype = NetatmoDataType.CO2;
 						let result = $("<div/>").addClass("displayCO2");
@@ -869,23 +883,6 @@ Module.register("MMM-Netatmo", {
 						let valueGustStrength = this.getValue(module, NetatmoDataType.GUST_STRENGTH, true, false);
 						let valueMaxAngle = this.getValue(module, NetatmoDataType.WIND_ANGLE_MAX, true, false);
 						let valueMaxStrength = this.getValue(module, NetatmoDataType.WIND_STRENGTH_MAX, true, false);
-
-						Log.log("MMM-Netatmo displayWind valuekmh: " + value);
-						let valueMS = formatter.kmh2ms(value);
-						Log.log("MMM-Netatmo displayWind valueMS: " + valueMS);
-						let valueBF = formatter.kmh2Beaufort(value);
-						Log.log("MMM-Netatmo displayWind valueBF: " + valueBF);
-						let valueMPH = formatter.kmh2mph(value);
-						let valueKTS = formatter.kmh2kt(value);
-						let thisUNIT = this.getUnit(datatype);
-						Log.log("MMM-Netatmo displayWind UNIT: " + thisUNIT);
-						let thisvalue = formatter.value(datatype, value);
-						Log.log("MMM-Netatmo displayWind FORMAT: " + thisvalue);
-
-						let thisicon = formatter.icon(NetatmoDataType.WIND_STRENGTH, value);
-						Log.log("MMM-Netatmo displayWind ICON: " + thisicon);
-						Log.log("MMM-Netatmo displayWind valueMPH: " + valueMPH);
-						Log.log("MMM-Netatmo displayWind valueKTS: " + valueKTS);
 
 						// MAIN Data
 						let divData = $("<div/>").addClass(datatype);
