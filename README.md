@@ -6,7 +6,7 @@
 
 A module to integrale informations from a Netatmo weather station into the [MagicMirror](https://github.com/MichMich/MagicMirror).
 
-![Netatmo visualisation](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_full.png)
+![MMM-Netatmo full display](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_full.png)
 
 ## Usage
 
@@ -61,16 +61,24 @@ The module needs the default configuration block in your config.js to work.
 	position: 'bottom_left', // the location where the module should be displayed
 	header: 'Netatmo',
 	config: {
-		location: 'germany/berlin', //for AirQuality
-		updateIntervalAirQuality: 600, //in secondes
-		
 		clientId: '', // your app id
 		clientSecret: '', // your app secret
-		refreshToken: '' // your generated refresh token
+		refreshToken: '', // your generated refresh token
 		
+		location: "germany/berlin",  //for AirQuality
+		updateIntervalAirQuality: 600, // in secondes = every 30 minutes
 		updatesIntervalDisplay: 60, //refresh internal
-    		animationSpeed: 1000,
-		moduleOrder: ["Wind","Rain","Backyard","Main", "Master]
+		lastMessageThreshold: 600, // in seconds (10 minutes)
+		windUnit: "KT", // Possible "KMH", "MPH", "MS", "BFT", "KT"
+		displayWindInOutdoor: false,
+		displayRainInOutdoor: false,
+		showLastMessage: true,
+		showDataIcon: true,
+		showDataHeader: true,
+		showModuleStatus: true,
+		showModuleFirmware: true,
+		refreshInterval: 3,
+		moduleOrder: ["Indoor", "wind", "Kitchen", "Garden", "Rain" ],
 	}
 }
 ```
@@ -85,8 +93,15 @@ The following properties can be configured:
 |updatesIntervalDisplay|How often to check if netatmo datas needs to be updated? (Minutes) No Netatmo server request with this value. Netatmo request minimum every 11 min.<br>Data is updated by netatmo every 10 minutes.<br><br>**Default value:** `1`|
 |moduleOrder|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.|
 |location|For AirQuality display. Use the part behind http://aqicn.org/city/ for your location. For example http://aqicn.org/city/netherland/utrecht/griftpark/<br><br>**Example:** `'germany/berlin'`|
-|lang|To display AirQuality result. Not all languages may be supported (see: http://aqicn.org/faq/2015-07-28/air-quality-widget-new-improved-feed/).<br><br>**Example:** `'fr'`|
 |updateIntervalAirQuality|Value in secondes. If last request to AirQuality server is bigger that this value, a new request to made. AirQuality serveur update is approx every hour. <br><br>**Example:** `600`|
+|windUnit|Unit to be used for windspeed. Default is "KMH" (km/h). Possible is "KMH" (km/h), "MPH" (mph), "MS (m/s)", "BFT (Bft)" and "KT (kt)" |
+|displayWindInOutdoor|When true, Wind-Module won't be shown, but the data will be added to the OutdoorModule|
+|displayRainInOutdoor|When true, Rain-Module won't be shown, but the data will be added to the OutdoorModule|
+|showLastMessage|When true, will show if contact with module has been lost|
+|showDataIcon|Show Icons with the module data, default true|
+|showDataHeader|Show Header-title with the module data, default true|
+|showModuleStatus|Show status of module like radio-signal or battery-status|
+|showModuleFirmware|Show firmwarestatus of module in modulestatus |
 
 ## About this Fork
 Initially I forked the original repository https://github.com/CFenner/MMM-Netatmo.git, and did some changes to it (like still being able to show all modules, even they not all were in reach).
@@ -94,3 +109,16 @@ Then however I found out that [AgP42](https://github.com/AgP42), [haywirecoder](
 Since it is not possible to double fork or something, I put my original fork in a release https://github.com/RaymondMolenaar/MMM-Netatmo/tree/master/Releases/CFenner-Fork
 
 The most important change of this fork, is that even when not all of your Netatmo Modules are in reach (due to empty batteries or whatever), this MM-Module will still display your module, but with empty values. It doesn't hang on the loading circle.
+
+I also redesigned the way de data is displayed. The Icons don't change color depending on the status, but the little dot's do, similar to the Android-App.
+The Wind-speed unit can be configured in the config.
+If your system is set to Imperial units, it will show Temp in Fahrenheit and Rain in Inches/Hour.
+
+## Some Screenprints
+![MMM-Netatmo full display](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_full.png)
+![MMM-Netatmo No DataHeader](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_noheader.png)
+![MMM-Netatmo No DataIcon](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_noicon.png)
+![MMM-Netatmo No DataIconHeader](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_noicon_noheader.png)
+![MMM-Netatmo No Status](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_nostatus.png)
+![MMM-Netatmo Rain and Wind in Outdoor](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_raininoutdoor.png)
+![MMM-Netatmo Wind in Knots](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_wind_in_knots.png)
