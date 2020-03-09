@@ -19,7 +19,7 @@ To use this module, clone this repository to your __modules__ folder of your Mag
 
 `cd ~/MagicMirror/modules`
 
-`git clone https://https://github.com/RaymondMolenaar/MMM-Netatmo.git MMM-Netatmo`
+`git clone https://github.com/RaymondMolenaar/MMM-Netatmo.git MMM-Netatmo`
 
 Now just add the module to your config.js file ([config entries](#configuration)).
 
