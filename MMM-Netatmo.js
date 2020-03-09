@@ -786,11 +786,11 @@ Module.register("MMM-Netatmo", {
 						let divDataIconMax = $("<div/>").addClass("data_icon").addClass("small light dimmed").addClass(formatter.icon(NetatmoDataType.TEMP_MAX));
 						let divDataLeftMin = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(datatype, valueMin));
 						let divDataRightMin = $("<div/>").addClass("data_right").append(
-							$("<div/>").addClass("xxsmall light dimmed").addClass("data_right_up").append(this.getUnit(NetatmoDataType.TEMP_MIN))
+							$("<div/>").addClass("xxsmall light").addClass("data_right_up").append(this.getUnit(NetatmoDataType.TEMP_MIN))
 						);
 						let divDataLeftMax = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(datatype, valueMax));
 						let divDataRightMax = $("<div/>").addClass("data_right").append(
-							$("<div/>").addClass("xxsmall light dimmed").addClass("data_right_up").append(this.getUnit(NetatmoDataType.TEMP_MAX))
+							$("<div/>").addClass("xxsmall light").addClass("data_right_up").append(this.getUnit(NetatmoDataType.TEMP_MAX))
 						);
 						divDataIconMin.appendTo(divDCBottomMin);
 						divDataLeftMin.appendTo(divDCBottomMin);
@@ -846,11 +846,11 @@ Module.register("MMM-Netatmo", {
 						let divDataIcon24 = $("<div/>").addClass("data_icon").addClass("small light dimmed").addClass(formatter.icon(NetatmoDataType.SUM_RAIN_24));
 						let divDataLeft1 = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(datatype, value1h));
 						let divDataRight1 = $("<div/>").addClass("data_right").append(
-							$("<div/>").addClass("xxsmall light dimmed").addClass("data_right_up").append(this.getUnit(NetatmoDataType.SUM_RAIN_1))
+							$("<div/>").addClass("xxsmall light").addClass("data_right_up").append(this.getUnit(NetatmoDataType.SUM_RAIN_1))
 						);
 						let divDataLeft24 = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(datatype, value24h));
 						let divDataRight24 = $("<div/>").addClass("data_right").append(
-							$("<div/>").addClass("xxsmall light dimmed").addClass("data_right_up").append(this.getUnit(NetatmoDataType.SUM_RAIN_24))
+							$("<div/>").addClass("xxsmall light").addClass("data_right_up").append(this.getUnit(NetatmoDataType.SUM_RAIN_24))
 						);
 						divDataIcon1.appendTo(divDCBottom1);
 						divDataLeft1.appendTo(divDCBottom1);
@@ -906,11 +906,11 @@ Module.register("MMM-Netatmo", {
 						let divDataIconMax = $("<div/>").addClass("data_icon").addClass("small light dimmed").addClass(formatter.icon(NetatmoDataType.WIND_ANGLE_MAX, valueMaxAngle));
 						let divDataLeftGust = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(NetatmoDataType.GUST_STRENGTH, valueGustStrength));
 						let divDataRightGust = $("<div/>").addClass("data_right").append(
-							$("<div/>").addClass("small light dimmed").addClass("data_right_up").addClass(formatter.icon(NetatmoDataType.GUST_STRENGTH, valueGustStrength))
+							$("<div/>").addClass("small light").addClass("data_right_up").addClass(formatter.icon(NetatmoDataType.GUST_STRENGTH, valueGustStrength))
 						);
 						let divDataLeftMax = $("<div/>").addClass("data_left").addClass("small").append(" " + formatter.value(NetatmoDataType.WIND_STRENGTH_MAX, valueMaxStrength));
 						let divDataRightMax = $("<div/>").addClass("data_right").append(
-							$("<div/>").addClass("small light dimmed").addClass("data_right_up").addClass(formatter.icon(NetatmoDataType.WIND_STRENGTH_MAX, valueMaxStrength))
+							$("<div/>").addClass("small light").addClass("data_right_up").addClass(formatter.icon(NetatmoDataType.WIND_STRENGTH_MAX, valueMaxStrength))
 						);
 						divDataIconGust.appendTo(divDCBottomGust);
 						divDataLeftGust.appendTo(divDCBottomGust);
