@@ -69,6 +69,8 @@ The module needs the default configuration block in your config.js to work.
 		updateIntervalAirQuality: 600, // in secondes = every 30 minutes
 		updatesIntervalDisplay: 60, //refresh internal
 		lastMessageThreshold: 600, // in seconds (10 minutes)
+		horizontal: false,
+		horizontalOverflow: false,
 		windUnit: "KT", // Possible "KMH", "MPH", "MS", "BFT", "KT"
 		displayWindInOutdoor: false,
 		displayRainInOutdoor: false,
@@ -94,6 +96,8 @@ The following properties can be configured:
 |moduleOrder|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.|
 |location|For AirQuality display. Use the part behind http://aqicn.org/city/ for your location. For example http://aqicn.org/city/netherland/utrecht/griftpark/<br><br>**Example:** `'germany/berlin'`|
 |updateIntervalAirQuality|Value in secondes. If last request to AirQuality server is bigger that this value, a new request to made. AirQuality serveur update is approx every hour. <br><br>**Example:** `600`|
+|horizontal|When true, Modules will be displayed horizontal (in a row). But only as wide as the MMM-Module has space. If it needs more space, de Netatmo-Modules will be added to the next row.|
+|horizontalOverflow|When true, all the Netatmo-Modules will stay in one row, and will overflow the module space is it needs more space.|
 |windUnit|Unit to be used for windspeed. Default is "KMH" (km/h). Possible is "KMH" (km/h), "MPH" (mph), "MS (m/s)", "BFT (Bft)" and "KT (kt)" |
 |displayWindInOutdoor|When true, Wind-Module won't be shown, but the data will be added to the OutdoorModule|
 |displayRainInOutdoor|When true, Rain-Module won't be shown, but the data will be added to the OutdoorModule|
@@ -114,6 +118,8 @@ I also redesigned the way de data is displayed. The Icons don't change color dep
 The Wind-speed unit can be configured in the config.
 If your system is set to Imperial units, it will show Temp in Fahrenheit and Rain in Inches/Hour.
 
+Update 22-03-2020: Added Horizantal (row) View
+
 ## Some Screenprints
 ![MMM-Netatmo full display](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_full.png)
 ![MMM-Netatmo No DataHeader](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_noheader.png)
@@ -122,3 +128,6 @@ If your system is set to Imperial units, it will show Temp in Fahrenheit and Rai
 ![MMM-Netatmo No Status](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_nostatus.png)
 ![MMM-Netatmo Rain and Wind in Outdoor](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_raininoutdoor.png)
 ![MMM-Netatmo Wind in Knots](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_wind_in_knots.png)
+![MMM-Netatmo Horizontal](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_Horizontal.png)
+![MMM-Netatmo Horizontal No Overflow ](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_Horizontal2.png)
+![MMM-Netatmo Horizontal Overflow ](https://github.com/RaymondMolenaar/MMM-Netatmo/blob/master/MMM-Netatmo_HorizontalOverflow.png)
