@@ -35,6 +35,26 @@
   color: #999;
 }
 
+
+.MMM-netatmo .bubbles.horizontal {
+  display: flex;
+  margin-bottom: 3px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.MMM-netatmo .bubbles.horizontal.overflow {
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.MMM-netatmo .bubbles.horizontal .module {
+  margin-bottom: 3px;
+  margin-left: 3px;
+  flex-shrink: 0;
+}
+
 .MMM-netatmo .bubbles .module {
   margin-bottom: 3px;
   margin-top: 3px;
@@ -51,6 +71,7 @@
   margin: 1.5em auto;
   width: .1em;
 }
+
 .MMM-netatmo .bubbles .module .good {
   background-color: #32cd32;
   color: #32cd32;

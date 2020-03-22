@@ -77,6 +77,8 @@ Module.register("MMM-Netatmo", {
 		animationSpeed: 1000,
 		updatesIntervalDisplayID: 0,
 		lastMessageThreshold: 600, // in seconds (10 minutes)
+		horizontal: false,
+		horizontalOverflow: false,
 		windUnit: "kmh", // Possible "KMH", "MPH", "MS", "BFT", "KT"
 		displayWindInOutdoor: false,
 		displayRainInOutdoor: false,
@@ -539,6 +541,11 @@ Module.register("MMM-Netatmo", {
 						if (that.config.windUnit) { WindUnit = that.config.windUnit; }
 						if (that.config.units) { Units = that.config.units; }
 						var sResult = $("<div/>").addClass("modules").addClass("bubbles");
+						if (that.config.horizontal) {
+							sResult.addClass("horizontal");
+							if (that.config.horizontalOverflow) { sResult.addClass("overflow"); }
+						}
+
 						if (that.config.moduleOrder && that.config.moduleOrder.length > 0) {
 							for (var moduleName of that.config.moduleOrder) {
 								if (device.module_name.toUpperCase() === moduleName.toUpperCase()) {
