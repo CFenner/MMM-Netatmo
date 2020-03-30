@@ -98,6 +98,7 @@ The following properties can be configured:
 |updateIntervalAirQuality|Value in secondes. If last request to AirQuality server is bigger that this value, a new request to made. AirQuality serveur update is approx every hour. <br><br>**Example:** `600`|
 |horizontal|When true, Modules will be displayed horizontal (in a row). But only as wide as the MMM-Module has space. If it needs more space, the Netatmo-Modules will be added to the next row.|
 |horizontalOverflow|When true, all the Netatmo-Modules will stay in one row, and will overflow the module space when it needs more space.|
+|units|Default config.units, bus can be overriden here. Possible values are metric or imperial|
 |windUnit|Unit to be used for windspeed. Default is "KMH" (km/h). Possible is "KMH" (km/h), "MPH" (mph), "MS (m/s)", "BFT (Bft)" and "KT (kt)" |
 |displayWindInOutdoor|When true, Wind-Module won't be shown, but the data will be added to the OutdoorModule|
 |displayRainInOutdoor|When true, Rain-Module won't be shown, but the data will be added to the OutdoorModule|
@@ -117,6 +118,24 @@ The most important change of this fork, is that even when not all of your Netatm
 I also redesigned the way de data is displayed. The Icons don't change color depending on the status, but the little dot's do, similar to the Android-App.
 The Wind-speed unit can be configured in the config.
 If your system is set to Imperial units, it will show Temp in Fahrenheit and Rain in Inches/Hour.
+
+In the MM-config: 
+```
+var config = {
+	units: "metric", // "imperial" for Fahrenheit
+};
+```
+or in MMM-config
+```
+{
+	module: 'MMM-Netatmo',
+	position: 'bottom_left', // the location where the module should be displayed
+	header: 'Netatmo',
+	config: {
+		units: "metric", // "imperial" for Fahrenheit
+	}
+},
+```
 
 Update 22-03-2020: Added Horizantal (row) View
 
