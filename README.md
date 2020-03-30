@@ -82,7 +82,7 @@ The module needs the default configuration block in your config.js to work.
 		refreshInterval: 3,
 		moduleOrder: ["Indoor", "wind", "Kitchen", "Garden", "Rain" ],
 	}
-}
+},
 ```
 
 The following properties can be configured:
