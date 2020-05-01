@@ -4,7 +4,9 @@
   "description": "",
   "main": "netatmo.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -45,5 +47,9 @@
         "globalReturn": true
       }
     }
+  },
+  "snyk": true,
+  "dependencies": {
+    "snyk": "^1.316.1"
   }
 }
