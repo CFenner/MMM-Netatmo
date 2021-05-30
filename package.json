@@ -22,7 +22,7 @@
     "grunt-cli": "^1.2.0",
     "grunt-contrib-csslint": "^2.0.0",
     "grunt-contrib-eslint": "0.0.5",
-    "grunt-contrib-uglify": "^2.3.0",
+    "grunt-contrib-uglify": "^3.4.0",
     "grunt-jsonlint": "^1.1.0",
     "grunt-yamllint": "^0.3.0",
     "gruntify-eslint": "^4.0.0"
