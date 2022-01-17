@@ -5,6 +5,7 @@
   "main": "netatmo.js",
   "scripts": {
     "test": "grunt test",
+    "compile:css": "lessc netatmo.less netatmo.css",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
@@ -27,7 +28,8 @@
     "grunt-contrib-uglify": "^3.4.0",
     "grunt-jsonlint": "^1.1.0",
     "grunt-yamllint": "^0.3.0",
-    "gruntify-eslint": "^5.0.0"
+    "gruntify-eslint": "^5.0.0",
+    "less": "^4.1.2"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

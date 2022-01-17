@@ -7,8 +7,8 @@
   display: inline-block;
 }
 .netatmo svg.loading {
-  height: .6em;
-  width: .6em;
+  height: 0.6em;
+  width: 0.6em;
 }
 .netatmo svg.loading circle {
   cx: 50;
@@ -18,7 +18,7 @@
   stroke-linecap: round;
 }
 .netatmo svg.loading .inner {
-  stroke: #ffffff;
+  stroke: #fff;
   stroke-width: 6;
 }
 .netatmo svg.loading .outer {
@@ -26,39 +26,39 @@
   stroke-width: 10;
 }
 .netatmo svg.loadTimer {
-  height: .5em;
-  margin: .2em 0;
+  height: 0.5em;
+  margin: 0.2em 0;
   vertical-align: middle;
-  width: .5em;
+  width: 0.5em;
 }
 .netatmo svg.loadTimer .loader {
-  fill: #000000;
+  fill: #000;
 }
 .netatmo svg.loadTimer .border {
   fill: #aaaaaa;
 }
 .netatmo .updated {
-  margin: .2em 0;
-  padding: 0 .5em;
+  margin: 0.2em 0;
+  padding: 0 0.5em;
   vertical-align: middle;
 }
 .netatmo .horizontal .module {
   display: inline-block;
 }
 .netatmo .classic .module {
-  border: 1px solid #ffffff;
-  border-radius: .25em;
-  margin: .25em .25em;
+  border: 1px solid #fff;
+  border-radius: 0.25em;
+  margin: 0.25em 0.25em;
   overflow: hidden;
 }
 .netatmo .classic .module .name {
-  background: #ffffff;
-  color: #000000;
-  padding: .125em .25em;
+  background: #fff;
+  color: #000;
+  padding: 0.125em 0.25em;
   text-align: center;
 }
 .netatmo .classic .module .data {
-  padding: .125em .25em;
+  padding: 0.125em 0.25em;
 }
 .xxlarge {
   font-size: 95px;
@@ -79,22 +79,22 @@
 }
 .netatmo .bubbles .module .secondary .CO2 .visual {
   border-radius: 1em;
-  box-shadow: 0 0 .9em 1em;
-  height: .1em;
+  box-shadow: 0 0 0.9em 1em;
+  height: 0.1em;
   margin: 1.5em auto;
-  width: .1em;
+  width: 0.1em;
 }
 .netatmo .bubbles .module .secondary .CO2 .good {
-  background-color: #32cd32;
-  color: #32cd32;
+  background-color: limegreen;
+  color: limegreen;
 }
 .netatmo .bubbles .module .secondary .CO2 .average {
-  background-color: #ffa500;
-  color: #ffa500;
+  background-color: orange;
+  color: orange;
 }
 .netatmo .bubbles .module .secondary .CO2 .bad {
-  background-color: #ff0000;
-  color: #ff0000;
+  background-color: red;
+  color: red;
 }
 .netatmo .bubbles .module .secondary .WindAngle .visual {
   display: inline-block;
