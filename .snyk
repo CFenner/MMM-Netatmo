@@ -1,0 +1,34 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - eslint > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt-contrib-csslint > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - eslint > inquirer > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - eslint > table > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - gruntify-eslint > eslint > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt > grunt-legacy-log > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt > grunt-legacy-util > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt-contrib-eslint > eslint > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt-yamllint > async > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - gruntify-eslint > eslint > inquirer > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - gruntify-eslint > eslint > table > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt-contrib-eslint > eslint > inquirer > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
+    - grunt-contrib-eslint > eslint > table > lodash:
+        patched: '2020-05-04T01:41:21.443Z'
