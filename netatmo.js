@@ -77,7 +77,7 @@ Module.register('netatmo', {
 
     result.name = module.module_name
 
-    if (module.type in [this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR]){
+    if ([this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR].includes(module.type)){
       let type = 'Temperature'
       let value = module.dashboard_data?module.dashboard_data[type]:''
       result.primary = {
@@ -103,7 +103,7 @@ Module.register('netatmo', {
       }
     }
 
-    if (module.type in [this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR]){
+    if ([this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR].includes(module.type)){
       result.temperatureTrend = module.dashboard_data?module.dashboard_data['temp_trend']:'';
       result.humidity = module.dashboard_data?module.dashboard_data['Humidity']:''
     } else if (module.type === this.moduleType.WIND) {
