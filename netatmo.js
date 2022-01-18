@@ -59,10 +59,12 @@ Module.register('netatmo', {
   updateModuleList: function (station) {
     const moduleList = []
 
-    moduleList.push(getModule(station))
+    moduleList.push(this.getModule(station))
+
     station.modules.forEach(function (module) {
-      moduleList.push(getModule(module))
+      moduleList.push(this.getModule(module))
     }.bind(this))
+
     this.loaded = true
     if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
       return
@@ -74,6 +76,32 @@ Module.register('netatmo', {
     let result = {}
 
     result.name = module.module_name
+
+    if (module.type in [this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR]){
+      let type = 'Temperature'
+      let value = module.dashboard_data?module.dashboard_data[type]:''
+      result.primary = {
+        unit: '',
+        value: this.formatter.value(type, value),
+        class: type,
+      }
+    } else if (module.type === this.moduleType.WIND) {
+      let type = 'WindStrength'
+      let value = module.dashboard_data?module.dashboard_data[type]:''
+      result.primary = {
+        unit: 'm/s',
+        value: value,
+        class: type,
+      }
+    } else if (module.type === this.moduleType.RAIN) {
+      let type = 'Rain'
+      let value = module.dashboard_data?module.dashboard_data[type]:''
+      result.primary = {
+        unit: 'mm/h',
+        value: value,
+        class: type,
+      }
+    }
 
     if (module.type in [this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR]){
       result.temperatureTrend = module.dashboard_data?module.dashboard_data['temp_trend']:'';
