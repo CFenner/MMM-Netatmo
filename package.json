@@ -50,6 +50,7 @@
   },
   "snyk": true,
   "dependencies": {
+    "@ungap/url-search-params": "^0.2.2",
     "snyk": "^1.317.0"
   }
 }

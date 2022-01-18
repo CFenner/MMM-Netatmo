@@ -6,120 +6,45 @@
  */
  /* global $, Q, moment, Module, Log */
 Module.register('netatmo', {
-  // default config,
+  // default config
   defaults: {
-    refreshToken: null,
+    username: null,
+    password: null,
+    initialDelay: 0,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
-    design: 'classic', //bubbles
     hideLoadTimer: false,
-    horizontal: true,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
     showBattery: true,
     showRadio: true,
     showWiFi: true,
     showTrend: true,
-    api: {
-      base: 'https://api.netatmo.com/',
-      authEndpoint: 'oauth2/token',
-      authPayload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
-      dataEndpoint: 'api/getstationsdata',
-      dataPayload: 'access_token={0}'
-    }
+    apiBase: 'api.netatmo.com',
+    authEndpoint: '/oauth2/token',
+    dataEndpoint: '/api/getstationsdata',
+  },
+  notifications: {
+    'auth': 'NETATMO_AUTH',
+    'auth_response': 'NETATMO_AUTH_RESPONSE',
+    'data': 'NETATMO_DATA',
+    'data_response': 'NETATMO_DATA_RESPONSE',
   },
   // init method
-  start: function() {
-    Log.info('Starting module: ' + this.name);
-    this.α = 0;
-    // set interval for reload timer
-    this.t = this.config.updateInterval * 60 * 1000 / 360;
-    // run timer
-    this.updateLoad();
-  },
-  updateLoad: function() {
-    // Log.info(this.name + " refresh triggered");
-    var that = this;
-    return Q.fcall(
-      this.load.token.bind(that),
-      this.renderError.bind(that)
-    ).then(
-      this.load.data.bind(that),
-      this.renderError.bind(that)
-    ).then(
-      this.renderAll.bind(that)
-    ).done(
-      this.updateWait.bind(that)
-    );
-  },
-  updateWait: function() {
-    this.α++;
-    this.α %= 360;
-    var r = (this.α * Math.PI / 180);
-    var x = Math.sin(r) * 125;
-    var y = Math.cos(r) * -125;
-    var mid = (this.α > 180) ? 1 : 0;
-    var anim = 'M 0 0 v -125 A 125 125 1 ' +
-       mid + ' 1 ' +
-       x + ' ' +
-       y + ' z';
+  start: function () {
+    let self = this
+    Log.info(`Starting module: ${this.name}`)
 
-    var loader = $('.netatmo .loadTimer .loader');
-    if (loader.length > 0) {
-      loader.attr('d', anim);
-    }
-    var border = $('.netatmo .loadTimer .border');
-    if (border.length > 0) {
-      border.attr('d', anim);
-    }
-    if (r === 0) {
-      // refresh data
-      this.updateLoad();
-    } else {
-      // wait further
-      setTimeout(this.updateWait.bind(this), this.t);
-    }
-  },
-  load: {
-    token: function() {
-      return Q($.ajax({
-        type: 'POST',
-        url: this.config.api.base + this.config.api.authEndpoint,
-        data: this.config.api.authPayload.format(
-            this.config.refreshToken,
-            this.config.clientId,
-            this.config.clientSecret)
-      }));
-    },
-    data: function(data) {
-      // Log.info(this.name + " token loaded "+data.access_token);
-      this.config.refreshToken = data.refresh_token;
-      // call for station data
-      return Q($.ajax({
-        url: this.config.api.base + this.config.api.dataEndpoint,
-        data: this.config.api.dataPayload.format(data.access_token)
-      }));
-    }
-  },
-  renderAll: function(data) {
-    var device = data.body.devices[0];
-    this.lastUpdate = device.dashboard_data.time_utc;
-    // render modules
-    this.dom = this.getDesign(this.config.design).render(device);
-    this.updateDom(this.config.animationSpeed);
-    return Q({});
-  },
-  renderError: function(reason) {
-    /* eslint-disable no-console */
-    console.log("error " + reason);
-    /* eslint-enable no-console */
-    //  enable display of error messages
-    /*
-    $(netatmo.location).updateWithText(
-      "could not load data: "+reason.responseJSON.error,
-      this.config.fadeInterval
-    );
-    */
+		//get a new token at start-up. When receive, GET_CAMERA_EVENTS will be requested
+    setTimeout(function() {
+			self.sendSocketNotification(self.notifications.data, self.config);
+		}, this.config.initialDelay *1000);
+
+		//set auto-update
+    setInterval( function () {
+			//request directly the data, with the previous token. When the token will become invalid (error 403), it will be requested again
+			self.sendSocketNotification(self.notifications.data, self.config);
+		}, this.config.updateInterval * 60 * 1000 + this.config.initialDelay *1000);
   },
   formatter: {
     value: function(dataType, value) {
@@ -198,312 +123,229 @@ Module.register('netatmo', {
       return '';
     }
   },
-  getDesign: function(design){
-    var that = this;
-    var formatter = this.formatter;
-    var translator = this.translate;
-    return {
-      classic: (function(formatter, translator, that){
-        return {
-          render: function(device){
-            var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
-            if(that.config.horizontal)
-              sResult.addClass('horizontal');
-            var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
-              that.config.moduleOrder :
-              null;
-            if (aOrderedModuleList) {
-              for (var moduleName of aOrderedModuleList) {
-                if (device.module_name === moduleName) {
-                  sResult.append(this.renderModule(device));
-                } else {
-                  for (var module of device.modules) {
-                    if (module.module_name === moduleName) {
-                      sResult.append(this.renderModule(module));
-                      break;
-                    }
-                  }
-                }
-              }
-            } else {
-              // render station data (main station)
-              sResult.append(this.renderModule(device));
-              // render module data (connected modules)
-              for (var cnt = 0; cnt < device.modules.length; cnt++) {
-                sResult.append(this.renderModule(device.modules[cnt]));
-              }
+  moduleType: {
+    MAIN: "NAMain",
+    INDOOR: "NAModule4",
+    OUTDOOR: "NAModule1",
+    RAIN: "NAModule3",
+    WIND: "NAModule2"
+  },
+  render: function(device){
+    var sResult = $('<div/>').addClass('modules').addClass('bubbles');
+    var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0 ?
+      this.config.moduleOrder :
+      null;
+
+    if (aOrderedModuleList) {
+      for (var moduleName of aOrderedModuleList) {
+        if (device.module_name === moduleName) {
+          sResult.append(this.module(device));
+        } else {
+          for (var module of device.modules) {
+            if (module.module_name === moduleName) {
+              sResult.append(this.module(module));
+              break;
             }
-            return sResult;
-          },
-          renderModule: function(oModule) {
-            return $('<div/>').addClass('module').append(
-              $('<div>').addClass('data').append(this.renderSensorData(oModule))
-            ).append(
-              $('<div>').addClass('name small').append(oModule.module_name)
-            );
-          },
-          renderSensorData: function(oModule) {
-            var sResult = $('<table/>');
-            var aDataTypeList = that.config.dataOrder && that.config.dataOrder.length > 0 ?
-              that.config.dataOrder :
-              oModule.data_type;
-            for (var dataType of aDataTypeList) {
-              if ($.inArray(dataType, oModule.data_type) > -1) {
-                sResult.append(
-                  this.renderData(
-                    formatter.clazz(dataType),
-                    dataType,
-                    oModule.dashboard_data[dataType])
-                );
-              }
-            }
-            if(oModule.battery_percent){
-              sResult.append(this.renderData(formatter.clazz(dataType), 'Battery', oModule.battery_percent));
-            }
-            return sResult;
-          },
-          renderData: function(clazz, dataType, value) {
-            return $('<tr/>').append(
-              $('<td/>').addClass('small').append(
-                translator.bind(that)(dataType.toUpperCase())
-              )
-            ).append(
-              $('<td/>').addClass('small value').append(
-                formatter.value(dataType, value)
-              )
-            );
           }
-        };
-      })(formatter, translator, that),
-      bubbles: (function(formatter, translator, that){
-        return {
-          moduleType: {
-            MAIN: "NAMain",
-            INDOOR: "NAModule4",
-            OUTDOOR: "NAModule1",
-            RAIN: "NAModule3",
-            WIND: "NAModule2"
-          },
-          render: function(device){
-            var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
-            var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
-              that.config.moduleOrder :
-              null;
+        }
+      }
+    } else {
+      // render station data (main station)
+      sResult.append(this.module(device));
+      // render module data (connected modules)
+      for (var cnt = 0; cnt < device.modules.length; cnt++) {
+        sResult.append(this.module(device.modules[cnt]));
+      }
+    }
+    return sResult;
+  },
+  module: function(module){
+    var result = $('<div/>').addClass('module').append(
+      $('<div/>').addClass('name small').append(module.module_name)
+    ).append(
+      $('<div/>').append(
+        $('<table/>').addClass('').append(
+          $('<tr/>').append(
+            this.primary(module)
+          ).append(
+            this.secondary(module)
+          ).append(
+            this.data2(module)
+          )))
+    );
+    return result[0].outerHTML;
+  },
+  primary: function(module){
+    var result = $('<td/>').addClass('primary');
+    var type;
+    var value;
+    switch(module.type){
+      case this.moduleType.MAIN:
+      case this.moduleType.INDOOR:
+      case this.moduleType.OUTDOOR:
+        type = 'Temperature';
+        value = module.dashboard_data?module.dashboard_data[type]:'';
+        $('<div/>').addClass(type).append(
+          $('<div/>').addClass('large light bright').append(this.formatter.value(type, value))
+        ).appendTo(result);
+        break;
+      case this.moduleType.WIND:
+        type = 'WindStrength';
+        value = module.dashboard_data[type];
+        $('<div/>').addClass(type).append(
+          $('<div/>').addClass('large light bright').append(value)
+        ).append(
+          $('<div/>').addClass('xsmall').append('m/s')
+        ).appendTo(result);
+        break;
+      case this.moduleType.RAIN:
+        type = 'Rain';
+        value = module.dashboard_data[type];
+        $('<div/>').addClass(type).append(
+          $('<div/>').addClass('large light bright').append(value)
+        ).append(
+          $('<div/>').addClass('xsmall').append('mm/h')
+        ).appendTo(result);
+        break;
+      default:
+    }
+    return result;
+  },
+  secondary: function(module){
+    var result = $('<td/>').addClass('secondary');
+    switch(module.type){
+      case this.moduleType.MAIN:
+      case this.moduleType.INDOOR:
+        var type = 'CO2';
+        var value = module.dashboard_data[type];
+        var status = value > 1600?'bad':value > 800?'average':'good';
 
-            if (aOrderedModuleList) {
-              for (var moduleName of aOrderedModuleList) {
-                if (device.module_name === moduleName) {
-                  sResult.append(this.module(device));
-                } else {
-                  for (var module of device.modules) {
-                    if (module.module_name === moduleName) {
-                      sResult.append(this.module(module));
-                      break;
-                    }
-                  }
-                }
-              }
-            } else {
-              // render station data (main station)
-              sResult.append(this.module(device));
-              // render module data (connected modules)
-              for (var cnt = 0; cnt < device.modules.length; cnt++) {
-                sResult.append(this.module(device.modules[cnt]));
-              }
-            }
-            return sResult;
-          },
-          module: function(module){
-            var result = $('<div/>').addClass('module').append(
-              $('<div/>').addClass('name small').append(module.module_name)
-            ).append(
-              $('<div/>').append(
-                $('<table/>').addClass('').append(
-                  $('<tr/>').append(
-                    this.primary(module)
-                  ).append(
-                    this.secondary(module)
-                  ).append(
-                    this.data(module)
-                  )))
-            );
-            return result[0].outerHTML;
-          },
-          primary: function(module){
-            var result = $('<td/>').addClass('primary');
-            var type;
-            var value;
-            switch(module.type){
-              case this.moduleType.MAIN:
-              case this.moduleType.INDOOR:
-              case this.moduleType.OUTDOOR:
-                type = 'Temperature';
-                value = module.dashboard_data[type];
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
-                ).appendTo(result);
-                break;
-              case this.moduleType.WIND:
-                type = 'WindStrength';
-                value = module.dashboard_data[type];
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(value)
-                ).append(
-                  $('<div/>').addClass('xsmall').append('m/s')
-                ).appendTo(result);
-                break;
-              case this.moduleType.RAIN:
-                type = 'Rain';
-                value = module.dashboard_data[type];
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(value)
-                ).append(
-                  $('<div/>').addClass('xsmall').append('mm/h')
-                ).appendTo(result);
-                break;
-              default:
-            }
-            return result;
-          },
-          secondary: function(module){
-            var result = $('<td/>').addClass('secondary');
-            switch(module.type){
-              case this.moduleType.MAIN:
-              case this.moduleType.INDOOR:
-                var type = 'CO2';
-                var value = module.dashboard_data[type];
-                var status = value > 1600?'bad':value > 800?'average':'good';
+        $('<div/>').addClass(type).append(
+          $('<div/>').addClass('visual').addClass(status)
+        ).append(
+          $('<div/>').addClass('small value').append(this.formatter.value(type, value))
+        ).appendTo(result);
+        break;
+      case this.moduleType.WIND:
+        type = 'WindAngle';
+        value = module.dashboard_data[type];
 
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('visual').addClass(status)
-                ).append(
-                  $('<div/>').addClass('small value').append(formatter.value(type, value))
-                ).appendTo(result);
-                break;
-              case this.moduleType.WIND:
-                type = 'WindAngle';
-                value = module.dashboard_data[type];
-
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
-                ).append(
-                  $('<div/>').addClass('small value').append(formatter.value(type, value))
-                ).appendTo(result);
-                break;
-              case this.moduleType.OUTDOOR:
-              case this.moduleType.RAIN:
-              default:
-                break;
-            }
-            return result;
-          },
-          data: function(module){
-            var result = $('<td/>').addClass('data');
-            switch(module.type){
-              case this.moduleType.MAIN:
-                this.addTemperatureTrend(result, module);
-                this.addHumidity(result, module);
-                this.addPressure(result, module);
-                this.addPressureTrend(result, module);
-                this.addNoise(result, module);
-                this.addWiFi(result, module);
-                //result += this.addData('max_temp', module.dashboard_data['max_temp']);
-                //result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                break;
-              case this.moduleType.INDOOR:
-                this.addTemperatureTrend(result, module);
-                this.addHumidity(result, module);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              case this.moduleType.OUTDOOR:
-                this.addTemperatureTrend(result, module);
-                this.addHumidity(result, module);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              case this.moduleType.WIND:
-                this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
-                this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              case this.moduleType.RAIN:
-                this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
-                this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              default:
-                break;
-            }
-            return result;
-          },
-          addTemperatureTrend: function(parent, module){
-            var value = module.dashboard_data['temp_trend'];
-            if(!value)
-              value = 'UNDEFINED'
-            if(that.config.showTrend)
-              this.addData(parent, 'temp_trend', translator.bind(that)(value.toUpperCase()));
-          },
-          addPressure: function(parent, module){
-            return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
-          },
-          addPressureTrend: function(parent, module){
-            var value = module.dashboard_data['pressure_trend'];
-            if(!value)
-              value = 'UNDEFINED'
-            if(that.config.showTrend)
-              this.addData(parent, 'pressure_trend', translator.bind(that)(value.toUpperCase()));
-          },
-          addHumidity: function(parent, module){
-            return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
-          },
-          addNoise: function(parent, module){
-            return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
-          },
-          addBattery: function(parent, module){
-            if(that.config.showBattery)
-              this.addData(parent, 'Battery', module.battery_percent);
-          },
-          addRadio: function(parent, module){
-            if(that.config.showRadio)
-              this.addData(parent, 'Radio', module.rf_status);
-          },
-          addWiFi: function(parent, module){
-            if(that.config.showWiFi)
-              this.addData(parent, 'WiFi', module.wifi_status);
-          },
-          addLastSeen: function(parent, module){
-            var duration = Date.now() / 1000 - module.last_message;
-            if(that.config.showLastMessage && duration > that.config.lastMessageThreshold){
-              $('<div/>')
-                .addClass('small flash')
-                .append(
-                  translator.bind(that)("LAST_MESSAGE")
-                  + ': '
-                  + moment.unix(module.last_message).fromNow()
-                )
-                .appendTo(parent);
-            }
-          },
-          addData: function(parent, type, value){
-            return $('<div/>')
-              .addClass('small')
-              .append(
-                translator.bind(that)(type.toUpperCase())
-                + ': '
-                + formatter.value(type, value)
-              )
-              .appendTo(parent);
-          }
-        };
-      })(formatter, translator, that)
-    }[design]
+        $('<div/>').addClass(type).append(
+          $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
+        ).append(
+          $('<div/>').addClass('small value').append(this.formatter.value(type, value))
+        ).appendTo(result);
+        break;
+      case this.moduleType.OUTDOOR:
+      case this.moduleType.RAIN:
+      default:
+        break;
+    }
+    return result;
+  },
+  data2: function(module){
+    var result = $('<td/>').addClass('data');
+    switch(module.type){
+      case this.moduleType.MAIN:
+        this.addTemperatureTrend(result, module);
+        this.addHumidity(result, module);
+        this.addPressure(result, module);
+        this.addPressureTrend(result, module);
+        this.addNoise(result, module);
+        this.addWiFi(result, module);
+        //result += this.addData('max_temp', module.dashboard_data['max_temp']);
+        //result += this.addData('min_temp', module.dashboard_data['min_temp']);
+        break;
+      case this.moduleType.INDOOR:
+        this.addTemperatureTrend(result, module);
+        this.addHumidity(result, module);
+        this.addBattery(result, module);
+        this.addRadio(result, module);
+        this.addLastSeen(result, module);
+        break;
+      case this.moduleType.OUTDOOR:
+        this.addTemperatureTrend(result, module);
+        this.addHumidity(result, module);
+        this.addBattery(result, module);
+        this.addRadio(result, module);
+        this.addLastSeen(result, module);
+        break;
+      case this.moduleType.WIND:
+        this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
+        this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
+        this.addBattery(result, module);
+        this.addRadio(result, module);
+        this.addLastSeen(result, module);
+        break;
+      case this.moduleType.RAIN:
+        this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
+        this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
+        this.addBattery(result, module);
+        this.addRadio(result, module);
+        this.addLastSeen(result, module);
+        break;
+      default:
+        break;
+    }
+    return result;
+  },
+  addTemperatureTrend: function(parent, module){
+    var value = module.dashboard_data?module.dashboard_data['temp_trend']:'';
+    if(!value)
+      value = 'UNDEFINED'
+    if(this.config.showTrend)
+      this.addData(parent, 'temp_trend', this.translate.bind(this)(value.toUpperCase()));
+  },
+  addPressure: function(parent, module){
+    return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
+  },
+  addPressureTrend: function(parent, module){
+    var value = module.dashboard_data?module.dashboard_data['pressure_trend']:'';
+    if(!value)
+      value = 'UNDEFINED'
+    if(this.config.showTrend)
+      this.addData(parent, 'pressure_trend', this.translate.bind(this)(value.toUpperCase()));
+  },
+  addHumidity: function(parent, module){
+    return this.addData(parent, 'Humidity', module.dashboard_data?module.dashboard_data['Humidity']:'');
+  },
+  addNoise: function(parent, module){
+    return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
+  },
+  addBattery: function(parent, module){
+    if(this.config.showBattery)
+      this.addData(parent, 'Battery', module.battery_percent);
+  },
+  addRadio: function(parent, module){
+    if(this.config.showRadio)
+      this.addData(parent, 'Radio', module.rf_status);
+  },
+  addWiFi: function(parent, module){
+    if(this.config.showWiFi)
+      this.addData(parent, 'WiFi', module.wifi_status);
+  },
+  addLastSeen: function(parent, module){
+    var duration = Date.now() / 1000 - module.last_message;
+    if(this.config.showLastMessage && duration > this.config.lastMessageThreshold){
+      $('<div/>')
+        .addClass('small flash')
+        .append(
+          this.translate.bind(this)("LAST_MESSAGE")
+          + ': '
+          + moment.unix(module.last_message).fromNow()
+        )
+        .appendTo(parent);
+    }
+  },
+  addData: function(parent, type, value){
+    return $('<div/>')
+      .addClass('small')
+      .append(
+        this.translate.bind(this)(type.toUpperCase())
+        + ': '
+        + this.formatter.value(type, value)
+      )
+      .appendTo(parent);
   },
   getScripts: function() {
     return [
@@ -513,10 +355,8 @@ Module.register('netatmo', {
       'moment.js'
     ];
   },
-  getStyles: function() {
-    return [
-      'netatmo.css'
-    ];
+  getStyles: function () {
+    return [`${this.name}.css`]
   },
   getTranslations: function() {
     return {
@@ -558,5 +398,33 @@ Module.register('netatmo', {
       ));
     }
     return dom[0];
+  },
+  socketNotificationReceived: function (notification, payload) {
+    const self = this
+    Log.debug('received ' + notification)
+    if (notification === self.notifications.auth_response) {
+      console.log(payload)
+      if(payload.status === 'OK') {
+        this.sendSocketNotification(self.notifications.data, self.config);
+      } else {
+        console.log("AUTH FAILED " + payload.message)
+      }
+    } else if (notification === self.notifications.data_response) {
+      console.log(payload)
+
+      if (payload.status === 'OK') {
+        console.log("devices returned")
+        var device = payload.payloadReturn[0];
+        this.lastUpdate = device.dashboard_data.time_utc;
+        // render modules
+        this.dom = this.render(device);
+        this.updateDom(this.config.animationSpeed);
+      } else if(payload.status === 'INVALID_TOKEN') {
+        console.log("DATA FAILED, refreshing token")
+        this.sendSocketNotification(self.notifications.auth, self.config);
+      } else {
+        console.log("DATA FAILED " + payload.message)
+      }
+    }
   }
 });
