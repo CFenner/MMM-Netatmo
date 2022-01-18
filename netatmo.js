@@ -76,6 +76,9 @@ Module.register('netatmo', {
     let result = {}
 
     result.name = module.module_name
+    result.measurementList = []
+
+//TODO check module.reachable
 
     if ([this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR].includes(module.type)){
       let type = 'Temperature'
@@ -115,13 +118,13 @@ Module.register('netatmo', {
     }
 
     if (module.type === this.moduleType.MAIN){
-      result.pressure = module.dashboard_data['Pressure']
-      result.pressureTrend = module.dashboard_data?module.dashboard_data['pressure_trend']:'';
-      result.noise = module.dashboard_data['Noise']
-      result.wifi = module.wifi_status
+      result.measurementList.push({value: module.dashboard_data['Pressure'], icon: '', label: 'pressure'})
+      result.measurementList.push({value: module.dashboard_data?module.dashboard_data['pressure_trend']:'', icon: '', label: 'pressure_trend'})
+      result.measurementList.push({value: module.dashboard_data['Noise'], icon: '', label: 'noise'})
+      result.measurementList.push({value: module.wifi_status, icon: '', label: 'wifi'})
     } else {
-      result.radio = module.rf_status
-      result.battery = module.battery_percent
+      result.measurementList.push({value: module.rf_status, icon: '', label: 'radio'})
+      result.measurementList.push({value: module.battery_percent, icon: '', label: 'battery'})
     }
     return result
   },
@@ -440,7 +443,8 @@ Module.register('netatmo', {
       showRadio: this.config.showRadio,
       showWiFi: this.config.showWiFi,
       showTrend: this.config.showTrend,
-      moduleList: this.moduleList
+      moduleList: this.moduleList,
+      fontClassModuleName: this.config.fontClassModuleName,
     }
   },
   getTranslations: function() {
