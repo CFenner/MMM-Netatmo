@@ -349,9 +349,6 @@ Module.register('netatmo', {
   },
   getScripts: function() {
     return [
-      'String.format.js',
-      '//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js',
-      'q.min.js',
       'moment.js'
     ];
   },
