@@ -21,7 +21,7 @@
                       </div>
                     </td>
                     <td class="data">
-                      {% for measurement in measurementList %}
+                      {% for measurement in module.measurementList %}
                       <div class="small">{{measurement.label}}: {{measurement.value}}</div>
                       {% endfor %}
                       {# <div class="small flash">letzter Kontakt: vor 37 Minuten</div> #}
