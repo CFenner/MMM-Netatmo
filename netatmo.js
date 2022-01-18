@@ -78,43 +78,93 @@ Module.register('netatmo', {
     result.name = module.module_name
     result.measurementList = []
 
+    if (!module.reachable) return result
+
 //TODO check module.reachable
+
+    switch (module.type) {
+      case this.moduleType.MAIN:
+        // break; fallthrough
+      case this.moduleType.INDOOR:
+        let secondaryType = 'CO2';
+        let secondaryValue = module.dashboard_data[secondaryType];
+        let status = secondaryValue > 1600?'bad':secondaryValue > 800?'average':'good';
+        result.secondary = {visualClass: status, value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
+        // break; fallthrough
+      case this.moduleType.OUTDOOR:
+        let primaryType = 'Temperature'
+        let primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
+        result.primary = {unit: '', value: this.formatter.value(primaryType, primaryValue), class: primaryType}
+        break;
+      case this.moduleType.WIND:
+        let primaryType = 'WindStrength'
+        let primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
+        result.primary = {unit: 'm/s', value: primaryValue, class: primaryType}
+        let secondaryType = 'WindAngle'
+        let secondaryValue = module.dashboard_data[type];
+        result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
+  //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
+        break;
+      case this.moduleType.RAIN:
+        let type = 'Rain'
+        let value = module.dashboard_data?module.dashboard_data[type]:''
+        result.primary = {unit: 'mm/h', value: value, class: type}
+        break;
+      default:
+        break;
+    }
 
     if ([this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR].includes(module.type)){
       let type = 'Temperature'
       let value = module.dashboard_data?module.dashboard_data[type]:''
-      result.primary = {
-        unit: '',
-        value: this.formatter.value(type, value),
-        class: type,
-      }
+      result.primary = {unit: '', value: this.formatter.value(type, value), class: type}
     } else if (module.type === this.moduleType.WIND) {
       let type = 'WindStrength'
       let value = module.dashboard_data?module.dashboard_data[type]:''
-      result.primary = {
-        unit: 'm/s',
-        value: value,
-        class: type,
-      }
+      result.primary = {unit: 'm/s', value: value, class: type}
     } else if (module.type === this.moduleType.RAIN) {
-      let type = 'Rain'
-      let value = module.dashboard_data?module.dashboard_data[type]:''
-      result.primary = {
-        unit: 'mm/h',
-        value: value,
-        class: type,
-      }
     }
+  //   var result = $('<td/>').addClass('secondary');
+  //   switch(module.type){
+  //     case this.moduleType.MAIN:
+  //     case this.moduleType.INDOOR:
+  //       var type = 'CO2';
+  //       var value = module.dashboard_data[type];
+  //       var status = value > 1600?'bad':value > 800?'average':'good';
+
+  //       $('<div/>').addClass(type).append(
+  //         $('<div/>').addClass('visual').addClass(status)
+  //       ).append(
+  //         $('<div/>').addClass('small value').append(this.formatter.value(type, value))
+  //       ).appendTo(result);
+  //       break;
+  //     case this.moduleType.WIND:
+  //       type = 'WindAngle';
+  //       value = module.dashboard_data[type];
+
+  //       $('<div/>').addClass(type).append(
+  //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
+  //       ).append(
+  //         $('<div/>').addClass('small value').append(this.formatter.value(type, value))
+  //       ).appendTo(result);
+  //       break;
+  //     case this.moduleType.OUTDOOR:
+  //     case this.moduleType.RAIN:
+  //     default:
+  //       break;
+  //   }
+
+
 
     if ([this.moduleType.MAIN, this.moduleType.INDOOR, this.moduleType.OUTDOOR].includes(module.type)){
-      result.temperatureTrend = module.dashboard_data?module.dashboard_data['temp_trend']:'';
-      result.humidity = module.dashboard_data?module.dashboard_data['Humidity']:''
+      result.measurementList.push({value: module.dashboard_data['temp_trend'], icon: '', label: 'temp_trend'})
+      result.measurementList.push({value: module.dashboard_data['Humidity'], icon: '', label: 'humidity'})
     } else if (module.type === this.moduleType.WIND) {
-      result.gustStrength = module.dashboard_data['GustStrength']
-      result.gustAngle = module.dashboard_data['GustAngle']
+      result.measurementList.push({value: module.dashboard_data['GustStrength'], icon: '', label: 'GustStrength'})
+      result.measurementList.push({value: module.dashboard_data['GustAngle'], icon: '', label: 'GustAngle'})
     } else if (module.type === this.moduleType.RAIN) {
-      result.raimPerHour = module.dashboard_data['sum_rain_1']
-      result.rainPerDay = module.dashboard_data['sum_rain_24']
+      result.measurementList.push({value: module.dashboard_data['sum_rain_1'], icon: '', label: 'per_hour'})
+      result.measurementList.push({value: module.dashboard_data['sum_rain_24'], icon: '', label: 'per_day'})
     }
 
     if (module.type === this.moduleType.MAIN){
