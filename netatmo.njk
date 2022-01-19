@@ -10,19 +10,19 @@
                 <tr>
                   <td class="primary">
                     <div class="{{ module.primary.class }}">
-                      <div class="large light bright">{{ module.primary.value }}</div>
+                      <div class="light bright {{ fontClassPrimary }}">{{ module.primary.value }}</div>
                       <div class="xsmall">{{ module.primary.unit }}</div>
                     </div>
                   </td>
                   <td class="secondary">
                     <div class="{{ module.secondary.class }}">
                       <div class="visual average"></div>
-                      <div class="small value">{{ module.secondary.value }}</div>
+                      <div class="value {{ fontClassSecondary }}">{{ module.secondary.value }}</div>
                     </div>
                   </td>
                   <td class="data">
                     {% for measurement in module.measurementList %}
-                      <div class="small">
+                      <div class="{{ fontClassMeasurement }}">
                         <span>{{ measurement.label }}</span>
                         <i class="fas fa-tachometer-alt fa-fw"></i>
                         <span>{{ measurement.value }}</span>
