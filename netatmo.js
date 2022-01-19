@@ -8,8 +8,6 @@
 Module.register('netatmo', {
   // default config
   defaults: {
-    username: null,
-    password: null,
     initialDelay: 0,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
@@ -66,7 +64,7 @@ Module.register('netatmo', {
     }.bind(this))
 
     if (station.reachable)
-      this.lastUpdate = device.dashboard_data.time_utc;
+      this.lastUpdate = station.dashboard_data.time_utc;
     this.loaded = true
     if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
       return
@@ -127,10 +125,6 @@ Module.register('netatmo', {
       default:
         break;
     }
-  //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
-  //         $('<div/>').addClass('small value').append(this.formatter.value(type, value))
-
-
     if (module.type === this.moduleType.MAIN){
       result.measurementList.push({value: module.dashboard_data['Pressure'], icon: '', label: 'pressure'})
       result.measurementList.push({value: module.dashboard_data?module.dashboard_data['pressure_trend']:'', icon: '', label: 'pressure_trend'})
@@ -140,6 +134,8 @@ Module.register('netatmo', {
       result.measurementList.push({value: module.rf_status, icon: '', label: 'radio'})
       result.measurementList.push({value: module.battery_percent, icon: '', label: 'battery'})
     }
+      //       this.translate.bind(this)(type.toUpperCase())
+
     return result
   },
   formatter: {
@@ -193,249 +189,32 @@ Module.register('netatmo', {
       if(value < 348.75) return 'NNW';
       return 'N';
     },
-    rain: function(){
-      return '';
-    },
-    clazz: function(dataType) {
-      /* unused
-      switch (dataType) {
-        case 'CO2':
-          return 'wi-na';
-        case 'Noise':
-          return 'wi-na';
-        case 'Humidity':
-          return 'wi-humidity';
-        case 'Pressure':
-          return 'wi-barometer';
-        case 'Temperature':
-          return 'wi-thermometer';
-        case 'Rain':
-          return 'wi-raindrops';
-        case 'Wind':
-          return 'wi-na';
-        default:
-          return '';
-      }*/
-      return '';
-    }
+    // rain: function(){
+    //   return '';
+    // },
+    // clazz: function(dataType) {
+    //   /* unused
+    //   switch (dataType) {
+    //     case 'CO2':
+    //       return 'wi-na';
+    //     case 'Noise':
+    //       return 'wi-na';
+    //     case 'Humidity':
+    //       return 'wi-humidity';
+    //     case 'Pressure':
+    //       return 'wi-barometer';
+    //     case 'Temperature':
+    //       return 'wi-thermometer';
+    //     case 'Rain':
+    //       return 'wi-raindrops';
+    //     case 'Wind':
+    //       return 'wi-na';
+    //     default:
+    //       return '';
+    //   }*/
+    //   return '';
+    // }
   },
-  render: function(device){
-    var sResult = $('<div/>').addClass('modules').addClass('bubbles');
-    var aOrderedModuleList = this.config.moduleOrder && this.config.moduleOrder.length > 0 ?
-      this.config.moduleOrder :
-      null;
-
-    if (aOrderedModuleList) {
-      for (var moduleName of aOrderedModuleList) {
-        if (device.module_name === moduleName) {
-          sResult.append(this.module(device));
-        } else {
-          for (var module of device.modules) {
-            if (module.module_name === moduleName) {
-              sResult.append(this.module(module));
-              break;
-            }
-          }
-        }
-      }
-    } else {
-      // render station data (main station)
-      sResult.append(this.module(device));
-      // render module data (connected modules)
-      for (var cnt = 0; cnt < device.modules.length; cnt++) {
-        sResult.append(this.module(device.modules[cnt]));
-      }
-    }
-    return sResult;
-  },
-  // module: function(module){
-  //   var result = $('<div/>').addClass('module').append(
-  //     $('<div/>').addClass(`name ${this.config.fontClassModuleName}`).append(module.module_name)
-  //   ).append(
-  //     $('<div/>').append(
-  //       $('<table/>').addClass('').append(
-  //         $('<tr/>').append(
-  //           this.primary(module)
-  //         ).append(
-  //           this.secondary(module)
-  //         ).append(
-  //           this.data2(module)
-  //         )))
-  //   );
-  //   return result[0].outerHTML;
-  // },
-  // primary: function(module){
-  //   var result = $('<td/>').addClass('primary');
-  //   var type;
-  //   var value;
-  //   switch(module.type){
-  //     case this.moduleType.MAIN:
-  //     case this.moduleType.INDOOR:
-  //     case this.moduleType.OUTDOOR:
-  //       type = 'Temperature';
-  //       value = module.dashboard_data?module.dashboard_data[type]:'';
-  //       $('<div/>').addClass(type).append(
-  //         $('<div/>').addClass('large light bright').append(this.formatter.value(type, value))
-  //       ).appendTo(result);
-  //       break;
-  //     case this.moduleType.WIND:
-  //       type = 'WindStrength';
-  //       value = module.dashboard_data[type];
-  //       $('<div/>').addClass(type).append(
-  //         $('<div/>').addClass('large light bright').append(value)
-  //       ).append(
-  //         $('<div/>').addClass('xsmall').append('m/s')
-  //       ).appendTo(result);
-  //       break;
-  //     case this.moduleType.RAIN:
-  //       type = 'Rain';
-  //       value = module.dashboard_data[type];
-  //       $('<div/>').addClass(type).append(
-  //         $('<div/>').addClass('large light bright').append(value)
-  //       ).append(
-  //         $('<div/>').addClass('xsmall').append('mm/h')
-  //       ).appendTo(result);
-  //       break;
-  //     default:
-  //   }
-  //   return result;
-  // },
-  // secondary: function(module){
-  //   var result = $('<td/>').addClass('secondary');
-  //   switch(module.type){
-  //     case this.moduleType.MAIN:
-  //     case this.moduleType.INDOOR:
-  //       var type = 'CO2';
-  //       var value = module.dashboard_data[type];
-  //       var status = value > 1600?'bad':value > 800?'average':'good';
-
-  //       $('<div/>').addClass(type).append(
-  //         $('<div/>').addClass('visual').addClass(status)
-  //       ).append(
-  //         $('<div/>').addClass('small value').append(this.formatter.value(type, value))
-  //       ).appendTo(result);
-  //       break;
-  //     case this.moduleType.WIND:
-  //       type = 'WindAngle';
-  //       value = module.dashboard_data[type];
-
-  //       $('<div/>').addClass(type).append(
-  //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
-  //       ).append(
-  //         $('<div/>').addClass('small value').append(this.formatter.value(type, value))
-  //       ).appendTo(result);
-  //       break;
-  //     case this.moduleType.OUTDOOR:
-  //     case this.moduleType.RAIN:
-  //     default:
-  //       break;
-  //   }
-  //   return result;
-  // },
-  // data2: function(module){
-  //   var result = $('<td/>').addClass('data');
-  //   switch(module.type){
-  //     case this.moduleType.MAIN:
-  //       this.addTemperatureTrend(result, module);
-  //       this.addHumidity(result, module);
-  //       this.addPressure(result, module);
-  //       this.addPressureTrend(result, module);
-  //       this.addNoise(result, module);
-  //       this.addWiFi(result, module);
-  //       //result += this.addData('max_temp', module.dashboard_data['max_temp']);
-  //       //result += this.addData('min_temp', module.dashboard_data['min_temp']);
-  //       break;
-  //     case this.moduleType.INDOOR:
-  //       this.addTemperatureTrend(result, module);
-  //       this.addHumidity(result, module);
-  //       this.addBattery(result, module);
-  //       this.addRadio(result, module);
-  //       this.addLastSeen(result, module);
-  //       break;
-  //     case this.moduleType.OUTDOOR:
-  //       this.addTemperatureTrend(result, module);
-  //       this.addHumidity(result, module);
-  //       this.addBattery(result, module);
-  //       this.addRadio(result, module);
-  //       this.addLastSeen(result, module);
-  //       break;
-  //     case this.moduleType.WIND:
-  //       this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
-  //       this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
-  //       this.addBattery(result, module);
-  //       this.addRadio(result, module);
-  //       this.addLastSeen(result, module);
-  //       break;
-  //     case this.moduleType.RAIN:
-  //       this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
-  //       this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
-  //       this.addBattery(result, module);
-  //       this.addRadio(result, module);
-  //       this.addLastSeen(result, module);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return result;
-  // },
-  // addTemperatureTrend: function(parent, module){
-  //   var value = module.dashboard_data?module.dashboard_data['temp_trend']:'';
-  //   if(!value)
-  //     value = 'UNDEFINED'
-  //   if(this.config.showTrend)
-  //     this.addData(parent, 'temp_trend', this.translate.bind(this)(value.toUpperCase()));
-  // },
-  // addPressure: function(parent, module){
-  //   return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
-  // },
-  // addPressureTrend: function(parent, module){
-  //   var value = module.dashboard_data?module.dashboard_data['pressure_trend']:'';
-  //   if(!value)
-  //     value = 'UNDEFINED'
-  //   if(this.config.showTrend)
-  //     this.addData(parent, 'pressure_trend', this.translate.bind(this)(value.toUpperCase()));
-  // },
-  // addHumidity: function(parent, module){
-  //   return this.addData(parent, 'Humidity', module.dashboard_data?module.dashboard_data['Humidity']:'');
-  // },
-  // addNoise: function(parent, module){
-  //   return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
-  // },
-  // addBattery: function(parent, module){
-  //   if(this.config.showBattery)
-  //     this.addData(parent, 'Battery', module.battery_percent);
-  // },
-  // addRadio: function(parent, module){
-  //   if(this.config.showRadio)
-  //     this.addData(parent, 'Radio', module.rf_status);
-  // },
-  // addWiFi: function(parent, module){
-  //   if(this.config.showWiFi)
-  //     this.addData(parent, 'WiFi', module.wifi_status);
-  // },
-  // addLastSeen: function(parent, module){
-  //   var duration = Date.now() / 1000 - module.last_message;
-  //   if(this.config.showLastMessage && duration > this.config.lastMessageThreshold){
-  //     $('<div/>')
-  //       .addClass('small flash')
-  //       .append(
-  //         this.translate.bind(this)("LAST_MESSAGE")
-  //         + ': '
-  //         + moment.unix(module.last_message).fromNow()
-  //       )
-  //       .appendTo(parent);
-  //   }
-  // },
-  // addData: function(parent, type, value){
-  //   return $('<div/>')
-  //     .addClass('small')
-  //     .append(
-  //       this.translate.bind(this)(type.toUpperCase())
-  //       + ': '
-  //       + this.formatter.value(type, value)
-  //     )
-  //     .appendTo(parent);
-  // },
   getScripts: function() {
     return [
       'moment.js'
@@ -450,8 +229,6 @@ Module.register('netatmo', {
   getTemplateData: function () {
     return {
       loaded: this.loaded,
-      // flip: this.data.position.startsWith('left'),
-      // loaded: this.loaded,
       showLastMessage: this.config.showLastMessage,
       showBattery: this.config.showBattery,
       showRadio: this.config.showRadio,
@@ -471,37 +248,6 @@ Module.register('netatmo', {
       nn: 'l10n/nn.json'
     };
   },
-  // getDom: function() {
-  //   var dom = $('<div/>').addClass('netatmo');
-  //   if(this.dom){
-  //     dom.append(
-  //       this.dom
-  //     ).append(
-  //       $('<div/>')
-  //         .addClass('updated xsmall')
-  //         .append(moment.unix(this.lastUpdate).fromNow())
-  //     );
-  //     if(!this.config.hideLoadTimer){
-  //       dom.append($(
-  //         '<svg class="loadTimer" viewbox="0 0 250 250">' +
-  //         '  <path class="border" transform="translate(125, 125)"/>' +
-  //         '  <path class="loader" transform="translate(125, 125) scale(.84)"/>' +
-  //         '</svg>'
-  //       ));
-  //     }
-  //   }else{
-  //     dom.append($(
-  //       '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">' +
-  //       '  <circle class="outer"></circle>' +
-  //       '  <circle class="inner">' +
-  //       '    <animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>' +
-  //       '    <animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>' +
-  //       '  </circle>' +
-  //       '</svg>'
-  //     ));
-  //   }
-  //   return dom[0];
-  // },
   socketNotificationReceived: function (notification, payload) {
     const self = this
     Log.debug('received ' + notification)
@@ -517,10 +263,8 @@ Module.register('netatmo', {
 
       if (payload.status === 'OK') {
         console.log("devices returned")
-        var device = payload.payloadReturn[0];
-        this.updateModuleList(device)
-        // render modules
-        // this.dom = this.render(device);
+        var station = payload.payloadReturn[0];
+        this.updateModuleList(station)
         this.updateDom(this.config.animationSpeed);
       } else if(payload.status === 'INVALID_TOKEN') {
         console.log("DATA FAILED, refreshing token")
