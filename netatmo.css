@@ -87,8 +87,6 @@
     opacity: 0;
   }
 }
-.xxlarge {
-  font-size: 95px;
-  letter-spacing: -3px;
-  line-height: 95px;
+.netatmo .module .data div * {
+  margin: 0 3px;
 }
