@@ -1,6 +1,6 @@
 # Netatmo Data
 
-```
+```json
 {
     "body": {
         "devices": [],
@@ -20,9 +20,9 @@
 - NAModule3 // wind
 - NAModule4 // indoor
 
-All module have the following data: 
+All module have the following data:
 
-```
+```json
 {
     "_id": "",
     "type": "NAModule1",
@@ -38,7 +38,7 @@ All module have the following data:
 
 Modules with batteries have the following additional data:
 
-```
+```json
 {
     "battery_vp": 5613,
     "battery_percent": 79,
@@ -48,7 +48,7 @@ Modules with batteries have the following additional data:
 
 ### Main - `NAMain`
 
-```
+```json
 {
     "_id": "",
     "cipher_id": "",
@@ -90,7 +90,7 @@ Modules with batteries have the following additional data:
 
 ### Outdoor - `NAModule1`
 
-```
+```json
 {
     "type": "NAModule1",
     "dashboard_data": {
@@ -109,7 +109,7 @@ Modules with batteries have the following additional data:
 
 ### Wind - `NAModule2`
 
-```
+```json
 {
     "type": "NAModule2",
     "dashboard_data": {
@@ -146,7 +146,7 @@ Modules with batteries have the following additional data:
 
 ### Rain - `NAModule3`
 
-```
+```json
 {
     "type": "NAModule3",
     "dashboard_data": {
@@ -161,7 +161,7 @@ Modules with batteries have the following additional data:
 
 ### Indoor - `NAModule4`
 
-```
+```json
 {
     "type": "NAModule4",
     "dashboard_data": {
@@ -181,7 +181,7 @@ Modules with batteries have the following additional data:
 
 ## User
 
-```
+```json
 "user": {
     "mail": "",
     "administrative": {
@@ -196,7 +196,7 @@ Modules with batteries have the following additional data:
 }
 ```
 
-```
+```json
 "user": {
     "mail": "",
     "administrative": {

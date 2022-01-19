@@ -90,9 +90,9 @@ The following properties can be configured:
 |`clientId`|The ID of your Netatmo [application][dev-portal].||yes|
 |`clientSecret`|The app secret of your Netatmo [application][dev-portal].||yes|
 |`refreshToken`|The generated refresh token you got from the POST request to the auth api.||yes|
-|`refreshInterval`|How often does the content needs to be updated? (Minutes)<br>Data is updated by netatmo every 10 minutes|`3`|no|
-|`moduleOrder`|The rendering order of your weather modules, ommit a module to hide the output.<br><br>**Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` <br>Be aware that you need to use the module names that you set in the netatmo configuration.||no|
-|`dataOrder`|The rendering order of the data types of a module, ommit a data type to hide the output.<br><br>**Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`||no|
+|`refreshInterval`|How often does the content needs to be updated (minutes)? Data is updated by netatmo every 10 minutes|`3`|no|
+|`moduleOrder`|The rendering order of your weather modules, ommit a module to hide the output. **Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` Be aware that you need to use the module names that you set in the netatmo configuration.||no|
+|`dataOrder`|The rendering order of the data types of a module, ommit a data type to hide the output. **Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`||no|
 
 [weather-station]: https://www.netatmo.com/weather
 [dev-portal]: https://dev.netatmo.com/apps/
