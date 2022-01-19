@@ -42,71 +42,53 @@
   padding: 0 0.5em;
   vertical-align: middle;
 }
-.netatmo .horizontal .module {
-  display: inline-block;
-}
-.netatmo .classic .module {
-  border: 1px solid #fff;
-  border-radius: 0.25em;
-  margin: 0.25em 0.25em;
-  overflow: hidden;
-}
-.netatmo .classic .module .name {
-  background: #fff;
-  color: #000;
-  padding: 0.125em 0.25em;
-  text-align: center;
-}
-.netatmo .classic .module .data {
-  padding: 0.125em 0.25em;
-}
-.xxlarge {
-  font-size: 95px;
-  letter-spacing: -3px;
-  line-height: 95px;
-}
-.netatmo .bubbles .module .name {
+.netatmo .module .name {
   text-align: left;
 }
-.netatmo .bubbles .module .primary,
-.netatmo .bubbles .module .secondary,
-.netatmo .bubbles .module .data {
+.netatmo .module .primary,
+.netatmo .module .secondary,
+.netatmo .module .data {
   text-align: left;
 }
-.netatmo .bubbles .module .secondary {
+.netatmo .module .secondary {
   text-align: center;
   width: 5em;
 }
-.netatmo .bubbles .module .secondary .CO2 .visual {
+.netatmo .module .secondary .CO2 .visual {
   border-radius: 1em;
   box-shadow: 0 0 0.9em 1em;
   height: 0.1em;
   margin: 1.5em auto;
   width: 0.1em;
 }
-.netatmo .bubbles .module .secondary .CO2 .good {
+.netatmo .module .secondary .CO2 .good {
   background-color: limegreen;
   color: limegreen;
 }
-.netatmo .bubbles .module .secondary .CO2 .average {
+.netatmo .module .secondary .CO2 .average {
   background-color: orange;
   color: orange;
 }
-.netatmo .bubbles .module .secondary .CO2 .bad {
+.netatmo .module .secondary .CO2 .bad {
   background-color: red;
   color: red;
 }
-.netatmo .bubbles .module .secondary .WindAngle .visual {
+.netatmo .module .secondary .WindAngle .visual {
   display: inline-block;
 }
-.netatmo .bubbles .module .data {
+.netatmo .module .data {
   width: 8em;
 }
-.netatmo .bubbles .module .data .flash {
+.netatmo .module .data .flash {
   animation: flasher 1s linear infinite;
 }
 @keyframes flasher {
   50% {
     opacity: 0;
   }
+}
+.xxlarge {
+  font-size: 95px;
+  letter-spacing: -3px;
+  line-height: 95px;
 }
