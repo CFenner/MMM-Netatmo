@@ -106,8 +106,8 @@ Module.register('netatmo', {
         primaryType = 'Temperature'
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
         result.primary = {unit: '', value: this.formatter.value(primaryType, primaryValue), class: primaryType}
-        result.measurementList.push({value: module.dashboard_data['temp_trend'], icon: '', label: 'temp_trend'})
-        result.measurementList.push({value: module.dashboard_data['Humidity'], icon: '', label: 'humidity'})
+        result.measurementList.push({value: module.dashboard_data['temp_trend'], icon: 'fa-long-arrow-alt-right', label: 'temp_trend'})
+        result.measurementList.push({value: module.dashboard_data['Humidity'], icon: 'fa-tint', label: 'humidity'})
         break;
       case this.moduleType.WIND:
         primaryType = 'WindStrength'
@@ -117,27 +117,27 @@ Module.register('netatmo', {
         secondaryValue = module.dashboard_data[type];
         result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
   //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
-        result.measurementList.push({value: module.dashboard_data['GustStrength'], icon: '', label: 'GustStrength'})
-        result.measurementList.push({value: module.dashboard_data['GustAngle'], icon: '', label: 'GustAngle'})
+        result.measurementList.push({value: module.dashboard_data['GustStrength'], icon: 'fa-tachometer-alt', label: 'GustStrength'})
+        result.measurementList.push({value: module.dashboard_data['GustAngle'], icon: 'fa-tachometer-alt', label: 'GustAngle'})
         break;
       case this.moduleType.RAIN:
         primaryType = 'Rain'
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
         result.primary = {unit: 'mm/h', value: primaryValue, class: primaryType}
-        result.measurementList.push({value: module.dashboard_data['sum_rain_1'], icon: '', label: 'per_hour'})
-        result.measurementList.push({value: module.dashboard_data['sum_rain_24'], icon: '', label: 'per_day'})
+        result.measurementList.push({value: module.dashboard_data['sum_rain_1'], icon: 'fa-cloud-rain', label: 'per_hour'})
+        result.measurementList.push({value: module.dashboard_data['sum_rain_24'], icon: 'fa-cloud-rain', label: 'per_day'})
         break;
       default:
         break;
     }
     if (module.type === this.moduleType.MAIN){
-      result.measurementList.push({value: module.dashboard_data['Pressure'], icon: '', label: 'pressure'})
-      result.measurementList.push({value: module.dashboard_data?module.dashboard_data['pressure_trend']:'', icon: '', label: 'pressure_trend'})
-      result.measurementList.push({value: module.dashboard_data['Noise'], icon: '', label: 'noise'})
-      result.measurementList.push({value: module.wifi_status, icon: '', label: 'wifi'})
+      result.measurementList.push({value: module.dashboard_data['Pressure'], icon: 'fa-tachometer-alt', label: 'pressure'})
+      result.measurementList.push({value: module.dashboard_data?module.dashboard_data['pressure_trend']:'', icon: 'fa-long-arrow-alt-right', label: 'pressure_trend'})
+      result.measurementList.push({value: module.dashboard_data['Noise'], icon: 'fa-tachometer-alt', label: 'noise'})
+      result.measurementList.push({value: module.wifi_status, icon: 'fa-wifi', label: 'wifi'})
     } else {
-      result.measurementList.push({value: module.rf_status, icon: '', label: 'radio'})
-      result.measurementList.push({value: module.battery_percent, icon: '', label: 'battery'})
+      result.measurementList.push({value: module.rf_status, icon: 'fa-broadcast-tower', label: 'radio'})
+      result.measurementList.push({value: module.battery_percent, icon: 'fa-battery-three-quarters', label: 'battery'})
     }
       //       this.translate.bind(this)(type.toUpperCase())
 
