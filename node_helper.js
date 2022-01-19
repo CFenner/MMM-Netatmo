@@ -122,12 +122,19 @@ module.exports = NodeHelper.create({
           payloadReturn: result.body.devices,
           status: 'OK',
         })
+      } else if (response.statusCode == '403') {
+        console.log('status code:', response.statusCode, '\n', result)
+        self.sendSocketNotification(self.notifications.data_response, {
+          payloadReturn: response.statusCode,
+          status: 'INVALID_TOKEN',
+          message: result,
+        })
       } else {
         console.log('status code:', response.statusCode, '\n', result)
         self.sendSocketNotification(self.notifications.data_response, {
           payloadReturn: response.statusCode,
           status: 'NOTOK',
-          message: response.statusCode,
+          message: result,
         })
       }
     })
