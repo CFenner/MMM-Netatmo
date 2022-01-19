@@ -65,6 +65,8 @@ Module.register('netatmo', {
       moduleList.push(this.getModule(module))
     }.bind(this))
 
+    if (station.reachable)
+      this.lastUpdate = device.dashboard_data.time_utc;
     this.loaded = true
     if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
       return
@@ -516,7 +518,6 @@ Module.register('netatmo', {
       if (payload.status === 'OK') {
         console.log("devices returned")
         var device = payload.payloadReturn[0];
-        this.lastUpdate = device.dashboard_data.time_utc;
         this.updateModuleList(device)
         // render modules
         // this.dom = this.render(device);
