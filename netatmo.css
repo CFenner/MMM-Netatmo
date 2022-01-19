@@ -45,7 +45,9 @@
 .netatmo .module .name {
   text-align: left;
 }
-.netatmo .module .primary,
+.netatmo .module .primary {
+  text-align: right;
+}
 .netatmo .module .secondary,
 .netatmo .module .data {
   text-align: left;
