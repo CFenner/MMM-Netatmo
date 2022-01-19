@@ -3,45 +3,48 @@
     <div class="modules">
       {% for module in moduleList %}
         <div class="module">
-          <div class="name{{ fontClassModuleName}}">{{module.name}}</div>
-            <div>
-              <table>
-                <tbody>
-                  <tr>
-                    <td class="primary">
-                      <div class="{{module.primary.class}}">
-                        <div class="large light bright">{{module.primary.value}}</div>
-                        <div class="xsmall">{{module.primary.unit}}</div>
+          <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+          <div>
+            <table>
+              <tbody>
+                <tr>
+                  <td class="primary">
+                    <div class="{{ module.primary.class }}">
+                      <div class="large light bright">{{ module.primary.value }}</div>
+                      <div class="xsmall">{{ module.primary.unit }}</div>
+                    </div>
+                  </td>
+                  <td class="secondary">
+                    <div class="{{ module.secondary.class }}">
+                      <div class="visual average"></div>
+                      <div class="small value">{{ module.secondary.value }}</div>
+                    </div>
+                  </td>
+                  <td class="data">
+                    {% for measurement in module.measurementList %}
+                      <div class="small">
+                        <span>{{ measurement.label }}</span>
+                        <i class="fas fa-tachometer-alt fa-fw"></i>
+                        <span>{{ measurement.value }}</span>
                       </div>
-                    </td>
-                    <td class="secondary">
-                      <div class="{{module.secondary.class}}">
-                        <div class="visual average"></div>
-                        <div class="small value">{{module.secondary.value}}</div>
-                      </div>
-                    </td>
-                    <td class="data">
-                      {% for measurement in module.measurementList %}
-                      <div class="small">{{measurement.label}}: {{measurement.value}}</div>
-                      {% endfor %}
-                      {# <div class="small flash">letzter Kontakt: vor 37 Minuten</div> #}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                    {% endfor %}
+                    {# <div class="small flash">letzter Kontakt: vor 37 Minuten</div> #}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
+  </div>
   {# <div class="updated xsmall">vor 9 Minuten</div>
-  <svg class="loadTimer" viewBox="0 0 250 250">
-    <path class="border" transform="translate(125, 125)" d="M 0 0 v -125 A 125 125 1 0 1 0 -125 z"></path>
-    <path class="loader" transform="translate(125, 125) scale(.84)" d="M 0 0 v -125 A 125 125 1 0 1 0 -125 z"></path>
-  </svg> #}
-  {% else %}
-    <div class="dimmed light small">
-      {{"LOADING"}}
-    </div>
-  {% endif %}
-</div>
+          <svg class="loadTimer" viewBox="0 0 250 250">
+            <path class="border" transform="translate(125, 125)" d="M 0 0 v -125 A 125 125 1 0 1 0 -125 z"></path>
+            <path class="loader" transform="translate(125, 125) scale(.84)" d="M 0 0 v -125 A 125 125 1 0 1 0 -125 z"></path>
+          </svg> #}
+{% else %}
+  <div class="dimmed light small">
+    {{ "LOADING" }}
+  </div>
+{% endif %}</div>
