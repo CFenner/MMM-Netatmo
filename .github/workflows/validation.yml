@@ -1,0 +1,21 @@
+name: "Validation"
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    name: 'MarkdownLint'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Validate Markdown Sources
+        uses: nosborn/github-action-markdown-cli@v1.1.1
+        with:
+          files: .
