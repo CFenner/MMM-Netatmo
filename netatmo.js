@@ -4,7 +4,7 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
- /* global $, Q, moment, Module, Log */
+ /* global Module, Log */
 Module.register('netatmo', {
   // default config
   defaults: {
@@ -134,13 +134,12 @@ Module.register('netatmo', {
       result.measurementList.push({value: module.dashboard_data['Pressure'], icon: 'fa-tachometer-alt', label: 'pressure'})
       result.measurementList.push({value: module.dashboard_data?module.dashboard_data['pressure_trend']:'', icon: 'fa-long-arrow-alt-right', label: 'pressure_trend'})
       result.measurementList.push({value: module.dashboard_data['Noise'], icon: 'fa-tachometer-alt', label: 'noise'})
-      result.measurementList.push({value: module.wifi_status, icon: 'fa-wifi', label: 'wifi'})
+      result.measurementList.push({value: module.wifi_status, icon: this.formatter.icon('wifi'), label: this.translate('wifi'.toUpperCase())})
     } else {
-      result.measurementList.push({value: module.rf_status, icon: 'fa-broadcast-tower', label: 'radio'})
-      result.measurementList.push({value: module.battery_percent, icon: 'fa-battery-three-quarters', label: 'battery'})
+      result.measurementList.push({value: module.rf_status, icon: this.formatter.icon('radio'), label: this.translate('radio'.toUpperCase())})
+      result.measurementList.push({value: module.battery_percent, icon: this.formatter.icon('battery'), label: this.translate('battery'.toUpperCase())})
     }
       //       this.translate.bind(this)(type.toUpperCase())
-
     return result
   },
   formatter: {
@@ -197,34 +196,39 @@ Module.register('netatmo', {
     // rain: function(){
     //   return '';
     // },
-    // clazz: function(dataType) {
-    //   /* unused
-    //   switch (dataType) {
-    //     case 'CO2':
-    //       return 'wi-na';
-    //     case 'Noise':
-    //       return 'wi-na';
-    //     case 'Humidity':
-    //       return 'wi-humidity';
-    //     case 'Pressure':
-    //       return 'wi-barometer';
-    //     case 'Temperature':
-    //       return 'wi-thermometer';
-    //     case 'Rain':
-    //       return 'wi-raindrops';
-    //     case 'Wind':
-    //       return 'wi-na';
-    //     default:
-    //       return '';
-    //   }*/
-    //   return '';
-    // }
+    icon: function(dataType) {
+      switch (dataType) {
+        case 'CO2':
+          return 'wi-na';
+        case 'Noise':
+          return 'wi-na';
+        case 'Humidity':
+          return 'wi-humidity';
+        case 'Pressure':
+          return 'wi-barometer';
+        case 'Temperature':
+          return 'wi-thermometer';
+        case 'Rain':
+          return 'wi-raindrops';
+        case 'Wind':
+          return 'wi-na';
+        case 'wifi':
+          return 'fa-wifi';
+        case 'radio':
+          return 'fa-broadcast-tower';
+        case 'battery':
+          return 'fa-battery-three-quarters';
+        default:
+          return '';
+      }
+      return '';
+    },
   },
-  getScripts: function() {
-    return [
-      'moment.js'
-    ];
-  },
+  // getScripts: function() {
+  //   return [
+  //     'moment.js'
+  //   ];
+  // },
   getStyles: function () {
     return [`${this.name}.css`]
   },
