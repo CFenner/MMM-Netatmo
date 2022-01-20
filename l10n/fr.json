@@ -13,12 +13,10 @@
   "WINDANGLE": "vent",
   "GUSTSTRENGTH": "rafale",
   "GUSTANGLE": "rafale",
-
   "UP": "hausse",
   "STABLE": "stable",
   "DOWN": "baisse",
   "UNDEFINED": "non disponible",
-
   "WIFI": "WiFi",
   "RADIO": "signal radio",
   "BATTERY": "batterie",

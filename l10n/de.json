@@ -13,12 +13,10 @@
   "WINDANGLE": "Wind (Richtung)",
   "GUSTSTRENGTH": "Böen",
   "GUSTANGLE": "Böen (Richtung)",
-
   "UP": "steigend",
   "STABLE": "stabil",
   "DOWN": "fallend",
   "UNDEFINED": "nicht verfügbar",
-
   "WIFI": "WLan",
   "RADIO": "Funksignal",
   "BATTERY": "Batterie",

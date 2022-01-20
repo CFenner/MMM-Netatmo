@@ -13,12 +13,10 @@
   "WINDANGLE": "Wind (direction)",
   "GUSTSTRENGTH": "Gusts",
   "GUSTANGLE": "Gusts (direction)",
-
   "UP": "rising",
   "STABLE": "stable",
   "DOWN": "falling",
   "UNDEFINED": "not available",
-
   "WIFI": "WiFi",
   "RADIO": "Radio signal",
   "BATTERY": "Battery",

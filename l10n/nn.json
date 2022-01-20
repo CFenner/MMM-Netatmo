@@ -13,12 +13,10 @@
   "WINDANGLE": "Vind (retning)",
   "GUSTSTRENGTH": "Vindkast",
   "GUSTANGLE": "Vindkast (retning)",
-
   "UP": "Aukande",
   "STABLE": "Stabilt",
   "DOWN": "Fallande",
   "UNDEFINED": "Ikkje tilgjengeleg",
-
   "WIFI": "WiFi",
   "RADIO": "Radio signal",
   "BATTERY": "Batteri",
