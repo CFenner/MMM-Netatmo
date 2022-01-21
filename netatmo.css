@@ -42,46 +42,46 @@
   padding: 0 0.5em;
   vertical-align: middle;
 }
-.netatmo .module .name {
+.netatmo .netatmo-module .name {
   text-align: left;
 }
-.netatmo .module .primary {
+.netatmo .netatmo-module .primary {
   text-align: right;
 }
-.netatmo .module .secondary,
-.netatmo .module .data {
+.netatmo .netatmo-module .secondary,
+.netatmo .netatmo-module .data {
   text-align: left;
 }
-.netatmo .module .secondary {
+.netatmo .netatmo-module .secondary {
   text-align: center;
   width: 5em;
 }
-.netatmo .module .secondary .CO2 .visual {
+.netatmo .netatmo-module .secondary .CO2 .visual {
   border-radius: 1em;
   box-shadow: 0 0 0.9em 1em;
   height: 0.1em;
   margin: 1.5em auto;
   width: 0.1em;
 }
-.netatmo .module .secondary .CO2 .good {
+.netatmo .netatmo-module .secondary .CO2 .good {
   background-color: limegreen;
   color: limegreen;
 }
-.netatmo .module .secondary .CO2 .average {
+.netatmo .netatmo-module .secondary .CO2 .average {
   background-color: orange;
   color: orange;
 }
-.netatmo .module .secondary .CO2 .bad {
+.netatmo .netatmo-module .secondary .CO2 .bad {
   background-color: red;
   color: red;
 }
-.netatmo .module .secondary .WindAngle .visual {
+.netatmo .netatmo-module .secondary .WindAngle .visual {
   display: inline-block;
 }
-.netatmo .module .data {
+.netatmo .netatmo-module .data {
   width: 8em;
 }
-.netatmo .module .data .flash {
+.netatmo .netatmo-module .data .flash {
   animation: flasher 1s linear infinite;
 }
 @keyframes flasher {
@@ -89,6 +89,6 @@
     opacity: 0;
   }
 }
-.netatmo .module .data div * {
+.netatmo .netatmo-module .data div * {
   margin: 0 3px;
 }

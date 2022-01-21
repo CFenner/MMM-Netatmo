@@ -1,42 +1,40 @@
 <div class="netatmo">
   {% if loaded %}
-    <div class="modules">
-      {% for module in moduleList %}
-        <div class="module">
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <td class="primary">
-                    <div class="{{ module.primary.class }}">
-                      <div class="light bright {{ fontClassPrimary }}">{{ module.primary.value }}</div>
-                      <div class="xsmall">{{ module.primary.unit }}</div>
+    {% for module in moduleList %}
+      <div class="netatmo-module">
+        <div>
+          <table>
+            <tbody>
+              <tr>
+                <td class="primary">
+                  <div class="{{ module.primary.class }}">
+                    <div class="light bright {{ fontClassPrimary }}">{{ module.primary.value }}</div>
+                    <div class="xsmall">{{ module.primary.unit }}</div>
+                  </div>
+                </td>
+                <td class="secondary">
+                  <div class="{{ module.secondary.class }}">
+                    <div class="visual average"></div>
+                    <div class="value {{ fontClassSecondary }}">{{ module.secondary.value }}</div>
+                  </div>
+                </td>
+                <td class="data">
+                  {% for measurement in module.measurementList %}
+                    <div class="{{ fontClassMeasurement }}">
+                      <span>{{ measurement.label }}</span>
+                      <i class="fas fa-fw {{ measurement.icon }}"></i>
+                      <span>{{ measurement.value }}</span>
                     </div>
-                  </td>
-                  <td class="secondary">
-                    <div class="{{ module.secondary.class }}">
-                      <div class="visual average"></div>
-                      <div class="value {{ fontClassSecondary }}">{{ module.secondary.value }}</div>
-                    </div>
-                  </td>
-                  <td class="data">
-                    {% for measurement in module.measurementList %}
-                      <div class="{{ fontClassMeasurement }}">
-                        <span>{{ measurement.label }}</span>
-                        <i class="fas fa-fw {{ measurement.icon }}"></i>
-                        <span>{{ measurement.value }}</span>
-                      </div>
-                    {% endfor %}
-                    {# <div class="small flash">letzter Kontakt: vor 37 Minuten</div> #}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+                  {% endfor %}
+                  {# <div class="small flash">letzter Kontakt: vor 37 Minuten</div> #}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      {% endfor %}
-    </div>
+        <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+      </div>
+    {% endfor %}
   {% else %}
     <div class="dimmed light small">
       {{ "LOADING" }}
