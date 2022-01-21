@@ -5,7 +5,7 @@
  * MIT Licensed.
  */
  /* global Module, Log */
-Module.register('netatmo', {
+ Module.register('netatmo', {
   // default config
   defaults: {
     initialDelay: 0,
@@ -40,6 +40,23 @@ Module.register('netatmo', {
     OUTDOOR: "NAModule1",
     RAIN: "NAModule3",
     WIND: "NAModule2"
+  },
+  measurement: {
+    CO2: 'CO2',
+    HUMIDITY: 'Humidity',
+    TEMPERATURE: 'Temperature',
+    TEMPERATURE_TREND: 'temp_trend',
+    PRESSURE: 'Pressure',
+    PRESSURE_TREND: 'pressure_trend',
+    HUMIDITY: 'Pressure',
+    NOISE: 'Noise',
+    WIND_STRENGTH: 'WindStrength',
+    WIND_ANGLE: 'WindAngle',
+    GUST_STRENGTH: 'GustStrength',
+    GUST_ANGLE: 'GustAngle',
+    RAIN: 'Rain',
+    RAIN_PER_HOUR: 'sum_rain_1',
+    RAIN_PER_DAY: 'sum_rain_24',
   },
   // init method
   start: function () {
@@ -95,7 +112,7 @@ Module.register('netatmo', {
       case this.moduleType.MAIN:
         // break; fallthrough
       case this.moduleType.INDOOR:
-        secondaryType = 'CO2';
+        secondaryType = this.measurement.CO2;
         secondaryValue = module.dashboard_data[secondaryType];
         let status = 'good';
         if(secondaryValue > 800) status = 'bad'
@@ -103,11 +120,11 @@ Module.register('netatmo', {
         result.secondary = {visualClass: status, value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
         // break; fallthrough
       case this.moduleType.OUTDOOR:
-        primaryType = 'Temperature'
+        primaryType = this.measurement.TEMPERATURE
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
         result.primary = {unit: '', value: this.formatter.value(primaryType, primaryValue), class: primaryType}
-        result.measurementList.push({value: module.dashboard_data['temp_trend'], icon: 'fa-long-arrow-alt-right', label: 'temp_trend'})
-        result.measurementList.push({value: module.dashboard_data['Humidity'], icon: 'fa-tint', label: 'humidity'})
+        result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
         break;
       case this.moduleType.WIND:
         primaryType = 'WindStrength'
@@ -117,30 +134,37 @@ Module.register('netatmo', {
         secondaryValue = module.dashboard_data[type];
         result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
   //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
-        result.measurementList.push({value: module.dashboard_data['GustStrength'], icon: 'fa-tachometer-alt', label: 'GustStrength'})
-        result.measurementList.push({value: module.dashboard_data['GustAngle'], icon: 'fa-tachometer-alt', label: 'GustAngle'})
+        result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_STRENGTH))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_ANGLE))
         break;
       case this.moduleType.RAIN:
         primaryType = 'Rain'
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
         result.primary = {unit: 'mm/h', value: primaryValue, class: primaryType}
-        result.measurementList.push({value: module.dashboard_data['sum_rain_1'], icon: 'fa-cloud-rain', label: 'per_hour'})
-        result.measurementList.push({value: module.dashboard_data['sum_rain_24'], icon: 'fa-cloud-rain', label: 'per_day'})
+        result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_HOUR))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_DAY))
         break;
       default:
         break;
     }
     if (module.type === this.moduleType.MAIN){
-      result.measurementList.push({value: module.dashboard_data['Pressure'], icon: 'fa-tachometer-alt', label: 'pressure'})
-      result.measurementList.push({value: module.dashboard_data?module.dashboard_data['pressure_trend']:'', icon: 'fa-long-arrow-alt-right', label: 'pressure_trend'})
-      result.measurementList.push({value: module.dashboard_data['Noise'], icon: 'fa-tachometer-alt', label: 'noise'})
-      result.measurementList.push({value: module.wifi_status, icon: this.formatter.icon('wifi'), label: this.translate('wifi'.toUpperCase())})
+      result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE))
+      result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE_TREND))
+      result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
+      result.measurementList.push(this.getMeasurement(module, 'wifi', module.wifi_status))
     } else {
-      result.measurementList.push({value: module.rf_status, icon: this.formatter.icon('radio'), label: this.translate('radio'.toUpperCase())})
-      result.measurementList.push({value: module.battery_percent, icon: this.formatter.icon('battery'), label: this.translate('battery'.toUpperCase())})
+      result.measurementList.push(this.getMeasurement(module, 'radio', module.rf_status))
+      result.measurementList.push(this.getMeasurement(module, 'battery', module.battery_percent))
     }
-      //       this.translate.bind(this)(type.toUpperCase())
     return result
+  },
+  getMeasurement: function(module, measurement, value){
+    value = value?value:module.dashboard_data[measurement]
+    return {
+      value: value,
+      icon: this.formatter.icon(measurement),
+      label: this.translate(measurement.toUpperCase()),
+    }
   },
   formatter: {
     value: function(dataType, value) {
@@ -193,25 +217,25 @@ Module.register('netatmo', {
       if(value < 348.75) return 'NNW';
       return 'N';
     },
-    // rain: function(){
-    //   return '';
-    // },
     icon: function(dataType) {
       switch (dataType) {
-        case 'CO2':
-          return 'wi-na';
-        case 'Noise':
-          return 'wi-na';
-        case 'Humidity':
-          return 'wi-humidity';
-        case 'Pressure':
-          return 'wi-barometer';
-        case 'Temperature':
-          return 'wi-thermometer';
-        case 'Rain':
-          return 'wi-raindrops';
-        case 'Wind':
-          return 'wi-na';
+        case this.measurement.CO2:
+          return 'fa-lungs';
+        case this.measurement.NOISE:
+          return 'fa-volume-up';
+        case this.measurement.HUMIDITY:
+          return 'fa-tint';
+        // case this.measurement.PRESSURE:
+        // case this.measurement.PRESSURE:
+        // case this.measurement.GUST_ANGLE:
+        // case this.measurement.GUST_STRENGTH:
+        // case this.measurement.WIND:
+        // case this.measurement.WIND_ANGLE:
+        // case this.measurement.WIND_STRENGTH:
+        // return 'fa-tachometer-alt';
+        case this.measurement.PRESSURE_TREND:
+        case this.measurement.TEMPERATURE_TREND:
+          return 'fa-long-arrow-alt-right';
         case 'wifi':
           return 'fa-wifi';
         case 'radio':
@@ -219,16 +243,10 @@ Module.register('netatmo', {
         case 'battery':
           return 'fa-battery-three-quarters';
         default:
-          return '';
+          return 'fa-ambulance';
       }
-      return '';
     },
   },
-  // getScripts: function() {
-  //   return [
-  //     'moment.js'
-  //   ];
-  // },
   getStyles: function () {
     return [`${this.name}.css`]
   },
