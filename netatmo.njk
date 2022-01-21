@@ -3,7 +3,6 @@
     <div class="modules">
       {% for module in moduleList %}
         <div class="module">
-          <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
           <div>
             <table>
               <tbody>
@@ -34,13 +33,13 @@
               </tbody>
             </table>
           </div>
+          <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
         </div>
-      </div>
+      {% endfor %}
     </div>
-  {% endfor %}
-{% else %}
-  <div class="dimmed light small">
-    {{ "LOADING" }}
-  </div>
-{% endif %}
+  {% else %}
+    <div class="dimmed light small">
+      {{ "LOADING" }}
+    </div>
+  {% endif %}
 </div>
