@@ -1,47 +1,6 @@
 .netatmo {
   display: inline-block;
 }
-.netatmo .loading,
-.netatmo .loadTimer,
-.netatmo .updated {
-  display: inline-block;
-}
-.netatmo svg.loading {
-  height: 0.6em;
-  width: 0.6em;
-}
-.netatmo svg.loading circle {
-  cx: 50;
-  cy: 50;
-  fill: none;
-  r: 40;
-  stroke-linecap: round;
-}
-.netatmo svg.loading .inner {
-  stroke: #fff;
-  stroke-width: 6;
-}
-.netatmo svg.loading .outer {
-  stroke: #aaaaaa;
-  stroke-width: 10;
-}
-.netatmo svg.loadTimer {
-  height: 0.5em;
-  margin: 0.2em 0;
-  vertical-align: middle;
-  width: 0.5em;
-}
-.netatmo svg.loadTimer .loader {
-  fill: #000;
-}
-.netatmo svg.loadTimer .border {
-  fill: #aaaaaa;
-}
-.netatmo .updated {
-  margin: 0.2em 0;
-  padding: 0 0.5em;
-  vertical-align: middle;
-}
 .netatmo .netatmo-module .name {
   text-align: left;
 }
@@ -56,26 +15,26 @@
   text-align: center;
   width: 5em;
 }
-.netatmo .netatmo-module .secondary .CO2 .visual {
+.netatmo .netatmo-module .secondary .co2 .visual {
   border-radius: 1em;
   box-shadow: 0 0 0.9em 1em;
   height: 0.1em;
   margin: 1.5em auto;
   width: 0.1em;
 }
-.netatmo .netatmo-module .secondary .CO2 .good {
+.netatmo .netatmo-module .secondary .co2 .good {
   background-color: limegreen;
   color: limegreen;
 }
-.netatmo .netatmo-module .secondary .CO2 .average {
+.netatmo .netatmo-module .secondary .co2 .average {
   background-color: orange;
   color: orange;
 }
-.netatmo .netatmo-module .secondary .CO2 .bad {
+.netatmo .netatmo-module .secondary .co2 .bad {
   background-color: red;
   color: red;
 }
-.netatmo .netatmo-module .secondary .WindAngle .visual {
+.netatmo .netatmo-module .secondary .wind-angle .visual {
   display: inline-block;
 }
 .netatmo .netatmo-module .data {
