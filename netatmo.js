@@ -26,7 +26,9 @@ Module.register('netatmo', {
     fontClassModuleName: 'xsmall',
     fontClassPrimary: 'large',
     fontClassSecondary: 'xsmall',
-    fontClassMeasurement: 'xsmall'
+    fontClassMeasurement: 'xsmall',
+    thresholdCO2Average: 800,
+    thresholdCO2Bad: 1800,
   },
   notifications: {
     auth: 'NETATMO_AUTH',
@@ -115,10 +117,7 @@ Module.register('netatmo', {
       case this.moduleType.INDOOR:
         secondaryType = this.measurement.CO2
         secondaryValue = module.dashboard_data[secondaryType]
-        let status = 'good'
-        if (secondaryValue > 800) status = 'bad'
-        if (secondaryValue > 1600) status = 'bad'
-        result.secondary = { visualClass: status, value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        result.secondary = { visualClass: this.getCO2Status(secondaryValue), value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
         // break; fallthrough
       case this.moduleType.OUTDOOR:
         primaryType = this.measurement.TEMPERATURE
@@ -132,7 +131,7 @@ Module.register('netatmo', {
         primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
         result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
         secondaryType = this.measurement.WIND_ANGLE
-        secondaryValue = module.dashboard_data[type]
+        secondaryValue = module.dashboard_data[secondaryType]
         result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
         //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_STRENGTH))
@@ -217,6 +216,11 @@ Module.register('netatmo', {
     if (value < 326.25) return 'NW'
     if (value < 348.75) return 'NNW'
     return 'N'
+  },
+  getCO2Status: function(value){
+    if (value >= this.config.thresholdCO2Bad) return 'bad'
+    if (value >= this.config.thresholdCO2Average) return 'average'
+    return 'good'
   },
   getIcon: function (dataType) {
     switch (dataType) {
