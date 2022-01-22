@@ -48,7 +48,6 @@
     TEMPERATURE_TREND: 'temp_trend',
     PRESSURE: 'Pressure',
     PRESSURE_TREND: 'pressure_trend',
-    HUMIDITY: 'Pressure',
     NOISE: 'Noise',
     WIND_STRENGTH: 'WindStrength',
     WIND_ANGLE: 'WindAngle',
@@ -107,8 +106,12 @@
     let secondaryType = ''
     let secondaryValue = ''
 
+    // add module sensor measurements
     switch (module.type) {
       case this.moduleType.MAIN:
+        result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE_TREND))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
         // break; fallthrough
       case this.moduleType.INDOOR:
         secondaryType = this.measurement.CO2;
@@ -146,10 +149,8 @@
       default:
         break;
     }
+    // add additional measurements
     if (module.type === this.moduleType.MAIN){
-      result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE))
-      result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE_TREND))
-      result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
       result.measurementList.push(this.getMeasurement(module, 'wifi', module.wifi_status))
     } else {
       result.measurementList.push(this.getMeasurement(module, 'radio', module.rf_status))
@@ -173,28 +174,28 @@
     if(!value)
       return value;
     switch (dataType) {
-      case 'CO2':
+      case this.measurement.CO2:
         return value.toFixed(0) + ' ppm';
-      case 'Noise':
+      case this.measurement.NOISE:
         return value.toFixed(0) + ' dB';
-      case 'Humidity':
+      case this.measurement.HUMIDITY:
       case 'Battery':
       case 'WiFi':
       case 'Radio':
         return value.toFixed(0) + '%';
-      case 'Pressure':
+      case this.measurement.PRESSURE:
         return value.toFixed(0) + ' mbar';
-      case 'Temperature':
+      case this.measurement.TEMPERATURE:
         return value.toFixed(1) + '°';
-      case 'Rain':
-      case 'sum_rain_24':
-      case 'sum_rain_1':
+      case this.measurement.RAIN:
+      case this.measurement.RAIN_PER_HOUR:
+      case this.measurement.RAIN_PER_DAY:
         return value.toFixed(1) + ' mm/h';
-      case 'WindStrength':
-      case 'GustStrength':
+      case this.measurement.WIND_STRENGTH:
+      case this.measurement.GUST_STRENGTH:
         return value.toFixed(0) + ' m/s';
-      case 'WindAngle':
-      case 'GustAngle':
+      case this.measurement.WIND_ANGLE:
+      case this.measurement.GUST_ANGLE:
         return this.direction(value) + ' | ' + value + '°';
       default:
         return value;
@@ -300,6 +301,7 @@
         this.updateModuleList(station)
         this.updateDom(this.config.animationSpeed);
       } else if(payload.status === 'INVALID_TOKEN') {
+        // node_module has no valid token, reauthenticate
         console.log("DATA FAILED, refreshing token")
         this.sendSocketNotification(self.notifications.auth, self.config);
       } else {
