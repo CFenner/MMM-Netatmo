@@ -11,6 +11,7 @@
     "validate:js": "eslint **/*.js",
     "validate:json": "find . -type f -name '*.json' ! -path './node_modules/*' -exec jsonlint {} --in-place ';'",
     "validate:md": "markdownlint *.md",
+    "validate": "npm run validate:css && npm run validate:js && npm run validate:json && npm run validate:md",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
@@ -25,47 +26,20 @@
   },
   "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
   "devDependencies": {
-    "eslint": "^7.32.0",
+    "eslint": "^8.7.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-csslint": "^2.0.0",
-    "grunt-contrib-eslint": "0.0.5",
-    "grunt-contrib-uglify": "^3.4.0",
-    "grunt-jsonlint": "^1.1.0",
-    "grunt-yamllint": "^0.3.0",
-    "gruntify-eslint": "^5.0.0",
+    "eslint-plugin-promise": "^5.2.0",
     "jsonlint": "^1.6.3",
     "less": "^4.1.2",
     "markdownlint": "^0.25.1",
+    "snyk": "^1.834.0",
     "stylelint": "^14.2.0",
     "stylelint-config-standard": "^24.0.0"
   },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "browser": true,
-      "es6": true,
-      "node": true
-    },
-    "ecmaFeatures": {
-      "modules": true,
-      "jsx": true
-    },
-    "parser": "espree",
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "ecmaFeatures": {
-        "globalReturn": true
-      }
-    }
-  },
   "snyk": true,
   "dependencies": {
-    "@ungap/url-search-params": "^0.2.2",
-    "snyk": "^1.317.0"
+    "@ungap/url-search-params": "^0.2.2"
   }
 }
