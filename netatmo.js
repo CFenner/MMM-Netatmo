@@ -11,7 +11,7 @@
     initialDelay: 0,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
-    hideLoadTimer: false,
+    // hideLoadTimer: false,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
     showBattery: true,
@@ -92,7 +92,6 @@
       return
     }
     this.moduleList = moduleList
-    this.updateDom(this.config.animationSpeed)
   },
   getModule: function(module){
     let result = {}
@@ -117,30 +116,30 @@
         let status = 'good';
         if(secondaryValue > 800) status = 'bad'
         if(secondaryValue > 1600) status = 'bad'
-        result.secondary = {visualClass: status, value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
+        result.secondary = {visualClass: status, value: this.formatter.value(secondaryType, secondaryValue), class: this.kebabCase(secondaryType)}
         // break; fallthrough
       case this.moduleType.OUTDOOR:
         primaryType = this.measurement.TEMPERATURE
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
-        result.primary = {unit: '', value: this.formatter.value(primaryType, primaryValue), class: primaryType}
+        result.primary = {unit: '', value: this.formatter.value(primaryType, primaryValue), class: this.kebabCase(primaryType)}
         result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND))
         result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
         break;
       case this.moduleType.WIND:
-        primaryType = 'WindStrength'
+        primaryType = this.measurement.WIND_STRENGTH
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
-        result.primary = {unit: 'm/s', value: primaryValue, class: primaryType}
-        secondaryType = 'WindAngle'
+        result.primary = {unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType)}
+        secondaryType = this.measurement.WIND_ANGLE
         secondaryValue = module.dashboard_data[type];
-        result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.formatter.value(secondaryType, secondaryValue), class: secondaryType}
+        result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.formatter.value(secondaryType, secondaryValue), class: this.kebabCase(secondaryType)}
   //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_STRENGTH))
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_ANGLE))
         break;
       case this.moduleType.RAIN:
-        primaryType = 'Rain'
+        primaryType = this.measurement.RAIN
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
-        result.primary = {unit: 'mm/h', value: primaryValue, class: primaryType}
+        result.primary = {unit: 'mm/h', value: primaryValue, class: this.kebabCase(primaryType)}
         result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_HOUR))
         result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_DAY))
         break;
@@ -166,6 +165,10 @@
       label: this.translate(measurement.toUpperCase()),
     }
   },
+  kebabCase: string => string
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase(),
   formatter: {
     value: function(dataType, value) {
       if(!value)
