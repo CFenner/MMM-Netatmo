@@ -116,12 +116,12 @@
         let status = 'good';
         if(secondaryValue > 800) status = 'bad'
         if(secondaryValue > 1600) status = 'bad'
-        result.secondary = {visualClass: status, value: this.formatter.value(secondaryType, secondaryValue), class: this.kebabCase(secondaryType)}
+        result.secondary = {visualClass: status, value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType)}
         // break; fallthrough
       case this.moduleType.OUTDOOR:
         primaryType = this.measurement.TEMPERATURE
         primaryValue = module.dashboard_data?module.dashboard_data[primaryType]:''
-        result.primary = {unit: '', value: this.formatter.value(primaryType, primaryValue), class: this.kebabCase(primaryType)}
+        result.primary = {unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType)}
         result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND))
         result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
         break;
@@ -131,7 +131,7 @@
         result.primary = {unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType)}
         secondaryType = this.measurement.WIND_ANGLE
         secondaryValue = module.dashboard_data[type];
-        result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.formatter.value(secondaryType, secondaryValue), class: this.kebabCase(secondaryType)}
+        result.secondary = {visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType)}
   //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_STRENGTH))
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_ANGLE))
@@ -161,7 +161,7 @@
     value = value?value:module.dashboard_data[measurement]
     return {
       value: value,
-      icon: this.formatter.icon(measurement).bind(this),
+      icon: this.getIcon(measurement),
       label: this.translate(measurement.toUpperCase()),
     }
   },
@@ -169,86 +169,84 @@
     .replace(/([a-z])([A-Z])/g, "$1-$2")
     .replace(/[\s_]+/g, '-')
     .toLowerCase(),
-  formatter: {
-    value: function(dataType, value) {
-      if(!value)
+  getValue: function(dataType, value) {
+    if(!value)
+      return value;
+    switch (dataType) {
+      case 'CO2':
+        return value.toFixed(0) + ' ppm';
+      case 'Noise':
+        return value.toFixed(0) + ' dB';
+      case 'Humidity':
+      case 'Battery':
+      case 'WiFi':
+      case 'Radio':
+        return value.toFixed(0) + '%';
+      case 'Pressure':
+        return value.toFixed(0) + ' mbar';
+      case 'Temperature':
+        return value.toFixed(1) + '°';
+      case 'Rain':
+      case 'sum_rain_24':
+      case 'sum_rain_1':
+        return value.toFixed(1) + ' mm/h';
+      case 'WindStrength':
+      case 'GustStrength':
+        return value.toFixed(0) + ' m/s';
+      case 'WindAngle':
+      case 'GustAngle':
+        return this.direction(value) + ' | ' + value + '°';
+      default:
         return value;
-      switch (dataType) {
-        case 'CO2':
-          return value.toFixed(0) + ' ppm';
-        case 'Noise':
-          return value.toFixed(0) + ' dB';
-        case 'Humidity':
-        case 'Battery':
-        case 'WiFi':
-        case 'Radio':
-          return value.toFixed(0) + '%';
-        case 'Pressure':
-          return value.toFixed(0) + ' mbar';
-        case 'Temperature':
-          return value.toFixed(1) + '°';
-        case 'Rain':
-        case 'sum_rain_24':
-        case 'sum_rain_1':
-          return value.toFixed(1) + ' mm/h';
-        case 'WindStrength':
-        case 'GustStrength':
-          return value.toFixed(0) + ' m/s';
-        case 'WindAngle':
-        case 'GustAngle':
-          return this.direction(value) + ' | ' + value + '°';
-        default:
-          return value;
-      }
-    },
-    direction: function(value){
-      if(value < 11.25) return 'N';
-      if(value < 33.75) return 'NNE';
-      if(value < 56.25) return 'NE';
-      if(value < 78.75) return 'ENE';
-      if(value < 101.25) return 'E';
-      if(value < 123.75) return 'ESE';
-      if(value < 146.25) return 'SE';
-      if(value < 168.75) return 'SSE';
-      if(value < 191.25) return 'S';
-      if(value < 213.75) return 'SSW';
-      if(value < 236.25) return 'SW';
-      if(value < 258.75) return 'WSW';
-      if(value < 281.25) return 'W';
-      if(value < 303.75) return 'WNW';
-      if(value < 326.25) return 'NW';
-      if(value < 348.75) return 'NNW';
-      return 'N';
-    },
-    icon: function(dataType) {
-      switch (dataType) {
-        case this.measurement.CO2:
-          return 'fa-lungs';
-        case this.measurement.NOISE:
-          return 'fa-volume-up';
-        case this.measurement.HUMIDITY:
-          return 'fa-tint';
-        // case this.measurement.PRESSURE:
-        // case this.measurement.PRESSURE:
-        // case this.measurement.GUST_ANGLE:
-        // case this.measurement.GUST_STRENGTH:
-        // case this.measurement.WIND:
-        // case this.measurement.WIND_ANGLE:
-        // case this.measurement.WIND_STRENGTH:
-        // return 'fa-tachometer-alt';
-        case this.measurement.PRESSURE_TREND:
-        case this.measurement.TEMPERATURE_TREND:
-          return 'fa-long-arrow-alt-right';
-        case 'wifi':
-          return 'fa-wifi';
-        case 'radio':
-          return 'fa-broadcast-tower';
-        case 'battery':
-          return 'fa-battery-three-quarters';
-        default:
-          return 'fa-ambulance';
-      }
-    },
+    }
+  },
+  getDirection: function(value){
+    if(value < 11.25) return 'N';
+    if(value < 33.75) return 'NNE';
+    if(value < 56.25) return 'NE';
+    if(value < 78.75) return 'ENE';
+    if(value < 101.25) return 'E';
+    if(value < 123.75) return 'ESE';
+    if(value < 146.25) return 'SE';
+    if(value < 168.75) return 'SSE';
+    if(value < 191.25) return 'S';
+    if(value < 213.75) return 'SSW';
+    if(value < 236.25) return 'SW';
+    if(value < 258.75) return 'WSW';
+    if(value < 281.25) return 'W';
+    if(value < 303.75) return 'WNW';
+    if(value < 326.25) return 'NW';
+    if(value < 348.75) return 'NNW';
+    return 'N';
+  },
+  getIcon: function(dataType) {
+    switch (dataType) {
+      case this.measurement.CO2:
+        return 'fa-lungs';
+      case this.measurement.NOISE:
+        return 'fa-volume-up';
+      case this.measurement.HUMIDITY:
+        return 'fa-tint';
+      // case this.measurement.PRESSURE:
+      // case this.measurement.PRESSURE:
+      // case this.measurement.GUST_ANGLE:
+      // case this.measurement.GUST_STRENGTH:
+      // case this.measurement.WIND:
+      // case this.measurement.WIND_ANGLE:
+      // case this.measurement.WIND_STRENGTH:
+      // return 'fa-tachometer-alt';
+      case this.measurement.PRESSURE_TREND:
+      case this.measurement.TEMPERATURE_TREND:
+        return 'fa-long-arrow-alt-right';
+      case 'wifi':
+        return 'fa-wifi';
+      case 'radio':
+        return 'fa-broadcast-tower';
+      case 'battery':
+        return 'fa-battery-three-quarters';
+      default:
+        return 'fa-ambulance';
+    }
   },
   getStyles: function () {
     return [`${this.name}.css`]
