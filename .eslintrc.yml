@@ -10,4 +10,5 @@ parserOptions:
 globals:
   Module: true
   Log: true
-rules: {}
+rules:
+  "comma-dangle": ["error", "always-multiline"]

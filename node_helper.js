@@ -12,13 +12,13 @@ module.exports = NodeHelper.create({
   start: function () {
     console.log('Netatmo helper started ...')
     this.token = null
-	  this.token_time = null
+    this.token_time = null
   },
   notifications: {
     auth: 'NETATMO_AUTH',
     auth_response: 'NETATMO_AUTH_RESPONSE',
     data: 'NETATMO_DATA',
-    data_response: 'NETATMO_DATA_RESPONSE'
+    data_response: 'NETATMO_DATA_RESPONSE',
   },
   authenticate: function (config) {
     const self = this
@@ -30,14 +30,14 @@ module.exports = NodeHelper.create({
       hostname: self.config.apiBase,
       path: self.config.authEndpoint,
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     }, self.callbackAuthenticate.bind(self))
 
     req.on('error', function (e) {
       console.log('There is a problem with your request:', e.message)
       self.sendSocketNotification(self.notifications.auth_response, {
         // instanceID: self.config.instanceID,
-        payloadReturn: e.message
+        payloadReturn: e.message,
       })
     })
 
@@ -47,7 +47,7 @@ module.exports = NodeHelper.create({
       username: self.config.username,
       password: self.config.password,
       client_id: self.config.clientId,
-      client_secret: self.config.clientSecret
+      client_secret: self.config.clientSecret,
     }).toString())
 
     req.end()
@@ -62,8 +62,8 @@ module.exports = NodeHelper.create({
       // method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${self.token}`
-      }
+        Authorization: `Bearer ${self.token}`,
+      },
     }, self.callbackData.bind(self))
 
     req.on('error', function (e) {
@@ -71,7 +71,7 @@ module.exports = NodeHelper.create({
       self.sendSocketNotification(self.notifications.data_response, {
         payloadReturn: e.message,
         status: 'NOTOK',
-        message: e.message
+        message: e.message,
       })
     })
     /*
@@ -90,13 +90,13 @@ module.exports = NodeHelper.create({
     response.on('data', function (chunk) { result += chunk })
     response.on('end', function () {
       result = JSON.parse(result)
-      if (response.statusCode == '200') {
+      if (response.statusCode === '200') {
         console.log('UPDATING TOKEN ' + result.access_token)
         self.token = result.access_token
         self.token_time = new Date()
         // we got a new token, save it to main file to allow it to request the datas
         self.sendSocketNotification(self.notifications.auth_response, {
-          status: 'OK'
+          status: 'OK',
         })
       } else {
         console.log('status code:', response.statusCode, '\n', result)
@@ -104,7 +104,7 @@ module.exports = NodeHelper.create({
           // instanceID: self.config.instanceID,
           payloadReturn: response.statusCode,
           status: 'NOTOK',
-          message: result
+          message: result,
         })
       }
     })
@@ -117,24 +117,24 @@ module.exports = NodeHelper.create({
     response.on('data', function (chunk) { result += chunk })
     response.on('end', function () {
       result = JSON.parse(result)
-      if (response.statusCode == '200') {
+      if (response.statusCode === '200') {
         self.sendSocketNotification(self.notifications.data_response, {
           payloadReturn: result.body.devices,
-          status: 'OK'
+          status: 'OK',
         })
-      } else if (response.statusCode == '403') {
+      } else if (response.statusCode === '403') {
         console.log('status code:', response.statusCode, '\n', result)
         self.sendSocketNotification(self.notifications.data_response, {
           payloadReturn: response.statusCode,
           status: 'INVALID_TOKEN',
-          message: result
+          message: result,
         })
       } else {
         console.log('status code:', response.statusCode, '\n', result)
         self.sendSocketNotification(self.notifications.data_response, {
           payloadReturn: response.statusCode,
           status: 'NOTOK',
-          message: result
+          message: result,
         })
       }
     })
@@ -147,11 +147,11 @@ module.exports = NodeHelper.create({
         this.sendSocketNotification(this.notifications.data_response, {
           payloadReturn: 400,
           status: 'INVALID_TOKEN',
-          message: 'token not set'
+          message: 'token not set',
         })
       } else {
         this.loadData(payload)
       }
     }
-  }
+  },
 })

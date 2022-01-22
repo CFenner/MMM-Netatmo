@@ -34,14 +34,14 @@ Module.register('netatmo', {
     auth: 'NETATMO_AUTH',
     auth_response: 'NETATMO_AUTH_RESPONSE',
     data: 'NETATMO_DATA',
-    data_response: 'NETATMO_DATA_RESPONSE'
+    data_response: 'NETATMO_DATA_RESPONSE',
   },
   moduleType: {
     MAIN: 'NAMain',
     INDOOR: 'NAModule4',
     OUTDOOR: 'NAModule1',
     RAIN: 'NAModule3',
-    WIND: 'NAModule2'
+    WIND: 'NAModule2',
   },
   measurement: {
     CO2: 'CO2',
@@ -57,7 +57,7 @@ Module.register('netatmo', {
     GUST_ANGLE: 'GustAngle',
     RAIN: 'Rain',
     RAIN_PER_HOUR: 'sum_rain_1',
-    RAIN_PER_DAY: 'sum_rain_24'
+    RAIN_PER_DAY: 'sum_rain_24',
   },
   // init method
   start: function () {
@@ -161,13 +161,14 @@ Module.register('netatmo', {
     return {
       value: value,
       icon: this.getIcon(measurement),
-      label: this.translate(measurement.toUpperCase())
+      label: this.translate(measurement.toUpperCase()),
     }
   },
-  kebabCase: string => string
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/[\s_]+/g, '-')
-    .toLowerCase(),
+  kebabCase: function (name) {
+    return name.replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/[\s_]+/g, '-')
+      .toLowerCase()
+  },
   getValue: function (dataType, value) {
     if (!value) { return value }
     switch (dataType) {
@@ -217,7 +218,7 @@ Module.register('netatmo', {
     if (value < 348.75) return 'NNW'
     return 'N'
   },
-  getCO2Status: function(value){
+  getCO2Status: function (value) {
     if (value >= this.config.thresholdCO2Bad) return 'bad'
     if (value >= this.config.thresholdCO2Average) return 'average'
     return 'good'
@@ -271,7 +272,7 @@ Module.register('netatmo', {
       fontClassModuleName: this.config.fontClassModuleName,
       fontClassPrimary: this.config.fontClassPrimary,
       fontClassSecondary: this.config.fontClassSecondary,
-      fontClassMeasurement: this.config.fontClassMeasurement
+      fontClassMeasurement: this.config.fontClassMeasurement,
     }
   },
   getTranslations: function () {
@@ -281,7 +282,7 @@ Module.register('netatmo', {
       fr: 'l10n/fr.json',
       cs: 'l10n/cs.json',
       nb: 'l10n/nb.json',
-      nn: 'l10n/nn.json'
+      nn: 'l10n/nn.json',
     }
   },
   socketNotificationReceived: function (notification, payload) {
@@ -310,5 +311,5 @@ Module.register('netatmo', {
         console.log('DATA FAILED ' + payload.message)
       }
     }
-  }
+  },
 })
