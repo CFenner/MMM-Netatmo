@@ -161,7 +161,7 @@
     value = value?value:module.dashboard_data[measurement]
     return {
       value: value,
-      icon: this.formatter.icon(measurement),
+      icon: this.formatter.icon(measurement).bind(this),
       label: this.translate(measurement.toUpperCase()),
     }
   },
