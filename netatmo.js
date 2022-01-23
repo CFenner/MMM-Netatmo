@@ -111,8 +111,7 @@ Module.register('netatmo', {
     switch (module.type) {
       case this.moduleType.MAIN:
         result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE))
-        if (this.config.showTrend)
-          result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE_TREND))
+        if (this.config.showTrend) { result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE_TREND)) }
         result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
         // break; fallthrough
       case this.moduleType.INDOOR:
@@ -124,8 +123,7 @@ Module.register('netatmo', {
         primaryType = this.measurement.TEMPERATURE
         primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
         result.primary = { unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType) }
-        if (this.config.showTrend)
-          result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND))
+        if (this.config.showTrend) { result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND)) }
         result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
         break
       case this.moduleType.WIND:
@@ -151,13 +149,10 @@ Module.register('netatmo', {
     }
     // add additional measurements
     if (module.type === this.moduleType.MAIN) {
-      if (this.config.showWiFi)
-        result.measurementList.push(this.getMeasurement(module, 'wifi', module.wifi_status))
+      if (this.config.showWiFi) { result.measurementList.push(this.getMeasurement(module, 'wifi', module.wifi_status)) }
     } else {
-      if (this.config.showRadio)
-        result.measurementList.push(this.getMeasurement(module, 'radio', module.rf_status))
-      if (this.config.showBattery)
-        result.measurementList.push(this.getMeasurement(module, 'battery', module.battery_percent))
+      if (this.config.showRadio) { result.measurementList.push(this.getMeasurement(module, 'radio', module.rf_status)) }
+      if (this.config.showBattery) { result.measurementList.push(this.getMeasurement(module, 'battery', module.battery_percent)) }
     }
     return result
   },
