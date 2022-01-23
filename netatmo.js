@@ -159,7 +159,7 @@ Module.register('netatmo', {
   getMeasurement: function (module, measurement, value) {
     value = value || module.dashboard_data[measurement]
     return {
-      value: value,
+      value: this.getValue(measurement, value),
       icon: this.getIcon(measurement),
       label: this.translate(measurement.toUpperCase()),
     }
@@ -169,17 +169,17 @@ Module.register('netatmo', {
       .replace(/[\s_]+/g, '-')
       .toLowerCase()
   },
-  getValue: function (dataType, value) {
+  getValue: function (measurement, value) {
     if (!value) { return value }
-    switch (dataType) {
+    switch (measurement) {
       case this.measurement.CO2:
         return value.toFixed(0) + ' ppm'
       case this.measurement.NOISE:
         return value.toFixed(0) + ' dB'
       case this.measurement.HUMIDITY:
-      case 'Battery':
-      case 'WiFi':
-      case 'Radio':
+      case 'battery':
+      case 'wifi':
+      case 'radio':
         return value.toFixed(0) + '%'
       case this.measurement.PRESSURE:
         return value.toFixed(0) + ' mbar'
