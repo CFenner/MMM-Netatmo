@@ -9,6 +9,7 @@
     "compile:css": "lessc netatmo.less netatmo.css",
     "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
+    "fix:js": "eslint --fix **/*.js",
     "validate:json": "find . -type f -name '*.json' ! -path './node_modules/*' -exec jsonlint {} --in-place ';'",
     "validate:md": "markdownlint *.md",
     "validate": "npm run validate:css && npm run validate:js && npm run validate:json && npm run validate:md",
