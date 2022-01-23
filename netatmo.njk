@@ -21,8 +21,12 @@
                 <td class="data">
                   {% for measurement in module.measurementList %}
                     <div class="{{ fontClassMeasurement }}">
-                      <span>{{ measurement.label }}</span>
-                      <i class="fas fa-fw {{ measurement.icon }}"></i>
+                      {% if showMeasurementLabel %}
+                        <span>{{ measurement.label }}</span>
+                      {% endif %}
+                      {% if showMeasurementIcon %}
+                        <i class="fas fa-fw {{ measurement.icon }}"></i>
+                      {% endif %}
                       <span>{{ measurement.value }}</span>
                     </div>
                   {% endfor %}
