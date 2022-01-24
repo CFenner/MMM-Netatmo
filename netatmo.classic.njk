@@ -1,7 +1,6 @@
 <div class="netatmo">
   {% if loaded %}
-    <div class="modules horizontal">
-      {# TODO: respect config.horizontal #}
+    <div class="modules {{ 'horizontal' if horizontal }}">
       {% for module in moduleList %}
         <div class="netatmo-module">
           <div class="data">

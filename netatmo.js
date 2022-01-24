@@ -13,6 +13,7 @@ Module.register('netatmo', {
     animationSpeed: 1000,
     design: 'classic', // or bubbles
     // hideLoadTimer: false,
+    horizontal: true,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
     showBattery: true,
@@ -315,6 +316,7 @@ Module.register('netatmo', {
       showTrend: this.config.showTrend,
       showMeasurementIcon: this.config.showMeasurementIcon,
       showMeasurementLabel: this.config.showMeasurementLabel,
+      horizontal: this.config.horizontal,
       moduleList: this.moduleList,
       fontClassModuleName: this.config.fontClassModuleName,
       fontClassPrimary: this.config.fontClassPrimary,
