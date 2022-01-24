@@ -45,18 +45,18 @@
 .netatmo .horizontal .netatmo-module {
   display: inline-block;
 }
-.netatmo .classic .netatmo-module {
+.netatmo .netatmo-module {
   border: 1px solid #fff;
   border-radius: 0.25em;
   margin: 0.25em 0.25em;
   overflow: hidden;
 }
-.netatmo .classic .netatmo-module .name {
+.netatmo .netatmo-module .name {
   background: #fff;
   color: #000;
   padding: 0.125em 0.25em;
   text-align: center;
 }
-.netatmo .classic .netatmo-module .data {
+.netatmo .netatmo-module .data {
   padding: 0.125em 0.25em;
 }
