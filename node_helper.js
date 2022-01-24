@@ -54,7 +54,6 @@ module.exports = NodeHelper.create({
   },
   loadData: function (config) {
     const self = this
-
     if (self.token === null) {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: 400,
@@ -63,6 +62,7 @@ module.exports = NodeHelper.create({
       })
       return
     }
+
     self.config = config
     const req = https.request({
       hostname: self.config.apiBase,
@@ -81,12 +81,6 @@ module.exports = NodeHelper.create({
         message: e.message,
       })
     })
-    /*
-    req.write(new URLSearchParams({
-      'access_token': self.token,
-    }).toString());
-*/
-
     req.end()
   },
   callbackAuthenticate: function (response) {
@@ -152,15 +146,7 @@ module.exports = NodeHelper.create({
         this.authenticate(payload)
         break
       case this.notifications.DATA:
-        if (this.token === null) {
-          this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
-            payloadReturn: 400,
-            status: 'INVALID_TOKEN',
-            message: 'token not set',
-          })
-        } else {
-          this.loadData(payload)
-        }
+        this.loadData(payload)
         break
     }
   },
