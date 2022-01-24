@@ -159,6 +159,9 @@ Module.register('netatmo', {
   },
   getMeasurement: function (module, measurement, value) {
     value = value || module.dashboard_data[measurement]
+    if (measurement === this.measurement.TEMPERATURE_TREND || measurement === this.measurement.PRESSURE_TREND) {
+      value = this.translate(value.toUpperCase())
+    }
     return {
       value: this.getValue(measurement, value),
       icon: this.getIcon(measurement),
