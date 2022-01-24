@@ -32,10 +32,10 @@ Module.register('netatmo', {
     thresholdCO2Bad: 1800,
   },
   notifications: {
-    auth: 'NETATMO_AUTH',
-    auth_response: 'NETATMO_AUTH_RESPONSE',
-    data: 'NETATMO_DATA',
-    data_response: 'NETATMO_DATA_RESPONSE',
+    AUTH: 'NETATMO_AUTH',
+    AUTH_RESPONSE: 'NETATMO_AUTH_RESPONSE',
+    DATA: 'NETATMO_DATA',
+    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE',
   },
   moduleType: {
     MAIN: 'NAMain',
@@ -93,12 +93,12 @@ Module.register('netatmo', {
       return
     }
     // reorder modules
-    if (this.config.moduleOrder && that.config.moduleOrder.length > 0) {
-      let reorderedModuleList = []
-      for (var moduleName of this.config.moduleOrder) {
-        for (var module of moduleList) {
+    if (this.config.moduleOrder && this.config.moduleOrder.length > 0) {
+      const reorderedModuleList = []
+      for (const moduleName of this.config.moduleOrder) {
+        for (const module of moduleList) {
           if (module.name === moduleName) {
-            reorderedModuleList.append(module);
+            reorderedModuleList.append(module)
           }
         }
       }
@@ -185,12 +185,12 @@ Module.register('netatmo', {
       if (this.config.showBattery) { result.measurementList.push(this.getMeasurement(module, 'battery', module.battery_percent)) }
     }
     // reorder measurements
-    if (this.config.dataOrder && that.config.dataOrder.length > 0) {
-      let reorderedMeasurementList = []
-      for (var measurementName of this.config.dataOrder) {
-        for (var measurement of result.measurementList) {
+    if (this.config.dataOrder && this.config.dataOrder.length > 0) {
+      const reorderedMeasurementList = []
+      for (const measurementName of this.config.dataOrder) {
+        for (const measurement of result.measurementList) {
           if (measurement.label === measurementName) {
-            reorderedMeasurementList.append(measurement);
+            reorderedMeasurementList.append(measurement)
           }
         }
       }
@@ -335,28 +335,30 @@ Module.register('netatmo', {
   socketNotificationReceived: function (notification, payload) {
     const self = this
     Log.debug('received ' + notification)
-    if (notification === self.notifications.auth_response) {
-      console.log(payload)
-      if (payload.status === 'OK') {
-        this.sendSocketNotification(self.notifications.data, self.config)
-      } else {
-        console.log('AUTH FAILED ' + payload.message)
-      }
-    } else if (notification === self.notifications.data_response) {
-      console.log(payload)
-
-      if (payload.status === 'OK') {
-        console.log('devices returned')
-        const station = payload.payloadReturn[0]
-        this.updateModuleList(station)
-        this.updateDom(this.config.animationSpeed)
-      } else if (payload.status === 'INVALID_TOKEN') {
-        // node_module has no valid token, reauthenticate
-        console.log('DATA FAILED, refreshing token')
-        this.sendSocketNotification(self.notifications.auth, self.config)
-      } else {
-        console.log('DATA FAILED ' + payload.message)
-      }
+    switch (notification) {
+      case self.notifications.auth_response:
+        console.log(payload)
+        if (payload.status === 'OK') {
+          self.sendSocketNotification(self.notifications.data, self.config)
+        } else {
+          console.log('AUTH FAILED ' + payload.message)
+        }
+        break
+      case self.notifications.data_response:
+        console.log(payload)
+        if (payload.status === 'OK') {
+          console.log('devices returned')
+          const station = payload.payloadReturn[0]
+          self.updateModuleList(station)
+          self.updateDom(self.config.animationSpeed)
+        } else if (payload.status === 'INVALID_TOKEN') {
+          // node_module has no valid token, reauthenticate
+          console.log('DATA FAILED, refreshing token')
+          self.sendSocketNotification(self.notifications.auth, self.config)
+        } else {
+          console.log('DATA FAILED ' + payload.message)
+        }
+        break
     }
   },
 })

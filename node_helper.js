@@ -15,10 +15,10 @@ module.exports = NodeHelper.create({
     this.token_time = null
   },
   notifications: {
-    auth: 'NETATMO_AUTH',
-    auth_response: 'NETATMO_AUTH_RESPONSE',
-    data: 'NETATMO_DATA',
-    data_response: 'NETATMO_DATA_RESPONSE',
+    AUTH: 'NETATMO_AUTH',
+    AUTH_RESPONSE: 'NETATMO_AUTH_RESPONSE',
+    DATA: 'NETATMO_DATA',
+    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE',
   },
   authenticate: function (config) {
     const self = this
@@ -54,12 +54,19 @@ module.exports = NodeHelper.create({
   },
   loadData: function (config) {
     const self = this
-    self.config = config
 
+    if (self.token === null) {
+      self.sendSocketNotification(self.notifications.data_response, {
+        payloadReturn: 400,
+        status: 'INVALID_TOKEN',
+        message: 'token not set',
+      })
+      return
+    }
+    self.config = config
     const req = https.request({
       hostname: self.config.apiBase,
       path: self.config.dataEndpoint,
-      // method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${self.token}`,
@@ -140,18 +147,21 @@ module.exports = NodeHelper.create({
     })
   },
   socketNotificationReceived: function (notification, payload) {
-    if (notification === this.notifications.auth) {
-      this.authenticate(payload)
-    } else if (notification === this.notifications.data) {
-      if (this.token === null) {
-        this.sendSocketNotification(this.notifications.data_response, {
-          payloadReturn: 400,
-          status: 'INVALID_TOKEN',
-          message: 'token not set',
-        })
-      } else {
-        this.loadData(payload)
-      }
+    switch (notification) {
+      case this.notifications.auth:
+        this.authenticate(payload)
+        break
+      case this.notifications.data:
+        if (this.token === null) {
+          this.sendSocketNotification(this.notifications.data_response, {
+            payloadReturn: 400,
+            status: 'INVALID_TOKEN',
+            message: 'token not set',
+          })
+        } else {
+          this.loadData(payload)
+        }
+        break
     }
   },
 })
