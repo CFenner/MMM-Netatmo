@@ -92,13 +92,13 @@ Module.register('netatmo', {
     if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
       return
     }
-
+    // reorder modules
     if (this.config.moduleOrder && that.config.moduleOrder.length > 0) {
       let reorderedModuleList = []
       for (var moduleName of this.config.moduleOrder) {
         for (var module of moduleList) {
           if (module.name === moduleName) {
-            reorderedModuleList.append(this.renderModule(module));
+            reorderedModuleList.append(module);
           }
         }
       }
@@ -128,32 +128,49 @@ Module.register('netatmo', {
         result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
         // break; fallthrough
       case this.moduleType.INDOOR:
-        secondaryType = this.measurement.CO2
-        secondaryValue = module.dashboard_data[secondaryType]
-        result.secondary = { visualClass: this.getCO2Status(secondaryValue), value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        if (this.design === 'bubbles') {
+          secondaryType = this.measurement.CO2
+          secondaryValue = module.dashboard_data[secondaryType]
+          result.secondary = { visualClass: this.getCO2Status(secondaryValue), value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.CO2))
+        }
         // break; fallthrough
       case this.moduleType.OUTDOOR:
-        primaryType = this.measurement.TEMPERATURE
-        primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-        result.primary = { unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType) }
+        if (this.design === 'bubbles') {
+          primaryType = this.measurement.TEMPERATURE
+          primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
+          result.primary = { unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE))
+        }
         if (this.config.showTrend) { result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND)) }
         result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
         break
       case this.moduleType.WIND:
-        primaryType = this.measurement.WIND_STRENGTH
-        primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-        result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
-        secondaryType = this.measurement.WIND_ANGLE
-        secondaryValue = module.dashboard_data[secondaryType]
-        result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        if (this.design === 'bubbles') {
+          primaryType = this.measurement.WIND_STRENGTH
+          primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
+          result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
+          secondaryType = this.measurement.WIND_ANGLE
+          secondaryValue = module.dashboard_data[secondaryType]
+          result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
+          result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_ANGLE))
+        }
         //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_STRENGTH))
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_ANGLE))
         break
       case this.moduleType.RAIN:
-        primaryType = this.measurement.RAIN
-        primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-        result.primary = { unit: 'mm/h', value: primaryValue, class: this.kebabCase(primaryType) }
+        if (this.design === 'bubbles') {
+          primaryType = this.measurement.RAIN
+          primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
+          result.primary = { unit: 'mm/h', value: primaryValue, class: this.kebabCase(primaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN))
+        }
         result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_HOUR))
         result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_DAY))
         break
@@ -167,6 +184,18 @@ Module.register('netatmo', {
       if (this.config.showRadio) { result.measurementList.push(this.getMeasurement(module, 'radio', module.rf_status)) }
       if (this.config.showBattery) { result.measurementList.push(this.getMeasurement(module, 'battery', module.battery_percent)) }
     }
+    // reorder measurements
+    if (this.config.dataOrder && that.config.dataOrder.length > 0) {
+      let reorderedMeasurementList = []
+      for (var measurementName of this.config.dataOrder) {
+        for (var measurement of result.measurementList) {
+          if (measurement.label === measurementName) {
+            reorderedMeasurementList.append(measurement);
+          }
+        }
+      }
+      result.measurementList = reorderedMeasurementList
+    }
     return result
   },
   getMeasurement: function (module, measurement, value) {
@@ -176,6 +205,7 @@ Module.register('netatmo', {
       value = this.translate(value.toUpperCase())
     }
     return {
+      name: measurement,
       value: this.getValue(measurement, value),
       icon: this.getIcon(measurement),
       label: this.translate(measurement.toUpperCase()),
