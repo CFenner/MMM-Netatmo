@@ -69,13 +69,13 @@ Module.register('netatmo', {
 
     // get a new token at start-up. When receive, GET_CAMERA_EVENTS will be requested
     setTimeout(function () {
-      self.sendSocketNotification(self.notifications.data, self.config)
+      self.sendSocketNotification(self.notifications.DATA, self.config)
     }, this.config.initialDelay * 1000)
 
     // set auto-update
     setInterval(function () {
       // request directly the data, with the previous token. When the token will become invalid (error 403), it will be requested again
-      self.sendSocketNotification(self.notifications.data, self.config)
+      self.sendSocketNotification(self.notifications.DATA, self.config)
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
   updateModuleList: function (station) {
@@ -336,15 +336,15 @@ Module.register('netatmo', {
     const self = this
     Log.debug('received ' + notification)
     switch (notification) {
-      case self.notifications.auth_response:
+      case self.notifications.AUTH_RESPONSE:
         console.log(payload)
         if (payload.status === 'OK') {
-          self.sendSocketNotification(self.notifications.data, self.config)
+          self.sendSocketNotification(self.notifications.DATA, self.config)
         } else {
           console.log('AUTH FAILED ' + payload.message)
         }
         break
-      case self.notifications.data_response:
+      case self.notifications.DATA_RESPONSE:
         console.log(payload)
         if (payload.status === 'OK') {
           console.log('devices returned')
@@ -354,7 +354,7 @@ Module.register('netatmo', {
         } else if (payload.status === 'INVALID_TOKEN') {
           // node_module has no valid token, reauthenticate
           console.log('DATA FAILED, refreshing token')
-          self.sendSocketNotification(self.notifications.auth, self.config)
+          self.sendSocketNotification(self.notifications.AUTH, self.config)
         } else {
           console.log('DATA FAILED ' + payload.message)
         }

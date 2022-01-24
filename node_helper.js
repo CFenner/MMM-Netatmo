@@ -35,7 +35,7 @@ module.exports = NodeHelper.create({
 
     req.on('error', function (e) {
       console.log('There is a problem with your request:', e.message)
-      self.sendSocketNotification(self.notifications.auth_response, {
+      self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
         // instanceID: self.config.instanceID,
         payloadReturn: e.message,
       })
@@ -56,7 +56,7 @@ module.exports = NodeHelper.create({
     const self = this
 
     if (self.token === null) {
-      self.sendSocketNotification(self.notifications.data_response, {
+      self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: 400,
         status: 'INVALID_TOKEN',
         message: 'token not set',
@@ -75,7 +75,7 @@ module.exports = NodeHelper.create({
 
     req.on('error', function (e) {
       console.log('There is a problem with your request:', e.message)
-      self.sendSocketNotification(self.notifications.data_response, {
+      self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: e.message,
         status: 'NOTOK',
         message: e.message,
@@ -102,12 +102,12 @@ module.exports = NodeHelper.create({
         self.token = result.access_token
         self.token_time = new Date()
         // we got a new token, save it to main file to allow it to request the datas
-        self.sendSocketNotification(self.notifications.auth_response, {
+        self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
           status: 'OK',
         })
       } else {
         console.log('status code:', response.statusCode, '\n', result)
-        self.sendSocketNotification(self.notifications.auth_response, {
+        self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
           // instanceID: self.config.instanceID,
           payloadReturn: response.statusCode,
           status: 'NOTOK',
@@ -125,20 +125,20 @@ module.exports = NodeHelper.create({
     response.on('end', function () {
       result = JSON.parse(result)
       if (response.statusCode === 200) {
-        self.sendSocketNotification(self.notifications.data_response, {
+        self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
           payloadReturn: result.body.devices,
           status: 'OK',
         })
       } else if (response.statusCode === 403) {
         console.log('status code:', response.statusCode, '\n', result)
-        self.sendSocketNotification(self.notifications.data_response, {
+        self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
           payloadReturn: response.statusCode,
           status: 'INVALID_TOKEN',
           message: result,
         })
       } else {
         console.log('status code:', response.statusCode, '\n', result)
-        self.sendSocketNotification(self.notifications.data_response, {
+        self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
           payloadReturn: response.statusCode,
           status: 'NOTOK',
           message: result,
@@ -148,12 +148,12 @@ module.exports = NodeHelper.create({
   },
   socketNotificationReceived: function (notification, payload) {
     switch (notification) {
-      case this.notifications.auth:
+      case this.notifications.AUTH:
         this.authenticate(payload)
         break
-      case this.notifications.data:
+      case this.notifications.DATA:
         if (this.token === null) {
-          this.sendSocketNotification(this.notifications.data_response, {
+          this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
             payloadReturn: 400,
             status: 'INVALID_TOKEN',
             message: 'token not set',
