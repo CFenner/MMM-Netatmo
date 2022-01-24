@@ -128,7 +128,7 @@ Module.register('netatmo', {
         result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
         // break; fallthrough
       case this.moduleType.INDOOR:
-        if (this.design === 'bubbles') {
+        if (this.config.design === 'bubbles') {
           secondaryType = this.measurement.CO2
           secondaryValue = module.dashboard_data[secondaryType]
           result.secondary = { visualClass: this.getCO2Status(secondaryValue), value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
@@ -137,7 +137,7 @@ Module.register('netatmo', {
         }
         // break; fallthrough
       case this.moduleType.OUTDOOR:
-        if (this.design === 'bubbles') {
+        if (this.config.design === 'bubbles') {
           primaryType = this.measurement.TEMPERATURE
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
           result.primary = { unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType) }
@@ -148,7 +148,7 @@ Module.register('netatmo', {
         result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
         break
       case this.moduleType.WIND:
-        if (this.design === 'bubbles') {
+        if (this.config.design === 'bubbles') {
           primaryType = this.measurement.WIND_STRENGTH
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
           result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
@@ -164,7 +164,7 @@ Module.register('netatmo', {
         result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_ANGLE))
         break
       case this.moduleType.RAIN:
-        if (this.design === 'bubbles') {
+        if (this.config.design === 'bubbles') {
           primaryType = this.measurement.RAIN
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
           result.primary = { unit: 'mm/h', value: primaryValue, class: this.kebabCase(primaryType) }
