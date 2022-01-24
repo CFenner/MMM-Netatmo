@@ -79,7 +79,7 @@ Module.register('netatmo', {
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
   updateModuleList: function (station) {
-    const moduleList = []
+    let moduleList = []
 
     moduleList.push(this.getModule(station))
 
@@ -102,7 +102,7 @@ Module.register('netatmo', {
           }
         }
       }
-      this.moduleList = reorderedModuleList
+      moduleList = reorderedModuleList
     }
     this.moduleList = moduleList
   },
