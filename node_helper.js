@@ -90,7 +90,7 @@ module.exports = NodeHelper.create({
     response.on('data', function (chunk) { result += chunk })
     response.on('end', function () {
       result = JSON.parse(result)
-      if (response.statusCode === '200') {
+      if (response.statusCode === 200) {
         console.log('UPDATING TOKEN ' + result.access_token)
         self.token = result.access_token
         self.token_time = new Date()
@@ -117,12 +117,12 @@ module.exports = NodeHelper.create({
     response.on('data', function (chunk) { result += chunk })
     response.on('end', function () {
       result = JSON.parse(result)
-      if (response.statusCode === '200') {
+      if (response.statusCode === 200) {
         self.sendSocketNotification(self.notifications.data_response, {
           payloadReturn: result.body.devices,
           status: 'OK',
         })
-      } else if (response.statusCode === '403') {
+      } else if (response.statusCode === 403) {
         console.log('status code:', response.statusCode, '\n', result)
         self.sendSocketNotification(self.notifications.data_response, {
           payloadReturn: response.statusCode,
