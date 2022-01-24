@@ -11,6 +11,7 @@ Module.register('netatmo', {
     initialDelay: 0,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
+    design: 'classic', // or bubbles
     // hideLoadTimer: false,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
@@ -147,7 +148,7 @@ Module.register('netatmo', {
       default:
         break
     }
-    // add additional measurements
+    // add module specific measurements
     if (module.type === this.moduleType.MAIN) {
       if (this.config.showWiFi) { result.measurementList.push(this.getMeasurement(module, 'wifi', module.wifi_status)) }
     } else {
@@ -253,10 +254,10 @@ Module.register('netatmo', {
     }
   },
   getStyles: function () {
-    return [`${this.name}.css`]
+    return [`${this.name}.${this.config.design}.css`]
   },
   getTemplate: function () {
-    return `${this.name}.njk`
+    return `${this.name}.${this.config.design}.njk`
   },
   getTemplateData: function () {
     return {
