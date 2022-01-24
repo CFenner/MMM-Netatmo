@@ -98,7 +98,7 @@ Module.register('netatmo', {
       for (const moduleName of this.config.moduleOrder) {
         for (const module of moduleList) {
           if (module.name === moduleName) {
-            reorderedModuleList.append(module)
+            reorderedModuleList.push(module)
           }
         }
       }
@@ -190,7 +190,7 @@ Module.register('netatmo', {
       for (const measurementName of this.config.dataOrder) {
         for (const measurement of result.measurementList) {
           if (measurement.name === measurementName.toUpperCase()) {
-            reorderedMeasurementList.append(measurement)
+            reorderedMeasurementList.push(measurement)
           }
         }
       }
