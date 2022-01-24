@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "grunt test",
-    "compile:css": "lessc netatmo.bubbles.less netatmo.bubbles.css",
+    "compile:css": "lessc netatmo.bubbles.less netatmo.bubbles.css && lessc netatmo.classic.less netatmo.classic.css",
     "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
     "fix:js": "eslint --fix **/*.js",

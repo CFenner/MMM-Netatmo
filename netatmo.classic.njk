@@ -1,0 +1,26 @@
+<div class="netatmo">
+  {% if loaded %}
+    <div class="modules horizontal">
+      {# TODO: respect config.horizontal #}
+      {% for module in moduleList %}
+        <div class="netatmo-module">
+          <div class="data">
+            <table>
+              {% for measurement in module.measurementList %}
+                <tr>
+                  <td class="small">{{ measurement.label }}</td>
+                  <td class="small value">{{ measurement.value }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+          <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="dimmed light small">
+      {{ "LOADING" }}
+    </div>
+  {% endif %}
+</div>
