@@ -1,0 +1,26 @@
+{
+  "CO2": "CO<sub>2</sub>",
+  "NOISE": "Zaj",
+  "HUMIDITY": "Páratartalom",
+  "PRESSURE": "Légnyomás",
+  "PRESSURE_TREND": "Légnyomás (trend)",
+  "TEMPERATURE": "Hőmérséklet",
+  "TEMP_TREND": "Hőmérséklet (trend)",
+  "RAIN": "Eső",
+  "SUM_RAIN_1": "Eső (1h)",
+  "SUM_RAIN_24": "Eső (24h)",
+  "WINDSTRENGTH": "Szél",
+  "WINDANGLE": "Szél (irány)",
+  "GUSTSTRENGTH": "Érzet",
+  "GUSTANGLE": "Érzet (irány)",
+
+  "UP": "növekvő",
+  "STABLE": "stabil",
+  "DOWN": "csökkenő",
+  "UNDEFINED": "Nem elérhető",
+
+  "WIFI": "WiFi",
+  "RADIO": "Jelerősség",
+  "BATTERY": "Akkumulátor",
+  "LAST_MESSAGE": "Utolsó üzenet"
+}
