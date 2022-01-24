@@ -22,7 +22,7 @@
                   {% for measurement in module.measurementList %}
                     <div class="{{ fontClassMeasurement }}">
                       {% if showMeasurementLabel %}
-                        <span>{{ measurement.label }}</span>
+                        <span>{{ measurement.label|safe }}</span>
                       {% endif %}
                       {% if showMeasurementIcon %}
                         <i class="fas fa-fw {{ measurement.icon }}"></i>

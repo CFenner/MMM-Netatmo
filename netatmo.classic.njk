@@ -8,7 +8,7 @@
             <table>
               {% for measurement in module.measurementList %}
                 <tr>
-                  <td class="small">{{ measurement.label }}</td>
+                  <td class="small">{{ measurement.label|safe }}</td>
                   <td class="small value">{{ measurement.value }}</td>
                 </tr>
               {% endfor %}
