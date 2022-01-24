@@ -92,6 +92,18 @@ Module.register('netatmo', {
     if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
       return
     }
+
+    if (this.config.moduleOrder && that.config.moduleOrder.length > 0) {
+      let reorderedModuleList = []
+      for (var moduleName of this.config.moduleOrder) {
+        for (var module of moduleList) {
+          if (module.name === moduleName) {
+            reorderedModuleList.append(this.renderModule(module));
+          }
+        }
+      }
+      this.moduleList = reorderedModuleList
+    }
     this.moduleList = moduleList
   },
   getModule: function (module) {
