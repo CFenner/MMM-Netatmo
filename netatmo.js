@@ -189,7 +189,7 @@ Module.register('netatmo', {
       const reorderedMeasurementList = []
       for (const measurementName of this.config.dataOrder) {
         for (const measurement of result.measurementList) {
-          if (measurement.name === measurementName.toUpperCase()) {
+          if (measurement.name === measurementName) {
             reorderedMeasurementList.push(measurement)
           }
         }
