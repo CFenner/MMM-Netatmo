@@ -525,7 +525,8 @@ Module.register('netatmo', {
       fr: 'l10n/fr.json',
       cs: 'l10n/cs.json',
       nb: 'l10n/nb.json',
-      nn: 'l10n/nn.json'
+      nn: 'l10n/nn.json',
+      hu: 'l10n/hu.json'
     };
   },
   getDom: function() {
