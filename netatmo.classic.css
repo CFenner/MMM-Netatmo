@@ -1,0 +1,62 @@
+.netatmo {
+  display: inline-block;
+}
+.netatmo .loading,
+.netatmo .loadTimer,
+.netatmo .updated {
+  display: inline-block;
+}
+.netatmo svg.loading {
+  height: 0.6em;
+  width: 0.6em;
+}
+.netatmo svg.loading circle {
+  cx: 50;
+  cy: 50;
+  fill: none;
+  r: 40;
+  stroke-linecap: round;
+}
+.netatmo svg.loading .inner {
+  stroke: #fff;
+  stroke-width: 6;
+}
+.netatmo svg.loading .outer {
+  stroke: #aaaaaa;
+  stroke-width: 10;
+}
+.netatmo svg.loadTimer {
+  height: 0.5em;
+  margin: 0.2em 0;
+  vertical-align: middle;
+  width: 0.5em;
+}
+.netatmo svg.loadTimer .loader {
+  fill: #000;
+}
+.netatmo svg.loadTimer .border {
+  fill: #aaaaaa;
+}
+.netatmo .updated {
+  margin: 0.2em 0;
+  padding: 0 0.5em;
+  vertical-align: middle;
+}
+.netatmo .horizontal .netatmo-module {
+  display: inline-block;
+}
+.netatmo .netatmo-module {
+  border: 1px solid #fff;
+  border-radius: 0.25em;
+  margin: 0.25em 0.25em;
+  overflow: hidden;
+}
+.netatmo .netatmo-module .name {
+  background: #fff;
+  color: #000;
+  padding: 0.125em 0.25em;
+  text-align: center;
+}
+.netatmo .netatmo-module .data {
+  padding: 0.125em 0.25em;
+}

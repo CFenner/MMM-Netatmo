@@ -1,0 +1,57 @@
+.netatmo {
+  display: inline-block;
+}
+.netatmo .netatmo-module .name {
+  text-align: left;
+}
+.netatmo .netatmo-module .primary {
+  text-align: right;
+}
+.netatmo .netatmo-module .secondary,
+.netatmo .netatmo-module .data {
+  text-align: left;
+}
+.netatmo .netatmo-module .secondary {
+  text-align: center;
+  width: 5em;
+}
+.netatmo .netatmo-module .secondary .co2 .visual {
+  border-radius: 1em;
+  box-shadow: 0 0 0.9em 1em;
+  height: 0.1em;
+  margin: 1.5em auto;
+  width: 0.1em;
+}
+.netatmo .netatmo-module .secondary .co2 .good {
+  background-color: limegreen;
+  color: limegreen;
+}
+.netatmo .netatmo-module .secondary .co2 .average {
+  background-color: orange;
+  color: orange;
+}
+.netatmo .netatmo-module .secondary .co2 .bad {
+  background-color: red;
+  color: red;
+}
+.netatmo .netatmo-module .secondary .co2 .undefined {
+  background-color: black;
+  color: black;
+}
+.netatmo .netatmo-module .secondary .wind-angle .visual {
+  display: inline-block;
+}
+.netatmo .netatmo-module .data {
+  width: 8em;
+}
+.netatmo .netatmo-module .data .flash {
+  animation: flasher 1s linear infinite;
+}
+@keyframes flasher {
+  50% {
+    opacity: 0;
+  }
+}
+.netatmo .netatmo-module .data div * {
+  margin: 0 3px;
+}
