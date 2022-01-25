@@ -27,35 +27,8 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-csslint": "^2.0.0",
-    "grunt-contrib-eslint": "0.0.5",
-    "grunt-contrib-uglify": "^3.4.0",
-    "grunt-jsonlint": "^1.1.0",
-    "grunt-yamllint": "^0.3.0",
-    "gruntify-eslint": "^5.0.0",
     "stylelint": "^14.2.0",
     "stylelint-config-standard": "^24.0.0"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "browser": true,
-      "es6": true,
-      "node": true
-    },
-    "ecmaFeatures": {
-      "modules": true,
-      "jsx": true
-    },
-    "parser": "espree",
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "ecmaFeatures": {
-        "globalReturn": true
-      }
-    }
   },
   "snyk": true,
   "dependencies": {
