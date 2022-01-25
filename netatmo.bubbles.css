@@ -34,6 +34,10 @@
   background-color: red;
   color: red;
 }
+.netatmo .netatmo-module .secondary .co2 .undefined {
+  background-color: black;
+  color: black;
+}
 .netatmo .netatmo-module .secondary .wind-angle .visual {
   display: inline-block;
 }

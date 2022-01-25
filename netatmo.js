@@ -267,6 +267,7 @@ Module.register('netatmo', {
     return 'N'
   },
   getCO2Status: function (value) {
+    if (!value || value === 'undefined' || value < 0) return 'undefined'
     if (value >= this.config.thresholdCO2Bad) return 'bad'
     if (value >= this.config.thresholdCO2Average) return 'average'
     return 'good'
