@@ -5,6 +5,8 @@
   "main": "netatmo.js",
   "scripts": {
     "test": "grunt test",
+    "validate:js": "eslint **/*.js",
+    "fix:js": "eslint --fix **/*.js",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
@@ -19,7 +21,11 @@
   },
   "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
   "devDependencies": {
-    "eslint": "^7.0.0",
+    "eslint": "^8.7.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-csslint": "^2.0.0",
