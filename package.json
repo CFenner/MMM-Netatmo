@@ -4,7 +4,7 @@
   "description": "",
   "main": "netatmo.js",
   "scripts": {
-    "test": "grunt test",
+    "compile:css": "lessc netatmo.bubbles.less netatmo.bubbles.css && lessc netatmo.classic.less netatmo.classic.css",
     "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
     "fix:js": "eslint --fix **/*.js",
@@ -27,6 +27,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
+    "less": "^4.1.2",
     "stylelint": "^14.2.0",
     "stylelint-config-standard": "^24.0.0"
   },
