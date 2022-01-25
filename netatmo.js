@@ -4,15 +4,15 @@
  * By Christopher Fenner http://github.com/CFenner
  * MIT Licensed.
  */
- /* global $, Q, moment, Module, Log */
+/* global Module, Log */
 Module.register('netatmo', {
-  // default config,
+  // default config
   defaults: {
-    refreshToken: null,
+    initialDelay: 0,
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
-    design: 'classic', //bubbles
-    hideLoadTimer: false,
+    design: 'classic', // or bubbles
+    // hideLoadTimer: false,
     horizontal: true,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,
@@ -20,505 +20,312 @@ Module.register('netatmo', {
     showRadio: true,
     showWiFi: true,
     showTrend: true,
-    api: {
-      base: 'https://api.netatmo.com/',
-      authEndpoint: 'oauth2/token',
-      authPayload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
-      dataEndpoint: 'api/getstationsdata',
-      dataPayload: 'access_token={0}'
-    }
+    showMeasurementIcon: true,
+    showMeasurementLabel: true,
+    apiBase: 'api.netatmo.com',
+    authEndpoint: '/oauth2/token',
+    dataEndpoint: '/api/getstationsdata',
+    fontClassModuleName: 'xsmall',
+    fontClassPrimary: 'large',
+    fontClassSecondary: 'xsmall',
+    fontClassMeasurement: 'xsmall',
+    thresholdCO2Average: 800,
+    thresholdCO2Bad: 1800,
+  },
+  notifications: {
+    AUTH: 'NETATMO_AUTH',
+    AUTH_RESPONSE: 'NETATMO_AUTH_RESPONSE',
+    DATA: 'NETATMO_DATA',
+    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE',
+  },
+  moduleType: {
+    MAIN: 'NAMain',
+    INDOOR: 'NAModule4',
+    OUTDOOR: 'NAModule1',
+    RAIN: 'NAModule3',
+    WIND: 'NAModule2',
+  },
+  measurement: {
+    CO2: 'CO2',
+    HUMIDITY: 'Humidity',
+    TEMPERATURE: 'Temperature',
+    TEMPERATURE_TREND: 'temp_trend',
+    PRESSURE: 'Pressure',
+    PRESSURE_TREND: 'pressure_trend',
+    NOISE: 'Noise',
+    WIND_STRENGTH: 'WindStrength',
+    WIND_ANGLE: 'WindAngle',
+    GUST_STRENGTH: 'GustStrength',
+    GUST_ANGLE: 'GustAngle',
+    RAIN: 'Rain',
+    RAIN_PER_HOUR: 'sum_rain_1',
+    RAIN_PER_DAY: 'sum_rain_24',
   },
   // init method
-  start: function() {
-    Log.info('Starting module: ' + this.name);
-    this.α = 0;
-    // set interval for reload timer
-    this.t = this.config.updateInterval * 60 * 1000 / 360;
-    // run timer
-    this.updateLoad();
-  },
-  updateLoad: function() {
-    // Log.info(this.name + " refresh triggered");
-    var that = this;
-    return Q.fcall(
-      this.load.token.bind(that),
-      this.renderError.bind(that)
-    ).then(
-      this.load.data.bind(that),
-      this.renderError.bind(that)
-    ).then(
-      this.renderAll.bind(that)
-    ).done(
-      this.updateWait.bind(that)
-    );
-  },
-  updateWait: function() {
-    this.α++;
-    this.α %= 360;
-    var r = (this.α * Math.PI / 180);
-    var x = Math.sin(r) * 125;
-    var y = Math.cos(r) * -125;
-    var mid = (this.α > 180) ? 1 : 0;
-    var anim = 'M 0 0 v -125 A 125 125 1 ' +
-       mid + ' 1 ' +
-       x + ' ' +
-       y + ' z';
+  start: function () {
+    const self = this
+    Log.info(`Starting module: ${this.name}`)
+    self.loaded = false
+    self.moduleList = []
 
-    var loader = $('.netatmo .loadTimer .loader');
-    if (loader.length > 0) {
-      loader.attr('d', anim);
-    }
-    var border = $('.netatmo .loadTimer .border');
-    if (border.length > 0) {
-      border.attr('d', anim);
-    }
-    if (r === 0) {
-      // refresh data
-      this.updateLoad();
-    } else {
-      // wait further
-      setTimeout(this.updateWait.bind(this), this.t);
-    }
+    // get a new token at start-up. When receive, GET_CAMERA_EVENTS will be requested
+    setTimeout(function () {
+      self.sendSocketNotification(self.notifications.DATA, self.config)
+    }, this.config.initialDelay * 1000)
+
+    // set auto-update
+    setInterval(function () {
+      // request directly the data, with the previous token. When the token will become invalid (error 403), it will be requested again
+      self.sendSocketNotification(self.notifications.DATA, self.config)
+    }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
-  load: {
-    token: function() {
-      return Q($.ajax({
-        type: 'POST',
-        url: this.config.api.base + this.config.api.authEndpoint,
-        data: this.config.api.authPayload.format(
-            this.config.refreshToken,
-            this.config.clientId,
-            this.config.clientSecret)
-      }));
-    },
-    data: function(data) {
-      // Log.info(this.name + " token loaded "+data.access_token);
-      this.config.refreshToken = data.refresh_token;
-      // call for station data
-      return Q($.ajax({
-        url: this.config.api.base + this.config.api.dataEndpoint,
-        data: this.config.api.dataPayload.format(data.access_token)
-      }));
+  updateModuleList: function (station) {
+    let moduleList = []
+
+    moduleList.push(this.getModule(station))
+
+    station.modules.forEach(function (module) {
+      moduleList.push(this.getModule(module))
+    }.bind(this))
+
+    if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
+    this.loaded = true
+    if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
+      return
     }
-  },
-  renderAll: function(data) {
-    var device = data.body.devices[0];
-    this.lastUpdate = device.dashboard_data.time_utc;
-    // render modules
-    this.dom = this.getDesign(this.config.design).render(device);
-    this.updateDom(this.config.animationSpeed);
-    return Q({});
-  },
-  renderError: function(reason) {
-    /* eslint-disable no-console */
-    console.log("error " + reason);
-    /* eslint-enable no-console */
-    //  enable display of error messages
-    /*
-    $(netatmo.location).updateWithText(
-      "could not load data: "+reason.responseJSON.error,
-      this.config.fadeInterval
-    );
-    */
-  },
-  formatter: {
-    value: function(dataType, value) {
-      if(!value)
-        return value;
-      switch (dataType) {
-        case 'CO2':
-          return value.toFixed(0) + ' ppm';
-        case 'Noise':
-          return value.toFixed(0) + ' dB';
-        case 'Humidity':
-        case 'Battery':
-        case 'WiFi':
-        case 'Radio':
-          return value.toFixed(0) + '%';
-        case 'Pressure':
-          return value.toFixed(0) + ' mbar';
-        case 'Temperature':
-          return value.toFixed(1) + '°';
-        case 'Rain':
-        case 'sum_rain_24':
-        case 'sum_rain_1':
-          return value.toFixed(1) + ' mm/h';
-        case 'WindStrength':
-        case 'GustStrength':
-          return value.toFixed(0) + ' m/s';
-        case 'WindAngle':
-        case 'GustAngle':
-          return this.direction(value) + ' | ' + value + '°';
-        default:
-          return value;
+    // reorder modules
+    if (this.config.moduleOrder && this.config.moduleOrder.length > 0) {
+      const reorderedModuleList = []
+      for (const moduleName of this.config.moduleOrder) {
+        for (const module of moduleList) {
+          if (module.name === moduleName) {
+            reorderedModuleList.push(module)
+          }
+        }
       }
-    },
-    direction: function(value){
-      if(value < 11.25) return 'N';
-      if(value < 33.75) return 'NNE';
-      if(value < 56.25) return 'NE';
-      if(value < 78.75) return 'ENE';
-      if(value < 101.25) return 'E';
-      if(value < 123.75) return 'ESE';
-      if(value < 146.25) return 'SE';
-      if(value < 168.75) return 'SSE';
-      if(value < 191.25) return 'S';
-      if(value < 213.75) return 'SSW';
-      if(value < 236.25) return 'SW';
-      if(value < 258.75) return 'WSW';
-      if(value < 281.25) return 'W';
-      if(value < 303.75) return 'WNW';
-      if(value < 326.25) return 'NW';
-      if(value < 348.75) return 'NNW';
-      return 'N';
-    },
-    rain: function(){
-      return '';
-    },
-    clazz: function(dataType) {
-      /* unused
-      switch (dataType) {
-        case 'CO2':
-          return 'wi-na';
-        case 'Noise':
-          return 'wi-na';
-        case 'Humidity':
-          return 'wi-humidity';
-        case 'Pressure':
-          return 'wi-barometer';
-        case 'Temperature':
-          return 'wi-thermometer';
-        case 'Rain':
-          return 'wi-raindrops';
-        case 'Wind':
-          return 'wi-na';
-        default:
-          return '';
-      }*/
-      return '';
+      moduleList = reorderedModuleList
+    }
+    this.moduleList = moduleList
+  },
+  getModule: function (module) {
+    const result = {}
+
+    result.name = module.module_name
+    result.measurementList = []
+
+    if (!module.reachable) return result
+
+    // TODO check module.reachable
+    let primaryType = ''
+    let primaryValue = ''
+    let secondaryType = ''
+    let secondaryValue = ''
+
+    // add module sensor measurements
+    switch (module.type) {
+      case this.moduleType.MAIN:
+        result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE))
+        if (this.config.showTrend) { result.measurementList.push(this.getMeasurement(module, this.measurement.PRESSURE_TREND)) }
+        result.measurementList.push(this.getMeasurement(module, this.measurement.NOISE))
+        // break; fallthrough
+      case this.moduleType.INDOOR:
+        if (this.config.design === 'bubbles') {
+          secondaryType = this.measurement.CO2
+          secondaryValue = module.dashboard_data[secondaryType]
+          result.secondary = { visualClass: this.getCO2Status(secondaryValue), value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.CO2))
+        }
+        // break; fallthrough
+      case this.moduleType.OUTDOOR:
+        if (this.config.design === 'bubbles') {
+          primaryType = this.measurement.TEMPERATURE
+          primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
+          result.primary = { unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE))
+        }
+        if (this.config.showTrend) { result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE_TREND)) }
+        result.measurementList.push(this.getMeasurement(module, this.measurement.HUMIDITY))
+        break
+      case this.moduleType.WIND:
+        if (this.config.design === 'bubbles') {
+          primaryType = this.measurement.WIND_STRENGTH
+          primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
+          result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
+          secondaryType = this.measurement.WIND_ANGLE
+          secondaryValue = module.dashboard_data[secondaryType]
+          result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
+          result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_ANGLE))
+        }
+        //         $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
+        result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_STRENGTH))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.GUST_ANGLE))
+        break
+      case this.moduleType.RAIN:
+        if (this.config.design === 'bubbles') {
+          primaryType = this.measurement.RAIN
+          primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
+          result.primary = { unit: 'mm/h', value: primaryValue, class: this.kebabCase(primaryType) }
+        } else {
+          result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN))
+        }
+        result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_HOUR))
+        result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN_PER_DAY))
+        break
+      default:
+        break
+    }
+    // add module specific measurements
+    if (module.type === this.moduleType.MAIN) {
+      if (this.config.showWiFi) { result.measurementList.push(this.getMeasurement(module, 'wifi', module.wifi_status)) }
+    } else {
+      if (this.config.showRadio) { result.measurementList.push(this.getMeasurement(module, 'radio', module.rf_status)) }
+      if (this.config.showBattery) { result.measurementList.push(this.getMeasurement(module, 'battery', module.battery_percent)) }
+    }
+    // reorder measurements
+    if (this.config.dataOrder && this.config.dataOrder.length > 0) {
+      const reorderedMeasurementList = []
+      for (const measurementName of this.config.dataOrder) {
+        for (const measurement of result.measurementList) {
+          if (measurement.name === measurementName) {
+            reorderedMeasurementList.push(measurement)
+          }
+        }
+      }
+      result.measurementList = reorderedMeasurementList
+    }
+    return result
+  },
+  getMeasurement: function (module, measurement, value) {
+    value = value || module.dashboard_data[measurement]
+    if (measurement === this.measurement.TEMPERATURE_TREND || measurement === this.measurement.PRESSURE_TREND) {
+      value = value || 'UNDEFINED'
+      value = this.translate(value.toUpperCase())
+    }
+    return {
+      name: measurement,
+      value: this.getValue(measurement, value),
+      icon: this.getIcon(measurement),
+      label: this.translate(measurement.toUpperCase()),
     }
   },
-  getDesign: function(design){
-    var that = this;
-    var formatter = this.formatter;
-    var translator = this.translate;
+  kebabCase: function (name) {
+    return name.replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/[\s_]+/g, '-')
+      .toLowerCase()
+  },
+  getValue: function (measurement, value) {
+    if (!value) { return value }
+    switch (measurement) {
+      case this.measurement.CO2:
+        return value.toFixed(0) + '&nbsp;ppm'
+      case this.measurement.NOISE:
+        return value.toFixed(0) + '&nbsp;dB'
+      case this.measurement.HUMIDITY:
+      case 'battery':
+      case 'wifi':
+      case 'radio':
+        return value.toFixed(0) + '%'
+      case this.measurement.PRESSURE:
+        return value.toFixed(0) + '&nbsp;mbar'
+      case this.measurement.TEMPERATURE:
+        return value.toFixed(1) + '°'
+      case this.measurement.RAIN:
+      case this.measurement.RAIN_PER_HOUR:
+      case this.measurement.RAIN_PER_DAY:
+        return value.toFixed(1) + '&nbsp;mm/h'
+      case this.measurement.WIND_STRENGTH:
+      case this.measurement.GUST_STRENGTH:
+        return value.toFixed(0) + '&nbsp;m/s'
+      case this.measurement.WIND_ANGLE:
+      case this.measurement.GUST_ANGLE:
+        return this.direction(value) + '&nbsp;|&nbsp;' + value + '°'
+      default:
+        return value
+    }
+  },
+  getDirection: function (value) {
+    if (value < 11.25) return 'N'
+    if (value < 33.75) return 'NNE'
+    if (value < 56.25) return 'NE'
+    if (value < 78.75) return 'ENE'
+    if (value < 101.25) return 'E'
+    if (value < 123.75) return 'ESE'
+    if (value < 146.25) return 'SE'
+    if (value < 168.75) return 'SSE'
+    if (value < 191.25) return 'S'
+    if (value < 213.75) return 'SSW'
+    if (value < 236.25) return 'SW'
+    if (value < 258.75) return 'WSW'
+    if (value < 281.25) return 'W'
+    if (value < 303.75) return 'WNW'
+    if (value < 326.25) return 'NW'
+    if (value < 348.75) return 'NNW'
+    return 'N'
+  },
+  getCO2Status: function (value) {
+    if (!value || value === 'undefined' || value < 0) return 'undefined'
+    if (value >= this.config.thresholdCO2Bad) return 'bad'
+    if (value >= this.config.thresholdCO2Average) return 'average'
+    return 'good'
+  },
+  getIcon: function (dataType) {
+    switch (dataType) {
+      case this.measurement.CO2:
+        return 'fa-lungs'
+      case this.measurement.NOISE:
+        return 'fa-volume-up'
+      case this.measurement.HUMIDITY:
+        return 'fa-tint'
+      // case this.measurement.PRESSURE:
+      // case this.measurement.PRESSURE:
+      // case this.measurement.GUST_ANGLE:
+      // case this.measurement.GUST_STRENGTH:
+      // case this.measurement.WIND:
+      // case this.measurement.WIND_ANGLE:
+      // case this.measurement.WIND_STRENGTH:
+      // return 'fa-tachometer-alt';
+      case this.measurement.PRESSURE_TREND:
+      case this.measurement.TEMPERATURE_TREND:
+        return 'fa-long-arrow-alt-right'
+      case 'wifi':
+        return 'fa-wifi'
+      case 'radio':
+        return 'fa-broadcast-tower'
+      case 'battery':
+        return 'fa-battery-three-quarters'
+      default:
+        return 'fa-ambulance'
+    }
+  },
+  getStyles: function () {
+    return [`${this.name}.${this.config.design}.css`]
+  },
+  getTemplate: function () {
+    return `${this.name}.${this.config.design}.njk`
+  },
+  getTemplateData: function () {
     return {
-      classic: (function(formatter, translator, that){
-        return {
-          render: function(device){
-            var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
-            if(that.config.horizontal)
-              sResult.addClass('horizontal');
-            var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
-              that.config.moduleOrder :
-              null;
-            if (aOrderedModuleList) {
-              for (var moduleName of aOrderedModuleList) {
-                if (device.module_name === moduleName) {
-                  sResult.append(this.renderModule(device));
-                } else {
-                  for (var module of device.modules) {
-                    if (module.module_name === moduleName) {
-                      sResult.append(this.renderModule(module));
-                      break;
-                    }
-                  }
-                }
-              }
-            } else {
-              // render station data (main station)
-              sResult.append(this.renderModule(device));
-              // render module data (connected modules)
-              for (var cnt = 0; cnt < device.modules.length; cnt++) {
-                sResult.append(this.renderModule(device.modules[cnt]));
-              }
-            }
-            return sResult;
-          },
-          renderModule: function(oModule) {
-            return $('<div/>').addClass('module').append(
-              $('<div>').addClass('data').append(this.renderSensorData(oModule))
-            ).append(
-              $('<div>').addClass('name small').append(oModule.module_name)
-            );
-          },
-          renderSensorData: function(oModule) {
-            var sResult = $('<table/>');
-            var aDataTypeList = that.config.dataOrder && that.config.dataOrder.length > 0 ?
-              that.config.dataOrder :
-              oModule.data_type;
-            for (var dataType of aDataTypeList) {
-              if ($.inArray(dataType, oModule.data_type) > -1) {
-                sResult.append(
-                  this.renderData(
-                    formatter.clazz(dataType),
-                    dataType,
-                    oModule.dashboard_data[dataType])
-                );
-              }
-            }
-            if(oModule.battery_percent){
-              sResult.append(this.renderData(formatter.clazz(dataType), 'Battery', oModule.battery_percent));
-            }
-            return sResult;
-          },
-          renderData: function(clazz, dataType, value) {
-            return $('<tr/>').append(
-              $('<td/>').addClass('small').append(
-                translator.bind(that)(dataType.toUpperCase())
-              )
-            ).append(
-              $('<td/>').addClass('small value').append(
-                formatter.value(dataType, value)
-              )
-            );
-          }
-        };
-      })(formatter, translator, that),
-      bubbles: (function(formatter, translator, that){
-        return {
-          moduleType: {
-            MAIN: "NAMain",
-            INDOOR: "NAModule4",
-            OUTDOOR: "NAModule1",
-            RAIN: "NAModule3",
-            WIND: "NAModule2"
-          },
-          render: function(device){
-            var sResult = $('<div/>').addClass('modules').addClass(that.config.design);
-            var aOrderedModuleList = that.config.moduleOrder && that.config.moduleOrder.length > 0 ?
-              that.config.moduleOrder :
-              null;
-
-            if (aOrderedModuleList) {
-              for (var moduleName of aOrderedModuleList) {
-                if (device.module_name === moduleName) {
-                  sResult.append(this.module(device));
-                } else {
-                  for (var module of device.modules) {
-                    if (module.module_name === moduleName) {
-                      sResult.append(this.module(module));
-                      break;
-                    }
-                  }
-                }
-              }
-            } else {
-              // render station data (main station)
-              sResult.append(this.module(device));
-              // render module data (connected modules)
-              for (var cnt = 0; cnt < device.modules.length; cnt++) {
-                sResult.append(this.module(device.modules[cnt]));
-              }
-            }
-            return sResult;
-          },
-          module: function(module){
-            var result = $('<div/>').addClass('module').append(
-              $('<div/>').addClass('name small').append(module.module_name)
-            ).append(
-              $('<div/>').append(
-                $('<table/>').addClass('').append(
-                  $('<tr/>').append(
-                    this.primary(module)
-                  ).append(
-                    this.secondary(module)
-                  ).append(
-                    this.data(module)
-                  )))
-            );
-            return result[0].outerHTML;
-          },
-          primary: function(module){
-            var result = $('<td/>').addClass('primary');
-            var type;
-            var value;
-            switch(module.type){
-              case this.moduleType.MAIN:
-              case this.moduleType.INDOOR:
-              case this.moduleType.OUTDOOR:
-                type = 'Temperature';
-                value = module.dashboard_data[type];
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(formatter.value(type, value))
-                ).appendTo(result);
-                break;
-              case this.moduleType.WIND:
-                type = 'WindStrength';
-                value = module.dashboard_data[type];
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(value)
-                ).append(
-                  $('<div/>').addClass('xsmall').append('m/s')
-                ).appendTo(result);
-                break;
-              case this.moduleType.RAIN:
-                type = 'Rain';
-                value = module.dashboard_data[type];
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('large light bright').append(value)
-                ).append(
-                  $('<div/>').addClass('xsmall').append('mm/h')
-                ).appendTo(result);
-                break;
-              default:
-            }
-            return result;
-          },
-          secondary: function(module){
-            var result = $('<td/>').addClass('secondary');
-            switch(module.type){
-              case this.moduleType.MAIN:
-              case this.moduleType.INDOOR:
-                var type = 'CO2';
-                var value = module.dashboard_data[type];
-                var status = value > 1600?'bad':value > 800?'average':'good';
-
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('visual').addClass(status)
-                ).append(
-                  $('<div/>').addClass('small value').append(formatter.value(type, value))
-                ).appendTo(result);
-                break;
-              case this.moduleType.WIND:
-                type = 'WindAngle';
-                value = module.dashboard_data[type];
-
-                $('<div/>').addClass(type).append(
-                  $('<div/>').addClass('visual xlarge wi wi-direction-up').css('transform', 'rotate(' + value + 'deg)')
-                ).append(
-                  $('<div/>').addClass('small value').append(formatter.value(type, value))
-                ).appendTo(result);
-                break;
-              case this.moduleType.OUTDOOR:
-              case this.moduleType.RAIN:
-              default:
-                break;
-            }
-            return result;
-          },
-          data: function(module){
-            var result = $('<td/>').addClass('data');
-            switch(module.type){
-              case this.moduleType.MAIN:
-                this.addTemperatureTrend(result, module);
-                this.addHumidity(result, module);
-                this.addPressure(result, module);
-                this.addPressureTrend(result, module);
-                this.addNoise(result, module);
-                this.addWiFi(result, module);
-                //result += this.addData('max_temp', module.dashboard_data['max_temp']);
-                //result += this.addData('min_temp', module.dashboard_data['min_temp']);
-                break;
-              case this.moduleType.INDOOR:
-                this.addTemperatureTrend(result, module);
-                this.addHumidity(result, module);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              case this.moduleType.OUTDOOR:
-                this.addTemperatureTrend(result, module);
-                this.addHumidity(result, module);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              case this.moduleType.WIND:
-                this.addData(result, 'GustStrength', module.dashboard_data['GustStrength']);
-                this.addData(result, 'GustAngle', module.dashboard_data['GustAngle']);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              case this.moduleType.RAIN:
-                this.addData(result, 'sum_rain_1', module.dashboard_data['sum_rain_1']);
-                this.addData(result, 'sum_rain_24', module.dashboard_data['sum_rain_24']);
-                this.addBattery(result, module);
-                this.addRadio(result, module);
-                this.addLastSeen(result, module);
-                break;
-              default:
-                break;
-            }
-            return result;
-          },
-          addTemperatureTrend: function(parent, module){
-            var value = module.dashboard_data['temp_trend'];
-            if(!value)
-              value = 'UNDEFINED'
-            if(that.config.showTrend)
-              this.addData(parent, 'temp_trend', translator.bind(that)(value.toUpperCase()));
-          },
-          addPressure: function(parent, module){
-            return this.addData(parent, 'Pressure', module.dashboard_data['Pressure']);
-          },
-          addPressureTrend: function(parent, module){
-            var value = module.dashboard_data['pressure_trend'];
-            if(!value)
-              value = 'UNDEFINED'
-            if(that.config.showTrend)
-              this.addData(parent, 'pressure_trend', translator.bind(that)(value.toUpperCase()));
-          },
-          addHumidity: function(parent, module){
-            return this.addData(parent, 'Humidity', module.dashboard_data['Humidity']);
-          },
-          addNoise: function(parent, module){
-            return this.addData(parent, 'Noise', module.dashboard_data['Noise']);
-          },
-          addBattery: function(parent, module){
-            if(that.config.showBattery)
-              this.addData(parent, 'Battery', module.battery_percent);
-          },
-          addRadio: function(parent, module){
-            if(that.config.showRadio)
-              this.addData(parent, 'Radio', module.rf_status);
-          },
-          addWiFi: function(parent, module){
-            if(that.config.showWiFi)
-              this.addData(parent, 'WiFi', module.wifi_status);
-          },
-          addLastSeen: function(parent, module){
-            var duration = Date.now() / 1000 - module.last_message;
-            if(that.config.showLastMessage && duration > that.config.lastMessageThreshold){
-              $('<div/>')
-                .addClass('small flash')
-                .append(
-                  translator.bind(that)("LAST_MESSAGE")
-                  + ': '
-                  + moment.unix(module.last_message).fromNow()
-                )
-                .appendTo(parent);
-            }
-          },
-          addData: function(parent, type, value){
-            return $('<div/>')
-              .addClass('small')
-              .append(
-                translator.bind(that)(type.toUpperCase())
-                + ': '
-                + formatter.value(type, value)
-              )
-              .appendTo(parent);
-          }
-        };
-      })(formatter, translator, that)
-    }[design]
+      loaded: this.loaded,
+      showLastMessage: this.config.showLastMessage,
+      showBattery: this.config.showBattery,
+      showRadio: this.config.showRadio,
+      showWiFi: this.config.showWiFi,
+      showTrend: this.config.showTrend,
+      showMeasurementIcon: this.config.showMeasurementIcon,
+      showMeasurementLabel: this.config.showMeasurementLabel,
+      horizontal: this.config.horizontal,
+      moduleList: this.moduleList,
+      fontClassModuleName: this.config.fontClassModuleName,
+      fontClassPrimary: this.config.fontClassPrimary,
+      fontClassSecondary: this.config.fontClassSecondary,
+      fontClassMeasurement: this.config.fontClassMeasurement,
+    }
   },
-  getScripts: function() {
-    return [
-      'String.format.js',
-      '//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js',
-      'q.min.js',
-      'moment.js'
-    ];
-  },
-  getStyles: function() {
-    return [
-      'netatmo.css'
-    ];
-  },
-  getTranslations: function() {
+  getTranslations: function () {
     return {
       en: 'l10n/en.json',
       de: 'l10n/de.json',
@@ -526,38 +333,35 @@ Module.register('netatmo', {
       cs: 'l10n/cs.json',
       nb: 'l10n/nb.json',
       nn: 'l10n/nn.json',
-      hu: 'l10n/hu.json'
-    };
-  },
-  getDom: function() {
-    var dom = $('<div/>').addClass('netatmo');
-    if(this.dom){
-      dom.append(
-        this.dom
-      ).append(
-        $('<div/>')
-          .addClass('updated xsmall')
-          .append(moment.unix(this.lastUpdate).fromNow())
-      );
-      if(!this.config.hideLoadTimer){
-        dom.append($(
-          '<svg class="loadTimer" viewbox="0 0 250 250">' +
-          '  <path class="border" transform="translate(125, 125)"/>' +
-          '  <path class="loader" transform="translate(125, 125) scale(.84)"/>' +
-          '</svg>'
-        ));
-      }
-    }else{
-      dom.append($(
-        '<svg class="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">' +
-        '  <circle class="outer"></circle>' +
-        '  <circle class="inner">' +
-        '    <animate attributeName="stroke-dashoffset" dur="5s" repeatCount="indefinite" from="0" to="502"></animate>' +
-        '    <animate attributeName="stroke-dasharray" dur="5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>' +
-        '  </circle>' +
-        '</svg>'
-      ));
     }
-    return dom[0];
-  }
-});
+  },
+  socketNotificationReceived: function (notification, payload) {
+    const self = this
+    Log.debug('received ' + notification)
+    switch (notification) {
+      case self.notifications.AUTH_RESPONSE:
+        console.log(payload)
+        if (payload.status === 'OK') {
+          self.sendSocketNotification(self.notifications.DATA, self.config)
+        } else {
+          console.log('AUTH FAILED ' + payload.message)
+        }
+        break
+      case self.notifications.DATA_RESPONSE:
+        console.log(payload)
+        if (payload.status === 'OK') {
+          console.log('devices returned')
+          const station = payload.payloadReturn[0]
+          self.updateModuleList(station)
+          self.updateDom(self.config.animationSpeed)
+        } else if (payload.status === 'INVALID_TOKEN') {
+          // node_module has no valid token, reauthenticate
+          console.log('DATA FAILED, refreshing token')
+          self.sendSocketNotification(self.notifications.AUTH, self.config)
+        } else {
+          console.log('DATA FAILED ' + payload.message)
+        }
+        break
+    }
+  },
+})
