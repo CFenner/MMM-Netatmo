@@ -5,6 +5,7 @@
   "main": "netatmo.js",
   "scripts": {
     "test": "grunt test",
+    "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
     "fix:js": "eslint --fix **/*.js",
     "snyk-protect": "snyk protect",
@@ -34,6 +35,8 @@
     "grunt-jsonlint": "^1.1.0",
     "grunt-yamllint": "^0.3.0",
     "gruntify-eslint": "^5.0.0"
+    "stylelint": "^14.2.0",
+    "stylelint-config-standard": "^24.0.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
