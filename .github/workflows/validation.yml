@@ -44,3 +44,5 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Validate CSS Sources
+        run: npm run validate:css
+
