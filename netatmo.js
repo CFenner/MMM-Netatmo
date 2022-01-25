@@ -221,28 +221,28 @@ Module.register('netatmo', {
     if (!value) { return value }
     switch (measurement) {
       case this.measurement.CO2:
-        return value.toFixed(0) + ' ppm'
+        return value.toFixed(0) + '&nbsp;ppm'
       case this.measurement.NOISE:
-        return value.toFixed(0) + ' dB'
+        return value.toFixed(0) + '&nbsp;dB'
       case this.measurement.HUMIDITY:
       case 'battery':
       case 'wifi':
       case 'radio':
         return value.toFixed(0) + '%'
       case this.measurement.PRESSURE:
-        return value.toFixed(0) + ' mbar'
+        return value.toFixed(0) + '&nbsp;mbar'
       case this.measurement.TEMPERATURE:
         return value.toFixed(1) + '°'
       case this.measurement.RAIN:
       case this.measurement.RAIN_PER_HOUR:
       case this.measurement.RAIN_PER_DAY:
-        return value.toFixed(1) + ' mm/h'
+        return value.toFixed(1) + '&nbsp;mm/h'
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return value.toFixed(0) + ' m/s'
+        return value.toFixed(0) + '&nbsp;m/s'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
-        return this.direction(value) + ' | ' + value + '°'
+        return this.direction(value) + '&nbsp;|&nbsp;' + value + '°'
       default:
         return value
     }
