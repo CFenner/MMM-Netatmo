@@ -1,65 +1,73 @@
+@light: #fff;
+@dark: #000;
+@dimmed: darken(@light, 33.5%);
+@borderColor: @light;
 @good: limegreen;
 @average: orange;
 @bad: red;
-
-.xxlarge{
-  font-size: 95px;
-  letter-spacing: -3px;
-  line-height: 95px;
-}
+@black: black;
 
 .netatmo{
-  .bubbles{
-    .module{
-      .name{
-        text-align: left;
-      }
-      .primary, .secondary, .data{
-        text-align: left;
-      }
-      .primary{}
-      .secondary{
-        text-align: center;
-        width: 5em;
+	display: inline-block;
 
-        .CO2{
-          .visual{
-            border-radius: 1em;
-            box-shadow: 0 0 .9em 1em;
-            height: .1em;
-            margin: 1.5em auto;
-            width: .1em;
-          }
-          .good{
-            background-color: @good;
-            color: @good;
-          }
-          .average{
-            background-color: @average;
-            color: @average;
-          }
-          .bad{
-            background-color: @bad;
-            color: @bad;
-          }
+  .netatmo-module{
+    .name{
+      text-align: left;
+    }
+    .primary{
+      text-align: right;
+    }
+    .secondary,
+    .data{
+      text-align: left;
+    }
+    .primary{}
+    .secondary{
+      text-align: center;
+      width: 5em;
+
+      .co2{
+        .visual{
+          border-radius: 1em;
+          box-shadow: 0 0 .9em 1em;
+          height: .1em;
+          margin: 1.5em auto;
+          width: .1em;
         }
-        .WindAngle{
-          .visual{
-            //margin: .4em;
-            display: inline-block;
-          }
+        .good{
+          background-color: @good;
+          color: @good;
+        }
+        .average{
+          background-color: @average;
+          color: @average;
+        }
+        .bad{
+          background-color: @bad;
+          color: @bad;
+        }
+        .undefined{
+          background-color: @black;
+          color: @black;
         }
       }
-      .data{
-        width: 8em;
-
-        .flash {
-          animation: flasher 1s linear infinite;
+      .wind-angle{
+        .visual{
+          //margin: .4em;
+          display: inline-block;
         }
-
-        @keyframes flasher {
-          50% { opacity: 0; }
-        }
+      }
+    }
+    .data{
+      width: 8em;
+      .flash {
+        animation: flasher 1s linear infinite;
+      }
+      @keyframes flasher {
+        50% { opacity: 0; }
+      }
+      div * {
+        margin: 0 3px;
       }
     }
   }
