@@ -8,6 +8,7 @@
     "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
     "fix:js": "eslint --fix **/*.js",
+    "validate:json": "find . -type f -name '*.json' ! -path './node_modules/*' -exec jsonlint {} --in-place ';'",
     "validate:md": "markdownlint *.md",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
@@ -28,6 +29,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
+    "jsonlint": "^1.6.3",
     "less": "^4.1.2",
     "markdownlint": "^0.25.1",
     "stylelint": "^14.2.0",
