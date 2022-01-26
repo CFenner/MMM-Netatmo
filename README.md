@@ -112,6 +112,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+    <td align="center"><a href="https://github.com/kuutio-hub"><img src="https://avatars.githubusercontent.com/u/66736498?v=4?s=100" width="100px;" alt=""/><br /><sub><b>kuutio-hub</b></sub></a><br /><a href="#translation-kuutio-hub" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/zdeneksofr"><img src="https://avatars.githubusercontent.com/u/25898139?v=4?s=100" width="100px;" alt=""/><br /><sub><b>zdeneksofr</b></sub></a><br /><a href="#translation-zdeneksofr" title="Translation">🌍</a></td>
   </tr>
 </table>
