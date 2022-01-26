@@ -1,0 +1,60 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "kuutio-hub",
+      "name": "kuutio-hub",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66736498?v=4",
+      "profile": "https://github.com/kuutio-hub",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "zdeneksofr",
+      "name": "zdeneksofr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25898139?v=4",
+      "profile": "https://github.com/zdeneksofr",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "tomlarse",
+      "name": "Tom-Inge Larsen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4574656?v=4",
+      "profile": "http://blog.codesalot.com",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "jegerikke",
+      "name": "jegerikke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35518057?v=4",
+      "profile": "https://github.com/jegerikke",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "gilmrt",
+      "name": "gilmrt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4236800?v=4",
+      "profile": "https://github.com/gilmrt",
+      "contributions": [
+        "translation"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "MMM-Netatmo",
+  "projectOwner": "CFenner",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
