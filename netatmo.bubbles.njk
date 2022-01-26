@@ -24,7 +24,7 @@
                       {% if showMeasurementLabel %}
                         <span>{{ measurement.label|safe }}</span>
                       {% endif %}
-                      {% if showMeasurementIcon %}
+                      {% if showMeasurementIcon and not measurement.icon == '' %}
                         <i class="fas fa-fw {{ measurement.icon }}"></i>
                       {% endif %}
                       <span>{{ measurement.value|safe }}</span>

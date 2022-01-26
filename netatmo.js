@@ -273,8 +273,8 @@ Module.register('netatmo', {
   },
   getIcon: function (dataType) {
     switch (dataType) {
-      case this.measurement.CO2:
-        return 'fa-lungs'
+      // case this.measurement.CO2:
+      //   return 'fa-lungs'
       case this.measurement.NOISE:
         return 'fa-volume-up'
       case this.measurement.HUMIDITY:
@@ -287,9 +287,9 @@ Module.register('netatmo', {
       // case this.measurement.WIND_ANGLE:
       // case this.measurement.WIND_STRENGTH:
       // return 'fa-tachometer-alt';
-      case this.measurement.PRESSURE_TREND:
-      case this.measurement.TEMPERATURE_TREND:
-        return 'fa-long-arrow-alt-right'
+      // case this.measurement.PRESSURE_TREND:
+      // case this.measurement.TEMPERATURE_TREND:
+      //   return 'fa-long-arrow-alt-right'
       case 'wifi':
         return 'fa-wifi'
       case 'radio':
@@ -297,7 +297,7 @@ Module.register('netatmo', {
       case 'battery':
         return 'fa-battery-three-quarters'
       default:
-        return 'fa-ambulance'
+        return ''
     }
   },
   getStyles: function () {
