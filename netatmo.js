@@ -12,7 +12,6 @@ Module.register('netatmo', {
     updateInterval: 3, // every 3 minutes, refresh interval on netatmo is 10 minutes
     animationSpeed: 1000,
     design: 'classic', // or bubbles
-    // hideLoadTimer: false,
     horizontal: true,
     lastMessageThreshold: 600, // in seconds (10 minutes)
     showLastMessage: true,

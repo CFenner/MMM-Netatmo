@@ -1,16 +1,14 @@
-@import 'netatmo.less';
+@light: #fff;
+@dark: #000;
+@borderColor: @light;
 
 .netatmo{
-	.horizontal{
-		.netatmo-module{
-			display: inline-block;
-		}
-	}
+  display: inline-block;
 
   .netatmo-module{
     border: 1px solid @borderColor;
     border-radius: .25em;
-    margin: .25em .25em;
+    margin: .25em;
     overflow: hidden;
 
     .name{
@@ -24,4 +22,9 @@
       padding: .125em .25em;
     }
   }
+	.horizontal{
+		.netatmo-module{
+			display: inline-block;
+		}
+	}
 }
