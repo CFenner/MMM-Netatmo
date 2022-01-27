@@ -2,26 +2,26 @@
 engines:
   csslint:
     enabled: true
+  editorconfig:
+    enabled: true
+  markdownlint:
+    enabled: true
   duplication:
     enabled: true
     config:
       languages:
-      - ruby
+#      - ruby
       - javascript
-      - python
-      - php
-  eslint:
-    enabled: true
-    channel: "eslint-8"
+#      - python
+#      - php
+#  eslint:
+#    enabled: true
+#    channel: "eslint-8"
   fixme:
     enabled: true
 ratings:
   paths:
   - "**.css"
-  - "**.inc"
+  - "**.json"
   - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
+  - "**.njk"
