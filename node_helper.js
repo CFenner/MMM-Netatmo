@@ -5,6 +5,7 @@
  * MIT Licensed.
  */
 const NodeHelper = require('node_helper')
+const fs = require('fs')
 const https = require('https')
 const URLSearchParams = require('@ungap/url-search-params')
 
@@ -62,6 +63,13 @@ module.exports = NodeHelper.create({
       })
       return
     }
+    if (self.mockData) {
+      self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
+        payloadReturn: this.mockData(),
+        status: 'OK',
+      })
+      return
+    }
 
     self.config = config
     const req = https.request({
@@ -82,6 +90,10 @@ module.exports = NodeHelper.create({
       })
     })
     req.end()
+  },
+  mockData: function(){
+    const sample = fs.readFileSync('./sample/sample.json', 'utf8');
+    return JSON.parse(sample)
   },
   callbackAuthenticate: function (response) {
     const self = this
