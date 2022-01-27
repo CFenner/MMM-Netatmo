@@ -2,7 +2,7 @@
   {
     "station_name": "Hamburg (Wohnzimmer)",
     "type": "NAMain",
-    "module_name": "Wohnzimmer",
+    "module_name": "MAIN",
     "wifi_status": 50,
     "reachable": true,
     "co2_calibrating": false,
@@ -28,8 +28,55 @@
     },
     "modules": [
       {
+          "type": "NAModule1",
+          "module_name": "OUTDOOR",
+          "data_type": ["Temperature", "Humidity"],
+          "battery_percent": 50,
+          "reachable": true,
+          "rf_status": 50,
+          "battery_vp": 5040,
+          "dashboard_data": {
+              "Temperature": 15.4,
+              "temp_trend": "down",
+              "Humidity": 36,
+              "min_temp": 2.2,
+              "max_temp": 19.7
+          }
+      },{
+          "type": "NAModule2",
+          "module_name": "WIND",
+          "data_type": ["Wind"],
+          "battery_percent": 50,
+          "reachable": true,
+          "rf_status": 50,
+          "battery_vp": 5040,
+          "dashboard_data": {
+              "WindAngle": 221,
+              "WindStrength": 2,
+              "GustAngle": 208,
+              "GustStrength": 4,
+              "WindHistoric": [],
+              "min_temp": 0,
+              "max_temp": 0,
+              "max_wind_angle": 44,
+              "max_wind_str": 20
+          }
+      },{
+        "type": "NAModule3",
+        "module_name": "RAIN",
+        "data_type": ["Rain"],
+        "battery_percent": 50,
+        "reachable": true,
+        "rf_status": 50,
+        "battery_vp": 5040,
+        "dashboard_data": {
+            "Rain": 0,
+            "sum_rain_24": 0,
+            "sum_rain_1": 0
+        }
+      },{
         "type": "NAModule4",
-        "module_name": "Küche",
+        "module_name": "INDOOR",
         "data_type": ["Temperature", "CO2", "Humidity"],
         "battery_percent": 50,
         "reachable": true,
