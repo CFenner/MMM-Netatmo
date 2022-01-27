@@ -1,27 +1,30 @@
+@light: #fff;
+@dark: #000;
+@borderColor: @light;
+
 .netatmo{
+  display: inline-block;
+
+  .netatmo-module{
+    border: 1px solid @borderColor;
+    border-radius: .25em;
+    margin: .25em;
+    overflow: hidden;
+
+    .name{
+    background: @borderColor;
+      color: @dark;
+      padding: .125em .25em;
+      text-align: center;
+    }
+
+    .data{
+      padding: .125em .25em;
+    }
+  }
 	.horizontal{
-		.module{
+		.netatmo-module{
 			display: inline-block;
-		}
-	}
-
-	.classic{
-		.module{
-			border: 1px solid @borderColor;
-			border-radius: .25em;
-			margin: .25em .25em;
-			overflow: hidden;
-
-			.name{
-			background: @borderColor;
-				color: @dark;
-				padding: .125em .25em;
-				text-align: center;
-			}
-
-			.data{
-				padding: .125em .25em;
-			}
 		}
 	}
 }
