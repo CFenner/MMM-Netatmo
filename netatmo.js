@@ -30,6 +30,7 @@ Module.register('netatmo', {
     fontClassMeasurement: 'xsmall',
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
+    mockData: false,
   },
   notifications: {
     AUTH: 'NETATMO_AUTH',
