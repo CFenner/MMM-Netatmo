@@ -1,13 +1,9 @@
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[logo]: https://img.shields.io/badge/all_contributors-5-orange.svg 'Number of contributors on All-Contributors'
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 [![Build Status](https://travis-ci.org/CFenner/MMM-Netatmo.svg?branch=master)](https://travis-ci.org/CFenner/MMM-Netatmo)
 [![Known Vulnerabilities](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module/badge.svg)](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module)
 [![code climate](https://codeclimate.com/github/CFenner/MMM-Netatmo/badges/gpa.svg)](https://codeclimate.com/github/CFenner/MMM-Netatmo)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![api](https://img.shields.io/badge/api-Netatmo-orange.svg)](https://dev.netatmo.com/doc)
-[![All Contributors][logo]](#link)
+[![All Contributors](https://img.shields.io/github/all-contributors/CFenner/MMM-Netatmo/main)](#contributors-)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://choosealicense.com/licenses/mit/)
 
 # MMM-Netatmo
