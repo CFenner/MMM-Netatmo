@@ -1,0 +1,47 @@
+<div class="netatmo">
+  {% if loaded %}
+    {% for module in moduleList %}
+      <div class="netatmo-module">
+        <div>
+          <table>
+            <tbody>
+              <tr>
+                <td class="primary">
+                  <div class="{{ module.primary.class }}">
+                    <div class="light bright {{ fontClassPrimary }}">{{ module.primary.value|safe }}</div>
+                    <div class="xsmall">{{ module.primary.unit }}</div>
+                  </div>
+                </td>
+                <td class="secondary">
+                  <div class="{{ module.secondary.class }}">
+                    <div class="visual {{ module.secondary.visualClass }}"></div>
+                    <div class="value {{ fontClassSecondary }}">{{ module.secondary.value|safe }}</div>
+                  </div>
+                </td>
+                <td class="data">
+                  {% for measurement in module.measurementList %}
+                    <div class="{{ fontClassMeasurement }}">
+                      {% if showMeasurementLabel %}
+                        <span>{{ measurement.label|safe }}</span>
+                      {% endif %}
+                      {% if showMeasurementIcon and not measurement.icon == '' %}
+                        <i class="fas fa-fw {{ measurement.icon }}"></i>
+                      {% endif %}
+                      <span>{{ measurement.value|safe }}</span>
+                    </div>
+                  {% endfor %}
+                  {# <div class="small flash">letzter Kontakt: vor 37 Minuten</div> #}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="dimmed light small">
+      {{ "LOADING" }}
+    </div>
+  {% endif %}
+</div>
