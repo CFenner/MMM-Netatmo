@@ -12,6 +12,7 @@ engines:
       - php
   eslint:
     enabled: true
+    channel: "eslint-7"
   fixme:
     enabled: true
 ratings:
@@ -24,6 +25,3 @@ ratings:
   - "**.php"
   - "**.py"
   - "**.rb"
-exclude_paths: [
-  "q.min.js"
-]
