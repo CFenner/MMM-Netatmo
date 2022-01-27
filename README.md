@@ -51,7 +51,6 @@ To run the module properly, you need to add the following data to your config.js
     clientSecret: '', // your app secret
     username: '', // your netatmo username
     password: '', // your netatmo password
-    design: 'bubbles' // or classic (default)
   }
 }
 ```
