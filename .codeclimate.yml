@@ -14,8 +14,8 @@ engines:
       - javascript
 #      - python
 #      - php
-#  eslint:
-#    enabled: true
+  eslint:
+    enabled: false
 #    channel: "eslint-8"
   fixme:
     enabled: true
