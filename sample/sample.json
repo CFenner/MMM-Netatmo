@@ -1,0 +1,48 @@
+[
+  {
+    "station_name": "Hamburg (Wohnzimmer)",
+    "type": "NAMain",
+    "module_name": "Wohnzimmer",
+    "wifi_status": 50,
+    "reachable": true,
+    "co2_calibrating": false,
+    "data_type": ["Temperature", "CO2", "Humidity", "Noise", "Pressure"],
+    "place": {
+      "altitude": 0,
+      "city": "Hamburg",
+      "country": "DE",
+      "timezone": "Europe/Berlin",
+      "location": [10.0, 10.0]
+    },
+    "home_name": "Hamburg",
+    "dashboard_data": {
+      "Temperature": 12.2,
+      "CO2": 1114,
+      "Humidity": 84,
+      "Noise": 39,
+      "Pressure": 1014.2,
+      "AbsolutePressure": 1011.2,
+      "min_temp": 9.3,
+      "max_temp": 13.3,
+      "pressure_trend": "stable"
+    },
+    "modules": [
+      {
+        "type": "NAModule4",
+        "module_name": "Küche",
+        "data_type": ["Temperature", "CO2", "Humidity"],
+        "battery_percent": 50,
+        "reachable": true,
+        "rf_status": 50,
+        "battery_vp": 5040,
+        "dashboard_data": {
+          "Temperature": 12.7,
+          "CO2": 995,
+          "Humidity": 72,
+          "min_temp": 12.2,
+          "max_temp": 12.8
+        }
+      }
+    ]
+  }
+]
