@@ -13,12 +13,10 @@
   "WINDANGLE": "Szél (irány)",
   "GUSTSTRENGTH": "Érzet",
   "GUSTANGLE": "Érzet (irány)",
-
   "UP": "növekvő",
   "STABLE": "stabil",
   "DOWN": "csökkenő",
   "UNDEFINED": "Nem elérhető",
-
   "WIFI": "WiFi",
   "RADIO": "Jelerősség",
   "BATTERY": "Akkumulátor",
