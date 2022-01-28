@@ -217,7 +217,8 @@ Module.register('netatmo', {
     }
     return {
       name: measurement,
-      value: this.getValue(measurement, value) + '&nbsp;' + this.getUnit(measurement),
+      value: this.getValue(measurement, value),
+      unit: this.getUnit(measurement),
       icon: this.getIcon(measurement),
       label: this.translate(measurement.toUpperCase()),
     }
