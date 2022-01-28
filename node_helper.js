@@ -55,18 +55,18 @@ module.exports = NodeHelper.create({
   },
   loadData: function (config) {
     const self = this
+    if (self.mockData) {
+      self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
+        payloadReturn: this.mockData(),
+        status: 'OK',
+      })
+      return
+    }
     if (self.token === null) {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: 400,
         status: 'INVALID_TOKEN',
         message: 'token not set',
-      })
-      return
-    }
-    if (self.mockData) {
-      self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
-        payloadReturn: this.mockData(),
-        status: 'OK',
       })
       return
     }
