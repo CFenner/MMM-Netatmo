@@ -136,7 +136,7 @@ Module.register('netatmo', {
             visualClass: this.getCO2Status(secondaryValue),
             value: this.getValue(secondaryType, secondaryValue),
             unit: this.getUnit(secondaryType),
-            class: this.kebabCase(secondaryType)
+            class: this.kebabCase(secondaryType),
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.CO2))
@@ -164,7 +164,7 @@ Module.register('netatmo', {
             visualClass: 'xlarge wi wi-direction-up',
             value: this.getValue(secondaryType, secondaryValue),
             unit: this.getUnit(secondaryType),
-            class: this.kebabCase(secondaryType)
+            class: this.kebabCase(secondaryType),
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
