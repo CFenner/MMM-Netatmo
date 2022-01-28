@@ -29,6 +29,12 @@ cd ~/MagicMirror/modules && git clone git clone https://github.com/CFenner/MMM-N
 
 :warning: Note that the checkout folder is named `netatmo` and not `MMM-Netatmo` as the repository.
 
+Navigate into the module folder and install missing dependencies:
+
+```shell
+cd netatmo && npm ci --production --ignore-scripts
+```
+
 ### Connection to Netatmo Service API
 
 To be able to access your data, you need to have an Netatmo Application. Create your personal app in the [Netatmo developer portal][dev-portal] and you will get an `APP_ID` and an `APP_SECRET` which you will need to enter in your [mirror configuration](#configuration).
