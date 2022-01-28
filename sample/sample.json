@@ -91,5 +91,32 @@
         }
       }
     ]
+  },{
+    "station_name": "Altona (Wohnzimmer)",
+    "type": "NAMain",
+    "module_name": "MAIN2",
+    "wifi_status": 50,
+    "reachable": false,
+    "co2_calibrating": false,
+    "data_type": ["Temperature", "CO2", "Humidity", "Noise", "Pressure"],
+    "place": {
+      "altitude": 0,
+      "city": "Altona",
+      "country": "DE",
+      "timezone": "Europe/Berlin",
+      "location": [10.0, 10.0]
+    },
+    "home_name": "Hamburg",
+    "modules": [
+      {
+          "type": "NAModule1",
+          "module_name": "OUTDOOR2",
+          "data_type": ["Temperature", "Humidity"],
+          "battery_percent": 50,
+          "reachable": false,
+          "rf_status": 50,
+          "battery_vp": 5040
+      }
+    ]
   }
 ]
