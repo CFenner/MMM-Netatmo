@@ -6,13 +6,22 @@
     "wifi_status": 50,
     "reachable": true,
     "co2_calibrating": false,
-    "data_type": ["Temperature", "CO2", "Humidity", "Noise", "Pressure"],
+    "data_type": [
+      "Temperature",
+      "CO2",
+      "Humidity",
+      "Noise",
+      "Pressure"
+    ],
     "place": {
       "altitude": 0,
       "city": "Hamburg",
       "country": "DE",
       "timezone": "Europe/Berlin",
-      "location": [10.0, 10.0]
+      "location": [
+        10,
+        10
+      ]
     },
     "home_name": "Hamburg",
     "dashboard_data": {
@@ -28,56 +37,70 @@
     },
     "modules": [
       {
-          "type": "NAModule1",
-          "module_name": "Outdoor",
-          "data_type": ["Temperature", "Humidity"],
-          "battery_percent": 50,
-          "reachable": true,
-          "rf_status": 50,
-          "battery_vp": 5040,
-          "dashboard_data": {
-              "Temperature": 15.4,
-              "temp_trend": "down",
-              "Humidity": 36,
-              "min_temp": 2.2,
-              "max_temp": 19.7
-          }
-      },{
-          "type": "NAModule2",
-          "module_name": "Wind",
-          "data_type": ["Wind"],
-          "battery_percent": 50,
-          "reachable": true,
-          "rf_status": 50,
-          "battery_vp": 5040,
-          "dashboard_data": {
-              "WindAngle": 221,
-              "WindStrength": 2,
-              "GustAngle": 208,
-              "GustStrength": 4,
-              "WindHistoric": [],
-              "min_temp": 0,
-              "max_temp": 0,
-              "max_wind_angle": 44,
-              "max_wind_str": 20
-          }
-      },{
-        "type": "NAModule3",
-        "module_name": "Raid",
-        "data_type": ["Rain"],
+        "type": "NAModule1",
+        "module_name": "Outdoor",
+        "data_type": [
+          "Temperature",
+          "Humidity"
+        ],
         "battery_percent": 50,
         "reachable": true,
         "rf_status": 50,
         "battery_vp": 5040,
         "dashboard_data": {
-            "Rain": 0,
-            "sum_rain_24": 0,
-            "sum_rain_1": 0
+          "Temperature": 15.4,
+          "temp_trend": "down",
+          "Humidity": 36,
+          "min_temp": 2.2,
+          "max_temp": 19.7
         }
-      },{
+      },
+      {
+        "type": "NAModule2",
+        "module_name": "Wind",
+        "data_type": [
+          "Wind"
+        ],
+        "battery_percent": 50,
+        "reachable": true,
+        "rf_status": 50,
+        "battery_vp": 5040,
+        "dashboard_data": {
+          "WindAngle": 221,
+          "WindStrength": 2,
+          "GustAngle": 208,
+          "GustStrength": 4,
+          "WindHistoric": [],
+          "min_temp": 0,
+          "max_temp": 0,
+          "max_wind_angle": 44,
+          "max_wind_str": 20
+        }
+      },
+      {
+        "type": "NAModule3",
+        "module_name": "Rain",
+        "data_type": [
+          "Rain"
+        ],
+        "battery_percent": 50,
+        "reachable": true,
+        "rf_status": 50,
+        "battery_vp": 5040,
+        "dashboard_data": {
+          "Rain": 0,
+          "sum_rain_24": 0,
+          "sum_rain_1": 0
+        }
+      },
+      {
         "type": "NAModule4",
         "module_name": "Indoor",
-        "data_type": ["Temperature", "CO2", "Humidity"],
+        "data_type": [
+          "Temperature",
+          "CO2",
+          "Humidity"
+        ],
         "battery_percent": 50,
         "reachable": true,
         "rf_status": 50,
@@ -91,31 +114,44 @@
         }
       }
     ]
-  },{
+  },
+  {
     "station_name": "Altona (Wohnzimmer)",
     "type": "NAMain",
     "module_name": "MAIN2",
     "wifi_status": 50,
     "reachable": false,
     "co2_calibrating": false,
-    "data_type": ["Temperature", "CO2", "Humidity", "Noise", "Pressure"],
+    "data_type": [
+      "Temperature",
+      "CO2",
+      "Humidity",
+      "Noise",
+      "Pressure"
+    ],
     "place": {
       "altitude": 0,
       "city": "Altona",
       "country": "DE",
       "timezone": "Europe/Berlin",
-      "location": [10.0, 10.0]
+      "location": [
+        10,
+        10
+      ]
     },
     "home_name": "Hamburg",
     "modules": [
       {
-          "type": "NAModule1",
-          "module_name": "OUTDOOR2",
-          "data_type": ["Temperature", "Humidity"],
-          "battery_percent": 50,
-          "reachable": false,
-          "rf_status": 50,
-          "battery_vp": 5040
+        "type": "NAModule1",
+        "module_name": "OUTDOOR2",
+        "data_type": [
+          "Temperature",
+          "Humidity"
+        ],
+        "battery_percent": 50,
+        "reachable": false,
+        "rf_status": 50,
+        "battery_vp": 5040
       }
     ]
   }
