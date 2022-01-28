@@ -92,7 +92,7 @@ module.exports = NodeHelper.create({
     req.end()
   },
   mockData: function () {
-    const sample = fs.readFileSync('./sample/sample.json', 'utf8')
+    const sample = fs.readFileSync(`${__dirname}/sample/sample.json`, 'utf8')
     return JSON.parse(sample)
   },
   callbackAuthenticate: function (response) {
