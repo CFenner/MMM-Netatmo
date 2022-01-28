@@ -10,8 +10,8 @@
 
 A module to integrate information from a [Netatmo weather station][weather-station] into the [MagicMirror][mirror].
 
-![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/master/.github/preview.classic.png)
-![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/master/.github/preview.bubbles.png)
+![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/main/.github/preview.classic.png)
+![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/main/.github/preview.bubbles.png)
 
 ## Usage
 
