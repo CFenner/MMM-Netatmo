@@ -207,7 +207,7 @@ Module.register('netatmo', {
     }
     return {
       name: measurement,
-      value: this.getValue(measurement, value),
+      value: this.getValue(measurement, value) + '&nbsp;' + this.getUnit(measurement),
       icon: this.getIcon(measurement),
       label: this.translate(measurement.toUpperCase()),
     }
@@ -242,7 +242,7 @@ Module.register('netatmo', {
         return value.toFixed(0)// + '&nbsp;m/s'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
-        return this.getDirection(value) + '&nbsp;|&nbsp;' + value + '°'
+        return this.getDirection(value) + '&nbsp;|&nbsp;' + value// + '°'
       default:
         return value
     }
