@@ -242,7 +242,7 @@ Module.register('netatmo', {
         return value.toFixed(0) + '&nbsp;m/s'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
-        return this.direction(value) + '&nbsp;|&nbsp;' + value + '°'
+        return this.getDirection(value) + '&nbsp;|&nbsp;' + value + '°'
       default:
         return value
     }
