@@ -5,6 +5,8 @@
  * MIT Licensed.
  */
 const NodeHelper = require('node_helper')
+const fs = require('fs')
+const path = require('path')
 const https = require('https')
 const URLSearchParams = require('@ungap/url-search-params')
 
@@ -54,6 +56,13 @@ module.exports = NodeHelper.create({
   },
   loadData: function (config) {
     const self = this
+    if (self.mockData) {
+      self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
+        payloadReturn: this.mockData(),
+        status: 'OK',
+      })
+      return
+    }
     if (self.token === null) {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: 400,
@@ -82,6 +91,10 @@ module.exports = NodeHelper.create({
       })
     })
     req.end()
+  },
+  mockData: function () {
+    const sample = fs.readFileSync(path.join(__dirname, 'sample', 'sample.json'), 'utf8')
+    return JSON.parse(sample)
   },
   callbackAuthenticate: function (response) {
     const self = this

@@ -1,13 +1,9 @@
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[logo]: https://img.shields.io/badge/all_contributors-5-orange.svg 'Number of contributors on All-Contributors'
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 [![Build Status](https://travis-ci.org/CFenner/MMM-Netatmo.svg?branch=master)](https://travis-ci.org/CFenner/MMM-Netatmo)
 [![Known Vulnerabilities](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module/badge.svg)](https://snyk.io/test/github/cfenner/magicmirror-netatmo-module)
 [![code climate](https://codeclimate.com/github/CFenner/MMM-Netatmo/badges/gpa.svg)](https://codeclimate.com/github/CFenner/MMM-Netatmo)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![api](https://img.shields.io/badge/api-Netatmo-orange.svg)](https://dev.netatmo.com/doc)
-[![All Contributors][logo]](#link)
+[![All Contributors](https://img.shields.io/github/all-contributors/CFenner/MMM-Netatmo/main)](#contributors-)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://choosealicense.com/licenses/mit/)
 
 # MMM-Netatmo
@@ -33,9 +29,19 @@ cd ~/MagicMirror/modules && git clone git clone https://github.com/CFenner/MMM-N
 
 :warning: Note that the checkout folder is named `netatmo` and not `MMM-Netatmo` as the repository.
 
+Navigate into the module folder and install missing dependencies:
+
+```shell
+cd netatmo && npm ci --production --ignore-scripts
+```
+
 ### Connection to Netatmo Service API
 
 To be able to access your data, you need to have an Netatmo Application. Create your personal app in the [Netatmo developer portal][dev-portal] and you will get an `APP_ID` and an `APP_SECRET` which you will need to enter in your [mirror configuration](#configuration).
+
+#### Sample Data
+
+If you don't have a Netatmo station yet, you can request a set of mock data by configuring `mockData: true` in the module configuration. In that case you don't need any user of app credentials.
 
 ### Configuration
 
@@ -81,6 +87,7 @@ The following properties can be configured:
 |`fontClassMeasurement`|Control font size class of the data entries.|`xsmall`|no|
 |`thresholdCO2Average`|Control the threshold for the CO2 status when it should turn `average` (`bubbles` design only).|`800`|no|
 |`thresholdCO2Bad`|Control the threshold for the CO2 status when it should turn `bad` (`bubbles` design only).|`1800`|no|
+|`mockData`|Use a set of mock data instead of a real data from the Netatmo API.|`false`|no|
 
 ## Contributors ✨
 
