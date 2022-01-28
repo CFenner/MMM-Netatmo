@@ -155,7 +155,7 @@ Module.register('netatmo', {
           result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
           secondaryType = this.measurement.WIND_ANGLE
           secondaryValue = module.dashboard_data[secondaryType]
-          result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue).bind(this), class: this.kebabCase(secondaryType) }
+          result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_ANGLE))
@@ -242,7 +242,7 @@ Module.register('netatmo', {
         return value.toFixed(0) + '&nbsp;m/s'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
-        return this.direction(value) + '&nbsp;|&nbsp;' + value + '°'
+        return this.getDirection(value) + '&nbsp;|&nbsp;' + value + '°'
       default:
         return value
     }
