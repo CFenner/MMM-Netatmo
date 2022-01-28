@@ -39,6 +39,10 @@ cd netatmo && npm ci --production --ignore-scripts
 
 To be able to access your data, you need to have an Netatmo Application. Create your personal app in the [Netatmo developer portal][dev-portal] and you will get an `APP_ID` and an `APP_SECRET` which you will need to enter in your [mirror configuration](#configuration).
 
+#### Sample Data
+
+If you don't have a Netatmo station yet, you can request a set of mock data by configuring `mockData: true` in the module configuration. In that case you don't need any user of app credentials.
+
 ### Configuration
 
 To run the module properly, you need to add the following data to your config.js file.
@@ -83,6 +87,7 @@ The following properties can be configured:
 |`fontClassMeasurement`|Control font size class of the data entries.|`xsmall`|no|
 |`thresholdCO2Average`|Control the threshold for the CO2 status when it should turn `average` (`bubbles` design only).|`800`|no|
 |`thresholdCO2Bad`|Control the threshold for the CO2 status when it should turn `bad` (`bubbles` design only).|`1800`|no|
+|`mockData`|Use a set of mock data instead of a real data from the Netatmo API.|`false`|no|
 
 ## Contributors ✨
 
