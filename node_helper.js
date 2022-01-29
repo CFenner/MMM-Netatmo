@@ -56,7 +56,8 @@ module.exports = NodeHelper.create({
   },
   loadData: function (config) {
     const self = this
-    if (self.mockData === true) {
+    self.config = config
+    if (self.config.mockData === true) {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: this.mockData(),
         status: 'OK',
@@ -72,7 +73,6 @@ module.exports = NodeHelper.create({
       return
     }
 
-    self.config = config
     const req = https.request({
       hostname: self.config.apiBase,
       path: self.config.dataEndpoint,
