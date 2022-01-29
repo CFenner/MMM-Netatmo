@@ -80,31 +80,33 @@ Module.register('netatmo', {
       self.sendSocketNotification(self.notifications.DATA, self.config)
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
-  updateModuleList: function (station) {
+  updateModuleList: function (stationList) {
     let moduleList = []
 
-    moduleList.push(this.getModule(station, station.home_name))
+    for (const station of stationList) {
+      moduleList.push(this.getModule(station, station.home_name))
 
-    station.modules.forEach(function (module) {
-      moduleList.push(this.getModule(module, station.home_name))
-    }.bind(this))
+      station.modules.forEach(function (module) {
+        moduleList.push(this.getModule(module, station.home_name))
+      }.bind(this))
 
-    if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
-    this.loaded = true
-    if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
-      return
-    }
-    // reorder modules
-    if (this.config.moduleOrder && this.config.moduleOrder.length > 0) {
-      const reorderedModuleList = []
-      for (const moduleName of this.config.moduleOrder) {
-        for (const module of moduleList) {
-          if (module.name === moduleName) {
-            reorderedModuleList.push(module)
+      if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
+      this.loaded = true
+      if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
+        return
+      }
+      // reorder modules
+      if (this.config.moduleOrder && this.config.moduleOrder.length > 0) {
+        const reorderedModuleList = []
+        for (const moduleName of this.config.moduleOrder) {
+          for (const module of moduleList) {
+            if (module.name === moduleName) {
+              reorderedModuleList.push(module)
+            }
           }
         }
+        moduleList = reorderedModuleList
       }
-      moduleList = reorderedModuleList
     }
     this.moduleList = moduleList
   },
@@ -395,8 +397,8 @@ Module.register('netatmo', {
         console.log(payload)
         if (payload.status === 'OK') {
           console.log('devices returned')
-          const station = payload.payloadReturn[0]
-          self.updateModuleList(station)
+          const stationList = payload.payloadReturn
+          self.updateModuleList(stationList)
           self.updateDom(self.config.animationSpeed)
         } else if (payload.status === 'INVALID_TOKEN') {
           // node_module has no valid token, reauthenticate
