@@ -91,22 +91,22 @@ Module.register('netatmo', {
       }.bind(this))
 
       if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
-      this.loaded = true
-      if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
-        return
-      }
-      // reorder modules
-      if (this.config.moduleOrder && this.config.moduleOrder.length > 0) {
-        const reorderedModuleList = []
-        for (const moduleName of this.config.moduleOrder) {
-          for (const module of moduleList) {
-            if (module.name === moduleName) {
-              reorderedModuleList.push(module)
-            }
+    }
+    this.loaded = true
+    if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
+      return
+    }
+    // reorder modules
+    if (this.config.moduleOrder && this.config.moduleOrder.length > 0) {
+      const reorderedModuleList = []
+      for (const moduleName of this.config.moduleOrder) {
+        for (const module of moduleList) {
+          if (module.name === moduleName) {
+            reorderedModuleList.push(module)
           }
         }
-        moduleList = reorderedModuleList
       }
+      moduleList = reorderedModuleList
     }
     this.moduleList = moduleList
   },
