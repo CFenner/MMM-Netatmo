@@ -21,6 +21,7 @@ Module.register('netatmo', {
     showTrend: true,
     showMeasurementIcon: true,
     showMeasurementLabel: true,
+    showStationName: true,
     apiBase: 'api.netatmo.com',
     authEndpoint: '/oauth2/token',
     dataEndpoint: '/api/getstationsdata',
@@ -31,7 +32,6 @@ Module.register('netatmo', {
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
     mockData: false,
-    showStationName: false,
   },
   notifications: {
     AUTH: 'NETATMO_AUTH',
@@ -80,16 +80,18 @@ Module.register('netatmo', {
       self.sendSocketNotification(self.notifications.DATA, self.config)
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
-  updateModuleList: function (station) {
+  updateModuleList: function (stationList) {
     let moduleList = []
 
-    moduleList.push(this.getModule(station, station.home_name))
+    for (const station of stationList) {
+      moduleList.push(this.getModule(station, station.home_name))
 
-    station.modules.forEach(function (module) {
-      moduleList.push(this.getModule(module, station.home_name))
-    }.bind(this))
+      station.modules.forEach(function (module) {
+        moduleList.push(this.getModule(module, station.home_name))
+      }.bind(this))
 
-    if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
+      if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
+    }
     this.loaded = true
     if (JSON.stringify(this.moduleList) === JSON.stringify(moduleList)) {
       return
@@ -395,8 +397,8 @@ Module.register('netatmo', {
         console.log(payload)
         if (payload.status === 'OK') {
           console.log('devices returned')
-          const station = payload.payloadReturn[0]
-          self.updateModuleList(station)
+          const stationList = payload.payloadReturn
+          self.updateModuleList(stationList)
           self.updateDom(self.config.animationSpeed)
         } else if (payload.status === 'INVALID_TOKEN') {
           // node_module has no valid token, reauthenticate
