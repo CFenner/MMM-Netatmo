@@ -30,6 +30,8 @@ Module.register('netatmo', {
     fontClassMeasurement: 'xsmall',
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
+    mockData: false,
+    showStationName: false,
   },
   notifications: {
     AUTH: 'NETATMO_AUTH',
@@ -81,10 +83,10 @@ Module.register('netatmo', {
   updateModuleList: function (station) {
     let moduleList = []
 
-    moduleList.push(this.getModule(station))
+    moduleList.push(this.getModule(station, station.home_name))
 
     station.modules.forEach(function (module) {
-      moduleList.push(this.getModule(module))
+      moduleList.push(this.getModule(module, station.home_name))
     }.bind(this))
 
     if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
@@ -106,10 +108,13 @@ Module.register('netatmo', {
     }
     this.moduleList = moduleList
   },
-  getModule: function (module) {
+  getModule: function (module, stationName) {
     const result = {}
 
     result.name = module.module_name
+    if (this.config.showStationName) {
+      result.name = `${stationName} - ${result.name}`
+    }
     result.measurementList = []
 
     if (!module.reachable) return result
@@ -131,7 +136,12 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           secondaryType = this.measurement.CO2
           secondaryValue = module.dashboard_data[secondaryType]
-          result.secondary = { visualClass: this.getCO2Status(secondaryValue), value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+          result.secondary = {
+            visualClass: this.getCO2Status(secondaryValue),
+            value: this.getValue(secondaryType, secondaryValue),
+            unit: this.getUnit(secondaryType),
+            class: this.kebabCase(secondaryType),
+          }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.CO2))
         }
@@ -140,7 +150,7 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.TEMPERATURE
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { unit: '', value: this.getValue(primaryType, primaryValue), class: this.kebabCase(primaryType) }
+          result.primary = { unit: this.getUnit(primaryType), value: primaryValue, class: this.kebabCase(primaryType) }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE))
         }
@@ -151,10 +161,15 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.WIND_STRENGTH
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { unit: 'm/s', value: primaryValue, class: this.kebabCase(primaryType) }
+          result.primary = { unit: this.getUnit(primaryType), value: primaryValue, class: this.kebabCase(primaryType) }
           secondaryType = this.measurement.WIND_ANGLE
           secondaryValue = module.dashboard_data[secondaryType]
-          result.secondary = { visualClass: 'xlarge wi wi-direction-up', value: this.getValue(secondaryType, secondaryValue), class: this.kebabCase(secondaryType) }
+          result.secondary = {
+            visualClass: 'xlarge wi wi-direction-up',
+            value: this.getValue(secondaryType, secondaryValue),
+            unit: this.getUnit(secondaryType),
+            class: this.kebabCase(secondaryType),
+          }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_ANGLE))
@@ -167,7 +182,7 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.RAIN
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { unit: 'mm/h', value: primaryValue, class: this.kebabCase(primaryType) }
+          result.primary = { unit: this.getUnit(primaryType), value: primaryValue, class: this.kebabCase(primaryType) }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN))
         }
@@ -207,6 +222,7 @@ Module.register('netatmo', {
     return {
       name: measurement,
       value: this.getValue(measurement, value),
+      unit: this.getUnit(measurement),
       icon: this.getIcon(measurement),
       label: this.translate(measurement.toUpperCase()),
     }
@@ -220,30 +236,59 @@ Module.register('netatmo', {
     if (!value) { return value }
     switch (measurement) {
       case this.measurement.CO2:
-        return value.toFixed(0) + '&nbsp;ppm'
+        return value.toFixed(0)// + '&nbsp;ppm'
       case this.measurement.NOISE:
-        return value.toFixed(0) + '&nbsp;dB'
+        return value.toFixed(0)// + '&nbsp;dB'
       case this.measurement.HUMIDITY:
       case 'battery':
       case 'wifi':
       case 'radio':
-        return value.toFixed(0) + '%'
+        return value.toFixed(0)// + '%'
       case this.measurement.PRESSURE:
-        return value.toFixed(0) + '&nbsp;mbar'
+        return value.toFixed(0)// + '&nbsp;mbar'
       case this.measurement.TEMPERATURE:
-        return value.toFixed(1) + '°'
+        return value.toFixed(1)// + '°C'
       case this.measurement.RAIN:
       case this.measurement.RAIN_PER_HOUR:
       case this.measurement.RAIN_PER_DAY:
-        return value.toFixed(1) + '&nbsp;mm/h'
+        return value.toFixed(1)// + '&nbsp;mm/h'
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return value.toFixed(0) + '&nbsp;m/s'
+        return value.toFixed(0)// + '&nbsp;m/s'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
-        return this.direction(value) + '&nbsp;|&nbsp;' + value + '°'
+        return this.getDirection(value) + '&nbsp;|&nbsp;' + value// + '°'
       default:
         return value
+    }
+  },
+  getUnit: function (measurement) {
+    switch (measurement) {
+      case this.measurement.CO2:
+        return 'ppm'
+      case this.measurement.NOISE:
+        return 'dB'
+      case this.measurement.HUMIDITY:
+      case 'battery':
+      case 'wifi':
+      case 'radio':
+        return '%'
+      case this.measurement.PRESSURE:
+        return 'mbar'
+      case this.measurement.TEMPERATURE:
+        return '°C'
+      case this.measurement.RAIN:
+      case this.measurement.RAIN_PER_HOUR:
+      case this.measurement.RAIN_PER_DAY:
+        return 'mm/h'
+      case this.measurement.WIND_STRENGTH:
+      case this.measurement.GUST_STRENGTH:
+        return 'm/s'
+      case this.measurement.WIND_ANGLE:
+      case this.measurement.GUST_ANGLE:
+        return '°'
+      default:
+        return ''
     }
   },
   getDirection: function (value) {
