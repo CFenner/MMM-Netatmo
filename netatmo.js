@@ -219,13 +219,12 @@ Module.register('netatmo', {
     value = value || module.dashboard_data[measurement]
     if (measurement === this.measurement.TEMPERATURE_TREND || measurement === this.measurement.PRESSURE_TREND) {
       value = value || 'UNDEFINED'
-      value = this.translate(value.toUpperCase())
     }
     return {
       name: measurement,
       value: this.getValue(measurement, value),
       unit: this.getUnit(measurement),
-      icon: this.getIcon(measurement),
+      icon: this.getIcon(measurement, value),
       label: this.translate(measurement.toUpperCase()),
     }
   },
@@ -260,6 +259,9 @@ Module.register('netatmo', {
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
         return this.getDirection(value) + '&nbsp;|&nbsp;' + value// + '°'
+      case this.measurement.TEMPERATURE_TREND:
+      case this.measurement.PRESSURE_TREND:
+        return this.translate(value.toUpperCase())
       default:
         return value
     }
@@ -318,7 +320,7 @@ Module.register('netatmo', {
     if (value >= this.config.thresholdCO2Average) return 'average'
     return 'good'
   },
-  getIcon: function (dataType) {
+  getIcon: function (dataType, value) {
     switch (dataType) {
       // case this.measurement.CO2:
       //   return 'fa-lungs'
@@ -326,26 +328,39 @@ Module.register('netatmo', {
         return 'fa-volume-up'
       case this.measurement.HUMIDITY:
         return 'fa-tint'
-      // case this.measurement.PRESSURE:
-      // case this.measurement.PRESSURE:
+      case this.measurement.PRESSURE:
+        return 'fa-tachometer-alt'
+      case this.measurement.GUST_STRENGTH:
+      case this.measurement.WIND_STRENGTH:
+        return 'fa-wind'
       // case this.measurement.GUST_ANGLE:
-      // case this.measurement.GUST_STRENGTH:
-      // case this.measurement.WIND:
       // case this.measurement.WIND_ANGLE:
-      // case this.measurement.WIND_STRENGTH:
-      // return 'fa-tachometer-alt';
-      // case this.measurement.PRESSURE_TREND:
-      // case this.measurement.TEMPERATURE_TREND:
-      //   return 'fa-long-arrow-alt-right'
+      case this.measurement.PRESSURE_TREND:
+      case this.measurement.TEMPERATURE_TREND:
+        return this.getTrendIcon(value)
       case 'wifi':
         return 'fa-wifi'
       case 'radio':
         return 'fa-broadcast-tower'
       case 'battery':
-        return 'fa-battery-three-quarters'
+        return this.getBatteryIcon(value)
       default:
         return ''
     }
+  },
+  getTrendIcon: function (value) {
+    return 'fa-chevron-circle-right'
+    return 'chevron-circle-down'
+    return 'chevron-circle-up'
+    // caret-up
+    // caret-down
+  },
+  getBatteryIcon: function (value) {
+    if (value > 80) return 'fa-battery-full'
+    if (value > 60) return 'fa-battery-three-quarters'
+    if (value > 40) return 'fa-battery-half'
+    if (value > 20) return 'fa-battery-quarter'
+    if (value > 0) return 'fa-battery-empty'
   },
   getStyles: function () {
     return [`${this.name}.${this.config.design}.css`]
