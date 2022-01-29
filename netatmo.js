@@ -21,6 +21,7 @@ Module.register('netatmo', {
     showTrend: true,
     showMeasurementIcon: true,
     showMeasurementLabel: true,
+    showStationName: true,
     apiBase: 'api.netatmo.com',
     authEndpoint: '/oauth2/token',
     dataEndpoint: '/api/getstationsdata',
@@ -31,7 +32,6 @@ Module.register('netatmo', {
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
     mockData: false,
-    showStationName: false,
   },
   notifications: {
     AUTH: 'NETATMO_AUTH',
