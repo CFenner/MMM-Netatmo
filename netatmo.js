@@ -31,6 +31,7 @@ Module.register('netatmo', {
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
     mockData: false,
+    showStationName: false,
   },
   notifications: {
     AUTH: 'NETATMO_AUTH',
@@ -82,10 +83,10 @@ Module.register('netatmo', {
   updateModuleList: function (station) {
     let moduleList = []
 
-    moduleList.push(this.getModule(station))
+    moduleList.push(this.getModule(station, station.home_name))
 
     station.modules.forEach(function (module) {
-      moduleList.push(this.getModule(module))
+      moduleList.push(this.getModule(module, station.home_name))
     }.bind(this))
 
     if (station.reachable) { this.lastUpdate = station.dashboard_data.time_utc }
@@ -107,10 +108,13 @@ Module.register('netatmo', {
     }
     this.moduleList = moduleList
   },
-  getModule: function (module) {
+  getModule: function (module, stationName) {
     const result = {}
 
     result.name = module.module_name
+    if (this.config.showStationName) {
+      result.name = `${stationName} - ${result.name}`
+    }
     result.measurementList = []
 
     if (!module.reachable) return result
