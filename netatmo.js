@@ -218,7 +218,7 @@ Module.register('netatmo', {
   getMeasurement: function (module, measurement, value) {
     value = value || module.dashboard_data[measurement]
     if (measurement === this.measurement.TEMPERATURE_TREND || measurement === this.measurement.PRESSURE_TREND) {
-      value = value || 'UNDEFINED'
+      value = value || 'undefined'
     }
     return {
       name: measurement,
@@ -349,11 +349,10 @@ Module.register('netatmo', {
     }
   },
   getTrendIcon: function (value) {
-    return 'fa-chevron-circle-right'
-    return 'chevron-circle-down'
-    return 'chevron-circle-up'
-    // caret-up
-    // caret-down
+    if (value === 'stable') return 'fa-chevron-circle-right'
+    if (value === 'down') return 'fa-chevron-circle-down'
+    if (value === 'up') return 'fa-chevron-circle-up'
+    if (value === 'undefined') return 'fa-times-circle'
   },
   getBatteryIcon: function (value) {
     if (value > 80) return 'fa-battery-full'
