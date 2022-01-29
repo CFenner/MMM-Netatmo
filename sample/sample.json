@@ -63,7 +63,7 @@
           "Temperature",
           "Humidity"
         ],
-        "battery_percent": 50,
+        "battery_percent": 90,
         "reachable": true,
         "rf_status": 50,
         "battery_vp": 5040,
@@ -81,7 +81,7 @@
         "data_type": [
           "Wind"
         ],
-        "battery_percent": 50,
+        "battery_percent": 10,
         "reachable": true,
         "rf_status": 50,
         "battery_vp": 5040,
@@ -103,7 +103,7 @@
         "data_type": [
           "Rain"
         ],
-        "battery_percent": 50,
+        "battery_percent": 30,
         "reachable": true,
         "rf_status": 50,
         "battery_vp": 5040,
