@@ -2,7 +2,7 @@
   {
     "station_name": "Hamburg (Wohnzimmer)",
     "type": "NAMain",
-    "module_name": "MAIN",
+    "module_name": "Main",
     "wifi_status": 50,
     "reachable": true,
     "co2_calibrating": false,
@@ -38,7 +38,7 @@
     "modules": [
       {
         "type": "NAModule1",
-        "module_name": "OUTDOOR",
+        "module_name": "Outdoor",
         "data_type": [
           "Temperature",
           "Humidity"
@@ -57,7 +57,7 @@
       },
       {
         "type": "NAModule2",
-        "module_name": "WIND",
+        "module_name": "Wind",
         "data_type": [
           "Wind"
         ],
@@ -79,7 +79,7 @@
       },
       {
         "type": "NAModule3",
-        "module_name": "RAIN",
+        "module_name": "Rain",
         "data_type": [
           "Rain"
         ],
@@ -95,7 +95,7 @@
       },
       {
         "type": "NAModule4",
-        "module_name": "INDOOR",
+        "module_name": "Indoor",
         "data_type": [
           "Temperature",
           "CO2",
