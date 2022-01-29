@@ -56,7 +56,7 @@ module.exports = NodeHelper.create({
   },
   loadData: function (config) {
     const self = this
-    if (self.mockData) {
+    if (self.mockData === true) {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: this.mockData(),
         status: 'OK',
