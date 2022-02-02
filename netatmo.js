@@ -119,7 +119,24 @@ Module.register('netatmo', {
     }
     result.measurementList = []
 
-    if (!module.reachable) return result
+    if (!module.reachable) {
+      let measurement = ''
+      if (module.type === this.moduleType.MAIN) {
+        measurement = 'wifi'
+      } else {
+        measurement = 'radio'
+      }
+
+      result.measurementList.push({
+        name: measurement,
+        value: this.getValue(measurement, 0),
+        unit: this.getUnit(measurement),
+        icon: this.getIcon(measurement, 0),
+        label: this.translate(measurement.toUpperCase()),
+      })
+
+      return result
+    }
 
     // TODO check module.reachable
     let primaryType = ''
