@@ -152,10 +152,10 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.TEMPERATURE
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { 
+          result.primary = {
             value: this.getValue(primaryType, primaryValue),
-            unit: this.getUnit(primaryType), 
-            class: this.kebabCase(primaryType)
+            unit: this.getUnit(primaryType),
+            class: this.kebabCase(primaryType),
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE))
@@ -167,10 +167,10 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.WIND_STRENGTH
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { 
+          result.primary = {
             value: this.getValue(primaryType, primaryValue),
-            unit: this.getUnit(primaryType), 
-            class: this.kebabCase(primaryType)
+            unit: this.getUnit(primaryType),
+            class: this.kebabCase(primaryType),
           }
           secondaryType = this.measurement.WIND_ANGLE
           secondaryValue = module.dashboard_data[secondaryType]
@@ -195,7 +195,7 @@ Module.register('netatmo', {
           result.primary = {
             value: this.getValue(primaryType, primaryValue),
             unit: this.getUnit(primaryType),
-            class: this.kebabCase(primaryType)
+            class: this.kebabCase(primaryType),
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN))
