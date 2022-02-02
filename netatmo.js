@@ -139,10 +139,10 @@ Module.register('netatmo', {
           secondaryType = this.measurement.CO2
           secondaryValue = module.dashboard_data[secondaryType]
           result.secondary = {
-            visualClass: this.getCO2Status(secondaryValue),
             value: this.getValue(secondaryType, secondaryValue),
             unit: this.getUnit(secondaryType),
             class: this.kebabCase(secondaryType),
+            visualClass: this.getCO2Status(secondaryValue),
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.CO2))
@@ -152,7 +152,11 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.TEMPERATURE
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { unit: this.getUnit(primaryType), value: primaryValue, class: this.kebabCase(primaryType) }
+          result.primary = { 
+            value: this.getValue(primaryType, primaryValue),
+            unit: this.getUnit(primaryType), 
+            class: this.kebabCase(primaryType)
+          }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE))
         }
@@ -163,14 +167,18 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.WIND_STRENGTH
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { unit: this.getUnit(primaryType), value: primaryValue, class: this.kebabCase(primaryType) }
+          result.primary = { 
+            value: this.getValue(primaryType, primaryValue),
+            unit: this.getUnit(primaryType), 
+            class: this.kebabCase(primaryType)
+          }
           secondaryType = this.measurement.WIND_ANGLE
           secondaryValue = module.dashboard_data[secondaryType]
           result.secondary = {
-            visualClass: 'xlarge wi wi-direction-up',
             value: this.getValue(secondaryType, secondaryValue),
             unit: this.getUnit(secondaryType),
             class: this.kebabCase(secondaryType),
+            visualClass: 'xlarge wi wi-direction-up',
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
@@ -184,7 +192,11 @@ Module.register('netatmo', {
         if (this.config.design === 'bubbles') {
           primaryType = this.measurement.RAIN
           primaryValue = module.dashboard_data ? module.dashboard_data[primaryType] : ''
-          result.primary = { unit: this.getUnit(primaryType), value: primaryValue, class: this.kebabCase(primaryType) }
+          result.primary = {
+            value: this.getValue(primaryType, primaryValue),
+            unit: this.getUnit(primaryType),
+            class: this.kebabCase(primaryType)
+          }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN))
         }
