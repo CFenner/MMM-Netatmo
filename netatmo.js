@@ -131,7 +131,7 @@ Module.register('netatmo', {
         name: measurement,
         value: this.getValue(measurement, 0),
         unit: this.getUnit(measurement),
-        icon: this.getIcon(measurement, 0),
+        icon: this.getIcon(measurement, 0) + 'flash red',
         label: this.translate(measurement.toUpperCase()),
       })
 
