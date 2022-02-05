@@ -388,7 +388,7 @@ Module.register('netatmo', {
     if (value > 60) return 'fa-battery-three-quarters'
     if (value > 40) return 'fa-battery-half'
     if (value > 20) return 'fa-battery-quarter'
-    if (value > 0) return 'fa-battery-empty'
+    return 'fa-battery-empty flash red'
   },
   getStyles: function () {
     return [`${this.name}.${this.config.design}.css`]
