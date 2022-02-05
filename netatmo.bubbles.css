@@ -6,6 +6,10 @@
   padding: 0;
   margin: 0;
 }
+.netatmo ul .room {
+  padding: 0.25em 0.5em;
+  text-align: left;
+}
 .netatmo ul .primary {
   text-align: right;
 }
