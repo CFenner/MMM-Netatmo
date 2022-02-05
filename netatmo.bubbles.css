@@ -52,7 +52,7 @@
   width: 8em;
 }
 .netatmo ul .data .flash {
-  animation: flasher 1s linear infinite;
+  animation: flasher 3s linear infinite;
 }
 .netatmo ul .data .red {
   color: red;
