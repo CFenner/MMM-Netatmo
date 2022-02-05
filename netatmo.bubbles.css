@@ -1,7 +1,8 @@
 .netatmo {
   display: inline-block;
 }
-.netatmo .netatmo-module .name {
+.netatmo .netatmo-module .room {
+  padding: 0.25em 0.5em;
   text-align: left;
 }
 .netatmo .netatmo-module .primary {
@@ -46,6 +47,9 @@
 }
 .netatmo .netatmo-module .data .flash {
   animation: flasher 1s linear infinite;
+}
+.netatmo .netatmo-module .data .red {
+  color: red;
 }
 @keyframes flasher {
   50% {

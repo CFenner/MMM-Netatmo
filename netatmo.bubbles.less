@@ -4,10 +4,11 @@
 @bad: red;
 
 .netatmo{
-	display: inline-block;
+  display: inline-block;
 
   .netatmo-module{
-    .name{
+    .room{
+      padding: 0.25em 0.5em;
       text-align: left;
     }
     .primary{
@@ -57,6 +58,9 @@
       width: 8em;
       .flash {
         animation: flasher 1s linear infinite;
+      }
+      .red {
+        color: @bad
       }
       @keyframes flasher {
         50% { opacity: 0; }
