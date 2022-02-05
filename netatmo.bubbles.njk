@@ -1,4 +1,4 @@
-<div class="netatmo">
+<div class="netatmo {{ 'horizontal' if horizontal }}">
   {% if loaded %}
   <ul>
     {% for module in moduleList %}
