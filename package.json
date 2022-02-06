@@ -4,13 +4,14 @@
   "description": "",
   "main": "netatmo.js",
   "scripts": {
+    "compile": "npm run compile:css",
     "compile:css": "lessc netatmo.bubbles.less netatmo.bubbles.css && lessc netatmo.classic.less netatmo.classic.css",
+    "validate": "npm run validate:css && npm run validate:js && npm run validate:json && npm run validate:md",
     "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
-    "fix:js": "eslint --fix **/*.js",
     "validate:json": "find . -type f -name '*.json' ! -path './node_modules/*' -exec jsonlint {} --insert-final-newline --in-place ';'",
     "validate:md": "markdownlint *.md",
-    "validate": "npm run validate:css && npm run validate:js && npm run validate:json && npm run validate:md",
+    "fix:js": "eslint --fix **/*.js",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },

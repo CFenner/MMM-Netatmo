@@ -412,14 +412,16 @@ Module.register('netatmo', {
       fontClassPrimary: this.config.fontClassPrimary,
       fontClassSecondary: this.config.fontClassSecondary,
       fontClassMeasurement: this.config.fontClassMeasurement,
+      labelLoading: this.translate('LOADING'),
     }
   },
   getTranslations: function () {
     return {
-      en: 'l10n/en.json',
-      de: 'l10n/de.json',
-      fr: 'l10n/fr.json',
       cs: 'l10n/cs.json',
+      de: 'l10n/de.json',
+      en: 'l10n/en.json',
+      fr: 'l10n/fr.json',
+      hu: 'l10n/hu.json',
       nb: 'l10n/nb.json',
       nn: 'l10n/nn.json',
     }
