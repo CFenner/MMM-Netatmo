@@ -412,7 +412,7 @@ Module.register('netatmo', {
       fontClassPrimary: this.config.fontClassPrimary,
       fontClassSecondary: this.config.fontClassSecondary,
       fontClassMeasurement: this.config.fontClassMeasurement,
-      labelLoading: this.translate("LOADING"),
+      labelLoading: this.translate('LOADING'),
     }
   },
   getTranslations: function () {
