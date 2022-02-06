@@ -75,7 +75,7 @@ The following properties can be configured:
 |`moduleOrder`|The rendering order of your weather modules, ommit a module to hide the output. **Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` Be aware that you need to use the module names that you set in the netatmo configuration.||no|
 |`dataOrder`|The rendering order of the data types of a module, ommit a data type to hide the output. **Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`||no|
 |`design`|The design for the module appearance, could be `classic` or `bubbles`.|`classic`|no|
-|`horizontal`|Control the direction of the modules (`classic` design only).|`true`|no|
+|`horizontal`|Control the direction of the modules.|`true`|no|
 |`showBattery`|Control the appearance of the battery status.|`true`|no|
 |`showRadio`|Control the appearance of the radio perception.|`true`|no|
 |`showWiFi`|Control the appearance of the Wifi perception.|`true`|no|

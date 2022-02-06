@@ -6,7 +6,11 @@
 .netatmo{
   display: inline-block;
 
-  .netatmo-module{
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
     .room{
       padding: 0.25em 0.5em;
       text-align: left;
@@ -14,11 +18,11 @@
     .primary{
       text-align: right;
     }
+    .name,
     .secondary,
     .data{
       text-align: left;
     }
-    .primary{}
     .secondary{
       text-align: center;
       width: 5em;
@@ -57,7 +61,7 @@
     .data{
       width: 8em;
       .flash {
-        animation: flasher 1s linear infinite;
+        animation: flasher 3s linear infinite;
       }
       .red {
         color: @bad
@@ -69,5 +73,10 @@
         margin: 0 2px;
       }
     }
+  }
+}
+.netatmo.horizontal{
+  ul>li{
+    display: inline-block;
   }
 }

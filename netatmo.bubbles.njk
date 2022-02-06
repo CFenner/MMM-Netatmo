@@ -1,7 +1,8 @@
-<div class="netatmo">
+<div class="netatmo {{ 'horizontal' if horizontal }}">
   {% if loaded %}
+  <ul>
     {% for module in moduleList %}
-      <div class="netatmo-module">
+      <li>
         <div>
           <table>
             <tbody>
@@ -38,8 +39,9 @@
           </table>
         </div>
         <div class="room {{ fontClassModuleName }}">{{ module.name }}</div>
-      </div>
+      </li>
     {% endfor %}
+    </ul>
   {% else %}
     <div class="dimmed light small">
       {{ labelLoading|safe }}
