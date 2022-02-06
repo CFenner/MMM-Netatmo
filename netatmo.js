@@ -431,7 +431,6 @@ Module.register('netatmo', {
     Log.debug('received ' + notification)
     switch (notification) {
       case self.notifications.AUTH_RESPONSE:
-        console.log(payload)
         if (payload.status === 'OK') {
           self.sendSocketNotification(self.notifications.DATA, self.config)
         } else {
@@ -439,9 +438,8 @@ Module.register('netatmo', {
         }
         break
       case self.notifications.DATA_RESPONSE:
-        console.log(payload)
         if (payload.status === 'OK') {
-          console.log('devices returned')
+          console.log('Devices %o', payload.payloadReturn)
           const stationList = payload.payloadReturn
           self.updateModuleList(stationList)
           self.updateDom(self.config.animationSpeed)
