@@ -42,7 +42,7 @@
     {% endfor %}
   {% else %}
     <div class="dimmed light small">
-      {{ labelLoading }}
+      {{ labelLoading|safe }}
     </div>
   {% endif %}
 </div>
