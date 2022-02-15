@@ -3,6 +3,9 @@
   <ul>
     {% for module in moduleList %}
       <li>
+        {% if showModuleNameOnTop %}
+          <div class="room {{ fontClassModuleName }}">{{ module.name }}</div>
+        {% endif %}
         <div>
           <table>
             <tbody>
@@ -38,7 +41,9 @@
             </tbody>
           </table>
         </div>
-        <div class="room {{ fontClassModuleName }}">{{ module.name }}</div>
+        {% if not showModuleNameOnTop %}
+          <div class="room {{ fontClassModuleName }}">{{ module.name }}</div>
+        {% endif %}
       </li>
     {% endfor %}
     </ul>

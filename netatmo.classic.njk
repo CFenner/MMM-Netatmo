@@ -3,6 +3,9 @@
     <div class="modules {{ 'horizontal' if horizontal }}">
       {% for module in moduleList %}
         <div class="netatmo-module">
+          {% if showModuleNameOnTop %}
+            <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+          {% endif %}
           <div class="data">
             <table>
               {% for measurement in module.measurementList %}
@@ -16,7 +19,9 @@
               {% endfor %}
             </table>
           </div>
-          <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+          {% if not showModuleNameOnTop %}
+            <div class="name {{ fontClassModuleName }}">{{ module.name }}</div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
