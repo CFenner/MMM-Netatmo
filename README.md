@@ -82,6 +82,7 @@ The following properties can be configured:
 |`showTrend`|Control the appearance of the temperature and pressure trend.|`true`|no|
 |`showMeasurementIcon`|Control the appearance of the data entry icons (`bubbles` design only).|`true`|no|
 |`showStationName`|Control the appearance of the station name next to the module name.|`true`|no|
+|`showModuleNameOnTop`|Control the position of the module name.|`false`|no|
 |`fontClassModuleName`|Control font size class of the module name.|`xsmall`|no|
 |`fontClassPrimary`|Control font size class of the primary value (`bubbles` design only).|`large`|no|
 |`fontClassSecondary`|Control font size class of the secondary value (`bubbles` design only).|`xsmall`|no|
