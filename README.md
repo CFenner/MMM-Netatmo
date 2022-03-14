@@ -105,6 +105,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://blog.codesalot.com"><img src="https://avatars.githubusercontent.com/u/4574656?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tom-Inge Larsen</b></sub></a><br /><a href="#translation-tomlarse" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/jegerikke"><img src="https://avatars.githubusercontent.com/u/35518057?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jegerikke</b></sub></a><br /><a href="#translation-jegerikke" title="Translation">🌍</a></td>
     <td align="center"><a href="https://github.com/gilmrt"><img src="https://avatars.githubusercontent.com/u/4236800?v=4?s=100" width="100px;" alt=""/><br /><sub><b>gilmrt</b></sub></a><br /><a href="#translation-gilmrt" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/cyber152"><img src="https://avatars.githubusercontent.com/u/96107993?v=4?s=100" width="100px;" alt=""/><br /><sub><b>cyber152</b></sub></a><br /><a href="https://github.com/CFenner/MMM-Netatmo/commits?author=cyber152" title="Documentation">📖</a></td>
   </tr>
 </table>
 
