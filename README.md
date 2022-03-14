@@ -24,7 +24,7 @@ To use this module you need to have access to a [Netatmo weather station][weathe
 Navigate into your MagicMirror's modules folder and clone the repository:
 
 ```shell
-cd ~/MagicMirror/modules && git clone git clone https://github.com/CFenner/MMM-Netatmo.git netatmo
+cd ~/MagicMirror/modules && git clone https://github.com/CFenner/MMM-Netatmo.git netatmo
 ```
 
 :warning: Note that the checkout folder is named `netatmo` and not `MMM-Netatmo` as the repository.
