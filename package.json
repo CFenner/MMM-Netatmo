@@ -36,7 +36,7 @@
     "markdownlint": "^0.25.1",
     "snyk": "^1.317.0",
     "stylelint": "^15.0.0",
-    "stylelint-config-standard": "^24.0.0"
+    "stylelint-config-standard": "^34.0.0"
   },
   "snyk": true,
   "dependencies": {
