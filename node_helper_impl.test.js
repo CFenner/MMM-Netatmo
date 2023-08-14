@@ -1,4 +1,4 @@
-const moduleName = 'api'
+const moduleName = 'node_helper_impl'
 const moduleUnderTest = require('./' + moduleName + '.js')
 
 describe(moduleName, () => {
