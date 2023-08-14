@@ -37,7 +37,7 @@ cd netatmo && npm ci --production --ignore-scripts
 
 ### Connection to Netatmo Service API
 
-To be able to access your data, you need to have an Netatmo Application. Create your personal app in the [Netatmo developer portal][dev-portal] and you will get an `APP_ID` and an `APP_SECRET` which you will need to enter in your [mirror configuration](#configuration).
+To be able to access your data, you need to have an Netatmo Application. Create your personal app in the [Netatmo developer portal][dev-portal] and you will get an `APP_ID` and an `APP_SECRET` which you will need to enter in your [mirror configuration](#configuration). On the same page, scroll to *Token Generator* and create a token with the `read_station` scope. During that process you will grant your previously created Netatmo app access to your Netatmo weather station. You will actually not need the `access_token`, but the `refresh_token`. This will also go into your mirror configuration.
 
 #### Sample Data
 
@@ -55,8 +55,7 @@ To run the module properly, you need to add the following data to your config.js
   config: {
     clientId: '', // your app id
     clientSecret: '', // your app secret
-    username: '', // your netatmo username
-    password: '', // your netatmo password
+    refresh_token: '', // your generated refresh token
   }
 }
 ```
@@ -69,8 +68,7 @@ The following properties can be configured:
 |---|---|---|---|
 |`clientId`|The ID of your Netatmo [application][dev-portal].||yes|
 |`clientSecret`|The app secret of your Netatmo [application][dev-portal].||yes|
-|`username`|Username for your Netatmo weather station.||yes|
-|`password`|Password for your Netatmo weather station.||yes|
+|`refresh_token`|Generated refresh token for your Netatmo app and Netatmo instance.||yes|
 |`refreshInterval`|How often does the content needs to be updated (minutes)? Data is updated by netatmo every 10 minutes|`3`|no|
 |`moduleOrder`|The rendering order of your weather modules, ommit a module to hide the output. **Example:** `["Kitchen","Kid's Bedroom","Garage","Garden"]` Be aware that you need to use the module names that you set in the netatmo configuration.||no|
 |`dataOrder`|The rendering order of the data types of a module, ommit a data type to hide the output. **Example:** `["Noise","Pressure","CO2","Humidity","Temperature","Rain"]`||no|
