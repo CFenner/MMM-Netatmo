@@ -2,6 +2,7 @@ env:
   browser: true
   es2021: true
   node: true
+  jest: true
 extends:
   - standard
 parserOptions:
@@ -12,4 +13,4 @@ globals:
   Log: true
 rules:
   "comma-dangle": ["error", "always-multiline"]
-  
+

@@ -55,4 +55,22 @@ jobs:
         run: npm clean-install
       - name: Validate CSS Sources
         run: npm run validate:css
+  unit:
+    runs-on: ubuntu-latest
+    name: 'Unit Tests'
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install Dependencies
+        run: npm clean-install
+      - name: Validate JS Sources
+        run: npm run test
 
