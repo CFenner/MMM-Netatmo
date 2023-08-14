@@ -12,7 +12,7 @@
     "validate:json": "find . -type f -name '*.json' ! -path './node_modules/*' -exec jsonlint {} --insert-final-newline --in-place ';'",
     "validate:md": "markdownlint *.md",
     "fix:js": "eslint --fix **/*.js",
-    "snyk-protect": "snyk protect",
+    "snyk-protect": "snyk-protect",
     "prepublish": "npm run snyk-protect"
   },
   "repository": {
