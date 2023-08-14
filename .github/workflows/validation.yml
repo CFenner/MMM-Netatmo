@@ -34,7 +34,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Install Dependencies
-        run: npm install
+        run: npm clean-install
       - name: Validate JS Sources
         run: npm run validate:js
   stylelint:
@@ -52,7 +52,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Install Dependencies
-        run: npm install
+        run: npm clean-install
       - name: Validate CSS Sources
         run: npm run validate:css
 
