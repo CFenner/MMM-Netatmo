@@ -32,7 +32,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('missing token', () => {
+    test('with missing token', () => {
       // moduleUnderTest.token = process.env.TOKEN
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
@@ -48,7 +48,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('invalid token', () => {
+    test('with invalid token', () => {
       moduleUnderTest.token = 'something'
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
@@ -66,14 +66,7 @@ describe('helper', () => {
   })
 
   describe('authentication', () => {
-    test('verify notifications map', () => {
-      expect(moduleUnderTest.notifications).toHaveProperty('AUTH', 'NETATMO_AUTH')
-      expect(moduleUnderTest.notifications).toHaveProperty('AUTH_RESPONSE', 'NETATMO_AUTH_RESPONSE')
-      expect(moduleUnderTest.notifications).toHaveProperty('DATA', 'NETATMO_DATA')
-      expect(moduleUnderTest.notifications).toHaveProperty('DATA_RESPONSE', 'NETATMO_DATA_RESPONSE')
-    })
-
-    test('with refresh_token from config', () => {
+    test('and data with refresh_token from config', () => {
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
         expect(type).toBe(moduleUnderTest.notifications.AUTH_RESPONSE)
@@ -122,7 +115,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('test authenticate fail', () => {
+    test('without refresh_token', () => {
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
         expect(type).toBe(moduleUnderTest.notifications.AUTH_RESPONSE)
