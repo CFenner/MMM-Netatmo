@@ -1,13 +1,11 @@
+require('dotenv').config()
 const moduleUnderTest = require('./helper.js')
 
-const netatmo = require('./module.js')
-
-require('dotenv').config()
+const apiBase = 'api.netatmo.com'
+const authEndpoint = '/oauth2/token'
+const dataEndpoint = '/api/getstationsdata'
 
 describe('helper', () => {
-  beforeEach(() => {
-  })
-
   afterEach(() => {
     delete moduleUnderTest.token
     delete moduleUnderTest.token_expires_in
@@ -27,8 +25,8 @@ describe('helper', () => {
       expect(moduleUnderTest).toHaveProperty('token')
       // test
       moduleUnderTest.loadData({
-        apiBase: netatmo.defaults.apiBase,
-        dataEndpoint: netatmo.defaults.dataEndpoint,
+        apiBase,
+        dataEndpoint,
       })
       // assert
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
@@ -43,8 +41,8 @@ describe('helper', () => {
       })
       // test
       moduleUnderTest.loadData({
-        apiBase: netatmo.defaults.apiBase,
-        dataEndpoint: netatmo.defaults.dataEndpoint,
+        apiBase,
+        dataEndpoint,
       })
       // assert
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
@@ -59,8 +57,8 @@ describe('helper', () => {
       })
       // test
       moduleUnderTest.loadData({
-        apiBase: netatmo.defaults.apiBase,
-        dataEndpoint: netatmo.defaults.dataEndpoint,
+        apiBase,
+        dataEndpoint,
       })
       // assert
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
@@ -86,8 +84,8 @@ describe('helper', () => {
       expect(moduleUnderTest).not.toHaveProperty('refresh_token')
       // test
       moduleUnderTest.authenticate({
-        apiBase: netatmo.defaults.apiBase,
-        authEndpoint: netatmo.defaults.authEndpoint,
+        apiBase,
+        authEndpoint,
         refresh_token: process.env.REFRESH_TOKEN,
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
@@ -111,8 +109,8 @@ describe('helper', () => {
       expect(moduleUnderTest).toHaveProperty('refresh_token')
       // test
       moduleUnderTest.authenticate({
-        apiBase: netatmo.defaults.apiBase,
-        authEndpoint: netatmo.defaults.authEndpoint,
+        apiBase,
+        authEndpoint,
         refresh_token: '',
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
@@ -135,8 +133,8 @@ describe('helper', () => {
       expect(moduleUnderTest).not.toHaveProperty('refresh_token')
       // test
       moduleUnderTest.authenticate({
-        apiBase: netatmo.defaults.apiBase,
-        authEndpoint: netatmo.defaults.authEndpoint,
+        apiBase,
+        authEndpoint,
         refresh_token: '',
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
