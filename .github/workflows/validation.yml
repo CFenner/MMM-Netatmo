@@ -24,7 +24,7 @@ jobs:
     name: 'ESLint'
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Install Dependencies
-        run: npm install
+        run: npm clean-install
       - name: Validate JS Sources
         run: npm run validate:js
   stylelint:
@@ -42,7 +42,7 @@ jobs:
     name: 'Stylelint'
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -52,7 +52,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Install Dependencies
-        run: npm install
+        run: npm clean-install
       - name: Validate CSS Sources
         run: npm run validate:css
 
