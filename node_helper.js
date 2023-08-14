@@ -5,6 +5,6 @@
  * MIT Licensed.
  */
 const NodeHelper = require('node_helper')
-const api = require('./api')
+const helper = require('./helper')
 
-module.exports = NodeHelper.create(api)
+module.exports = NodeHelper.create(helper)

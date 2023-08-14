@@ -14,6 +14,9 @@
     "fix:js": "eslint --fix **/*.js",
     "test": "npm run test:js",
     "test:js": "jest *.test.js",
+    "docker:server": "docker compose --file compose/docker-compose.yml up",
+    "docker:clone": "git clone https://github.com/CFenner/MMM-Netatmo.git compose/modules/netatmo",
+    "docker:install": "npm clean-install --production --ignore-scripts --prefix compose/modules/netatmo",
     "snyk-protect": "snyk-protect",
     "prepublish": "npm run snyk-protect"
   },
@@ -29,6 +32,7 @@
   "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
   "devDependencies": {
     "@snyk/protect": "^1.1200.0",
+    "dotenv": "^16.3.1",
     "eslint": "^8.7.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.25.4",
@@ -43,6 +47,7 @@
   },
   "snyk": true,
   "dependencies": {
-    "@ungap/url-search-params": "^0.2.2"
+    "@ungap/url-search-params": "^0.2.2",
+    "sync-fetch": "^0.5.2"
   }
 }

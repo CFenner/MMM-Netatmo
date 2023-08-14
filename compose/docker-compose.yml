@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  magicmirror:
+    container_name: mm
+    image: karsten13/magicmirror:fat
+    volumes:
+      - ./config:/opt/magic_mirror/config
+      - ./modules:/opt/magic_mirror/modules
+      - ./css:/opt/magic_mirror/css
+    environment:
+      TZ: Europe/Berlin
+      MM_SHOW_CURSOR: "true"
+    env_file: ../.env
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    command:
+     - npm
+     - run
+     - server

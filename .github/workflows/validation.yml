@@ -71,6 +71,5 @@ jobs:
           cache: "npm"
       - name: Install Dependencies
         run: npm clean-install
-      - name: Validate JS Sources
+      - name: Execute Unit Tests
         run: npm run test
-
