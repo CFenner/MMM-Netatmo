@@ -24,7 +24,7 @@ jobs:
     name: 'ESLint'
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
