@@ -66,7 +66,7 @@ describe('helper', () => {
   })
 
   describe('authentication', () => {
-    test('and data with refresh_token from config', () => {
+    test('with refresh_token from config', () => {
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
         expect(type).toBe(moduleUnderTest.notifications.AUTH_RESPONSE)
