@@ -8,7 +8,7 @@ To test the module in a MagicMirror instance:
 - run `npm run docker:install` to install the modules dependencies
 - add the module config to the `config/config.js`
 
-  ```
+  ```yaml
       {
         module: 'netatmo',
         position: 'bottom_left',
@@ -21,4 +21,4 @@ To test the module in a MagicMirror instance:
       },
   ```
 
-- open MagicMirror ui at http://0.0.0.0:8080
+- open MagicMirror ui at [`http://0.0.0.0:8080`](http://0.0.0.0:8080)
