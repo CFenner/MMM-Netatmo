@@ -1,3 +1,4 @@
-config/
+config/**
 css/
 modules/
+!config/config.js.template

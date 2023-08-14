@@ -11,6 +11,7 @@ services:
     environment:
       TZ: Europe/Berlin
       MM_SHOW_CURSOR: "true"
+    env_file: ../.env
     ports:
       - 8080:8080
     restart: unless-stopped
