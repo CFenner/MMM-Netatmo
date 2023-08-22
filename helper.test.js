@@ -14,8 +14,18 @@ describe('helper', () => {
   })
   describe('data', () => {
     test('existing token', () => {
-      moduleUnderTest.token = process.env.TOKEN
+      // moduleUnderTest.token = process.env.TOKEN
       // prepare
+      expect(moduleUnderTest).not.toHaveProperty('token')
+      moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {})
+      moduleUnderTest.authenticate({
+        apiBase,
+        authEndpoint,
+        refresh_token: process.env.REFRESH_TOKEN,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+      })
+      expect(moduleUnderTest).toHaveProperty('token')
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
         expect(type).toBe(moduleUnderTest.notifications.DATA_RESPONSE)
         expect(payload).toHaveProperty('status', 'OK')
