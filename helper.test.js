@@ -14,7 +14,6 @@ describe('helper', () => {
   })
   describe('data', () => {
     test('existing token', () => {
-      // moduleUnderTest.token = process.env.TOKEN
       // prepare
       expect(moduleUnderTest).not.toHaveProperty('token')
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {})
