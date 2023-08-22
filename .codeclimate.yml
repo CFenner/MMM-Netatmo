@@ -1,29 +1,24 @@
----
-engines:
+version: "2"         # required to adjust maintainability checks
+plugins:
   csslint:
     enabled: true
   duplication:
     enabled: true
     config:
       languages:
-      - ruby
       - javascript
-      - python
-      - php
+  editorconfig:
+    enabled: true
   eslint:
     enabled: true
+    channel: eslint-8
   fixme:
+    enabled: true
+  markdownlint:
     enabled: true
 ratings:
   paths:
   - "**.css"
-  - "**.inc"
+  - "**.json"
   - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
-exclude_paths: [
-  "q.min.js"
-]
+  - "**.njk"
