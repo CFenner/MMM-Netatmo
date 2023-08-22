@@ -16,9 +16,3 @@ plugins:
     enabled: true
   markdownlint:
     enabled: true
-ratings:
-  paths:
-  - "**.css"
-  - "**.json"
-  - "**.js"
-  - "**.njk"
