@@ -1,7 +1,7 @@
 {
   "CO2": "CO<sub>2</sub>",
   "NOISE": "Шум",
-  "HUMIDITY": "Влажность",
+  "HUMIDITY": "Влажн",
   "PRESSURE": "Давлен",
   "PRESSURE_TREND": "Давлен (изм)",
   "TEMPERATURE": "Темп-ра",
@@ -12,13 +12,13 @@
   "WINDSTRENGTH": "Ветер",
   "WINDANGLE": "Ветер (направл)",
   "GUSTSTRENGTH": "Порыв",
-  "GUSTANGLE": "Порыв (направл)",
+  "GUSTANGLE": "Направл",
   "UP": "рост",
   "STABLE": "стаб",
   "DOWN": "упало",
   "UNDEFINED": "неизвестно",
   "WIFI": "WiFi",
-  "RADIO": "Ур. сигнала",
+  "RADIO": "Ур.сигнала",
   "BATTERY": "Батарея",
-  "LAST_MESSAGE": "Посл соед"
+  "LAST_MESSAGE": "Посл.соед"
 }
