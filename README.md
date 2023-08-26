@@ -97,14 +97,17 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/kuutio-hub"><img src="https://avatars.githubusercontent.com/u/66736498?v=4?s=100" width="100px;" alt=""/><br /><sub><b>kuutio-hub</b></sub></a><br /><a href="#translation-kuutio-hub" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/zdeneksofr"><img src="https://avatars.githubusercontent.com/u/25898139?v=4?s=100" width="100px;" alt=""/><br /><sub><b>zdeneksofr</b></sub></a><br /><a href="#translation-zdeneksofr" title="Translation">🌍</a></td>
-    <td align="center"><a href="http://blog.codesalot.com"><img src="https://avatars.githubusercontent.com/u/4574656?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tom-Inge Larsen</b></sub></a><br /><a href="#translation-tomlarse" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/jegerikke"><img src="https://avatars.githubusercontent.com/u/35518057?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jegerikke</b></sub></a><br /><a href="#translation-jegerikke" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/gilmrt"><img src="https://avatars.githubusercontent.com/u/4236800?v=4?s=100" width="100px;" alt=""/><br /><sub><b>gilmrt</b></sub></a><br /><a href="#translation-gilmrt" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/cyber152"><img src="https://avatars.githubusercontent.com/u/96107993?v=4?s=100" width="100px;" alt=""/><br /><sub><b>cyber152</b></sub></a><br /><a href="https://github.com/CFenner/MMM-Netatmo/commits?author=cyber152" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kuutio-hub"><img src="https://avatars.githubusercontent.com/u/66736498?v=4?s=100" width="100px;" alt="kuutio-hub"/><br /><sub><b>kuutio-hub</b></sub></a><br /><a href="#translation-kuutio-hub" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/zdeneksofr"><img src="https://avatars.githubusercontent.com/u/25898139?v=4?s=100" width="100px;" alt="zdeneksofr"/><br /><sub><b>zdeneksofr</b></sub></a><br /><a href="#translation-zdeneksofr" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://blog.codesalot.com"><img src="https://avatars.githubusercontent.com/u/4574656?v=4?s=100" width="100px;" alt="Tom-Inge Larsen"/><br /><sub><b>Tom-Inge Larsen</b></sub></a><br /><a href="#translation-tomlarse" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jegerikke"><img src="https://avatars.githubusercontent.com/u/35518057?v=4?s=100" width="100px;" alt="jegerikke"/><br /><sub><b>jegerikke</b></sub></a><br /><a href="#translation-jegerikke" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gilmrt"><img src="https://avatars.githubusercontent.com/u/4236800?v=4?s=100" width="100px;" alt="gilmrt"/><br /><sub><b>gilmrt</b></sub></a><br /><a href="#translation-gilmrt" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cyber152"><img src="https://avatars.githubusercontent.com/u/96107993?v=4?s=100" width="100px;" alt="cyber152"/><br /><sub><b>cyber152</b></sub></a><br /><a href="https://github.com/CFenner/MMM-Netatmo/commits?author=cyber152" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Laz2516"><img src="https://avatars.githubusercontent.com/u/40304797?v=4?s=100" width="100px;" alt="Laz2516"/><br /><sub><b>Laz2516</b></sub></a><br /><a href="#translation-Laz2516" title="Translation">🌍</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
