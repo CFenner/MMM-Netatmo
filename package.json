@@ -49,6 +49,7 @@
   "snyk": true,
   "dependencies": {
     "@ungap/url-search-params": "^0.2.2",
+    "node-fetch": "^2.6.13",
     "sync-fetch": "^0.5.2"
   }
 }
