@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchPackagePatterns": ["lint"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchPackageNames": ["@snyk/protect", "jest", "expect"],
+      "automerge": true,
+      "platformAutomerge": true
+    }
+  ]
+}
