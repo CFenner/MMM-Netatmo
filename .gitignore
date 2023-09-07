@@ -1,5 +1,5 @@
 # Ignore all node modules.
 node_modules
 report
-.env
+.env*
 .DS_Store
