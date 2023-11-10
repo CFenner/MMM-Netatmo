@@ -16,7 +16,7 @@
     "test:js": "jest *.test.js",
     "docker:clean": "rm -f compose/config/config.js && rm -f compose/config/config.js_* && rm -rf compose/css && rm -rf compose/modules",
     "docker:server": "docker compose --file compose/docker-compose.yml up",
-    "docker:clone": "git clone https://github.com/CFenner/MMM-Netatmo.git compose/modules/netatmo",
+    "docker:clone": "git clone https://github.com/CFenner/MMM-Netatmo compose/modules/netatmo",
     "docker:install": "npm clean-install --production --ignore-scripts --prefix compose/modules/netatmo",
     "snyk-protect": "snyk-protect",
     "prepublish": "npm run snyk-protect"
