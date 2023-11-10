@@ -5,14 +5,24 @@
   ],
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies"],
-      "matchPackagePatterns": ["lint"],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchPackagePatterns": [
+        "lint"
+      ],
       "automerge": true,
       "platformAutomerge": true
     },
     {
-      "matchDepTypes": ["devDependencies"],
-      "matchPackageNames": ["@snyk/protect", "jest", "expect"],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchPackageNames": [
+        "@snyk/protect",
+        "jest",
+        "expect"
+      ],
       "automerge": true,
       "platformAutomerge": true
     }
