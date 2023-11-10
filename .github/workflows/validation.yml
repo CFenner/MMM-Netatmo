@@ -24,7 +24,7 @@ jobs:
     name: 'ESLint'
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
     name: 'Stylelint'
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
     name: 'Unit Tests'
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
