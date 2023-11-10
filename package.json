@@ -1,7 +1,7 @@
 {
   "name": "netatmo",
   "version": "2.0.0",
-  "description": "",
+  "description": "A module for the MagicMirror² to display informations about your rooms climate from your Netatmo system. ",
   "main": "netatmo.js",
   "scripts": {
     "compile": "npm run compile:css",
@@ -25,7 +25,12 @@
     "type": "git",
     "url": "git+https://github.com/CFenner/MagicMirror-Netatmo-Module.git"
   },
-  "author": "",
+  "keywords": [
+    "magicmirror",
+    "netatmo",
+    "smarthome"
+  ],
+  "author": "Christopher Fenner",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/CFenner/MagicMirror-Netatmo-Module/issues"
