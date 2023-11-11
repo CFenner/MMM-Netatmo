@@ -60,7 +60,7 @@ jobs:
     name: 'Unit Tests'
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [18.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
