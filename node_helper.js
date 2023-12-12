@@ -1,5 +1,5 @@
-/* Magic Mirror
- * Module: MagicMirror-Netatmo-Module
+/* MagicMirror²
+ * Module: MMM-Netatmo
  *
  * By Christopher Fenner https://github.com/CFenner
  * MIT Licensed.

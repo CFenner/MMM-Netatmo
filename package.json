@@ -1,7 +1,7 @@
 {
   "name": "netatmo",
   "version": "2.0.0",
-  "description": "",
+  "description": "A module for the MagicMirror² to display information about your rooms climate from your Netatmo system.",
   "main": "netatmo.js",
   "scripts": {
     "compile": "npm run compile:css",
@@ -10,13 +10,13 @@
     "validate:css": "stylelint **/*.css",
     "validate:js": "eslint **/*.js",
     "validate:json": "find . -type f -name '*.json' ! -path './node_modules/*' -exec jsonlint {} --insert-final-newline --in-place ';'",
-    "validate:md": "markdownlint *.md",
+    "validate:md": "node_modules/.bin/markdownlint *.md",
     "fix:js": "eslint --fix **/*.js",
     "test": "npm run test:js",
     "test:js": "jest *.test.js",
     "docker:clean": "rm -f compose/config/config.js && rm -f compose/config/config.js_* && rm -rf compose/css && rm -rf compose/modules",
     "docker:server": "docker compose --file compose/docker-compose.yml up",
-    "docker:clone": "git clone https://github.com/CFenner/MMM-Netatmo.git compose/modules/netatmo",
+    "docker:clone": "git clone https://github.com/CFenner/MMM-Netatmo compose/modules/netatmo",
     "docker:install": "npm clean-install --production --ignore-scripts --prefix compose/modules/netatmo",
     "snyk-protect": "snyk-protect",
     "prepublish": "npm run snyk-protect"
@@ -25,7 +25,12 @@
     "type": "git",
     "url": "git+https://github.com/CFenner/MagicMirror-Netatmo-Module.git"
   },
-  "author": "",
+  "keywords": [
+    "magicmirror",
+    "netatmo",
+    "smarthome"
+  ],
+  "author": "Christopher Fenner",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/CFenner/MagicMirror-Netatmo-Module/issues"
