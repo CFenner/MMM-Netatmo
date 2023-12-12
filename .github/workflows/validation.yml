@@ -79,4 +79,4 @@ jobs:
           node-version: ${{ env.node-version }}
           cache: "npm"
       - run: npm install --ignore-scripts
-      - run: git diff --name-only --exit-code
+      - run: git diff --exit-code
