@@ -6,7 +6,7 @@
  */
 const fs = require('fs')
 const path = require('path')
-const fetch = require('sync-fetch')
+const fetch = require('node-fetch')
 const URLSearchParams = require('@ungap/url-search-params')
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
     console.log('Netatmo helper started ...')
     this.token = null
   },
-  authenticate: function (config) {
+  authenticate: async function (config) {
     const self = this
     self.config = config
 
@@ -31,20 +31,22 @@ module.exports = {
     params.append('client_secret', self.config.clientSecret)
 
     try {
-      const result = fetch('https://' + self.config.apiBase + self.config.authEndpoint, {
+      const result = await fetch('https://' + self.config.apiBase + self.config.authEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params,
-      }).json()
+      })
 
       if (result.error) {
         throw new Error(result.error + ': ' + result.error_description)
       }
 
-      console.log('UPDATING TOKEN ' + result.access_token)
-      self.token = result.access_token
-      self.token_expires_in = result.expires_in
-      self.refresh_token = result.refresh_token
+      const authData = await result.json()
+
+      console.log('UPDATING TOKEN ' + authData.access_token)
+      self.token = authData.access_token
+      self.token_expires_in = authData.expires_in
+      self.refresh_token = authData.refresh_token
       // we got a new token, save it to main file to allow it to request the datas
       self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
         status: 'OK',
@@ -58,7 +60,7 @@ module.exports = {
       })
     }
   },
-  loadData: function (config) {
+  loadData: async function (config) {
     const self = this
     self.config = config
 
@@ -79,7 +81,7 @@ module.exports = {
     }
 
     try {
-      let result = fetch('https://' + self.config.apiBase + self.config.dataEndpoint, {
+      let result = await fetch('https://' + self.config.apiBase + self.config.dataEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${self.token}`,
@@ -96,7 +98,7 @@ module.exports = {
         return
       }
 
-      result = result.json()
+      result = await result.json()
 
       if (result.error) {
         throw new Error(result.error.message)
