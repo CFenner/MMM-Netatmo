@@ -109,6 +109,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ottolote"><img src="https://avatars.githubusercontent.com/u/6615220?v=4?s=100" width="100px;" alt="Otto Lote"/><br /><sub><b>Otto Lote</b></sub></a><br /><a href="https://github.com/CFenner/MMM-Netatmo/commits?author=ottolote" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cgillinger"><img src="https://avatars.githubusercontent.com/u/11836825?v=4?s=100" width="100px;" alt="cgillinger"/><br /><sub><b>cgillinger</b></sub></a><br /><a href="#translation-cgillinger" title="Translation">🌍</a></td>
     </tr>
   </tbody>
 </table>
