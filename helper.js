@@ -6,7 +6,6 @@
  */
 const fs = require('fs')
 const path = require('path')
-const fetch = require('node-fetch')
 const URLSearchParams = require('@ungap/url-search-params')
 
 module.exports = {
