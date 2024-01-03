@@ -13,11 +13,11 @@ describe('helper', () => {
     delete moduleUnderTest.sendSocketNotification
   })
   describe('data', () => {
-    test('existing token', () => {
+    test('existing token', async () => {
       // prepare
       expect(moduleUnderTest).not.toHaveProperty('token')
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {})
-      moduleUnderTest.authenticate({
+      await moduleUnderTest.authenticate({
         apiBase,
         authEndpoint,
         refresh_token: process.env.REFRESH_TOKEN,
@@ -33,7 +33,7 @@ describe('helper', () => {
       })
       expect(moduleUnderTest).toHaveProperty('token')
       // test
-      moduleUnderTest.loadData({
+      await moduleUnderTest.loadData({
         apiBase,
         dataEndpoint,
       })
@@ -41,7 +41,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('with missing token', () => {
+    test('with missing token', async () => {
       // moduleUnderTest.token = process.env.TOKEN
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
@@ -49,7 +49,7 @@ describe('helper', () => {
         expect(payload).toHaveProperty('status', 'INVALID_TOKEN')
       })
       // test
-      moduleUnderTest.loadData({
+      await moduleUnderTest.loadData({
         apiBase,
         dataEndpoint,
       })
@@ -57,7 +57,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('with invalid token', () => {
+    test('with invalid token', async () => {
       moduleUnderTest.token = 'something'
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
@@ -65,7 +65,7 @@ describe('helper', () => {
         expect(payload).toHaveProperty('status', 'INVALID_TOKEN')
       })
       // test
-      moduleUnderTest.loadData({
+      await moduleUnderTest.loadData({
         apiBase,
         dataEndpoint,
       })
@@ -75,7 +75,7 @@ describe('helper', () => {
   })
 
   describe('authentication', () => {
-    test('with refresh_token from config', () => {
+    test('with refresh_token from config', async () => {
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
         expect(type).toBe(moduleUnderTest.notifications.AUTH_RESPONSE)
@@ -85,7 +85,7 @@ describe('helper', () => {
       expect(moduleUnderTest).not.toHaveProperty('token_expires_in')
       expect(moduleUnderTest).not.toHaveProperty('refresh_token')
       // test
-      moduleUnderTest.authenticate({
+      await moduleUnderTest.authenticate({
         apiBase,
         authEndpoint,
         refresh_token: process.env.REFRESH_TOKEN,
@@ -99,7 +99,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('with refresh_token from object', () => {
+    test('with refresh_token from object', async () => {
       // prepare
       moduleUnderTest.refresh_token = process.env.REFRESH_TOKEN
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
@@ -110,7 +110,7 @@ describe('helper', () => {
       expect(moduleUnderTest).not.toHaveProperty('token_expires_in')
       expect(moduleUnderTest).toHaveProperty('refresh_token')
       // test
-      moduleUnderTest.authenticate({
+      await moduleUnderTest.authenticate({
         apiBase,
         authEndpoint,
         refresh_token: '',
@@ -124,7 +124,7 @@ describe('helper', () => {
       expect(moduleUnderTest.sendSocketNotification).toHaveBeenCalled()
     })
 
-    test('without refresh_token', () => {
+    test('without refresh_token', async () => {
       // prepare
       moduleUnderTest.sendSocketNotification = jest.fn((type, payload) => {
         expect(type).toBe(moduleUnderTest.notifications.AUTH_RESPONSE)
@@ -134,7 +134,7 @@ describe('helper', () => {
       expect(moduleUnderTest).not.toHaveProperty('token_expires_in')
       expect(moduleUnderTest).not.toHaveProperty('refresh_token')
       // test
-      moduleUnderTest.authenticate({
+      await moduleUnderTest.authenticate({
         apiBase,
         authEndpoint,
         refresh_token: '',
