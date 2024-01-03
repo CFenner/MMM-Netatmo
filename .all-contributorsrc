@@ -67,6 +67,15 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "ottolote",
+      "name": "Otto Lote",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6615220?v=4",
+      "profile": "https://github.com/ottolote",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
