@@ -76,6 +76,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cgillinger",
+      "name": "cgillinger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11836825?v=4",
+      "profile": "https://github.com/cgillinger",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
