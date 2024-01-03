@@ -427,6 +427,7 @@ Module.register('netatmo', {
       nb: 'l10n/nb.json',
       nn: 'l10n/nn.json',
       ru: 'l10n/ru.json',
+      sv: 'l10n/sv.json',
     }
   },
   socketNotificationReceived: function (notification, payload) {
