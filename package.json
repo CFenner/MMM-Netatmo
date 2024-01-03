@@ -53,7 +53,6 @@
   },
   "snyk": true,
   "dependencies": {
-    "@ungap/url-search-params": "0.2.2",
-    "node-fetch": "2.7.0"
+    "@ungap/url-search-params": "0.2.2"
   }
 }
