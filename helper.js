@@ -35,18 +35,16 @@ module.exports = {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params,
-      })
+      }).then(response => response.json())
 
       if (result.error) {
         throw new Error(result.error + ': ' + result.error_description)
       }
 
-      const authData = await result.json()
-
-      console.log('UPDATING TOKEN ' + authData.access_token)
-      self.token = authData.access_token
-      self.token_expires_in = authData.expires_in
-      self.refresh_token = authData.refresh_token
+      console.log('UPDATING TOKEN ' + result.access_token)
+      self.token = result.access_token
+      self.token_expires_in = result.expires_in
+      self.refresh_token = result.refresh_token
       // we got a new token, save it to main file to allow it to request the datas
       self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
         status: 'OK',
