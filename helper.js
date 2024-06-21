@@ -23,7 +23,7 @@ module.exports = {
     const self = this
     self.config = config
 
-    const refreshToken = this.readToken();
+    const refreshToken = this.readToken()
 
     const params = new URLSearchParams()
     params.append('grant_type', 'refresh_token')
@@ -46,7 +46,7 @@ module.exports = {
       self.token = result.access_token
       self.token_expires_in = result.expires_in
       self.refresh_token = result.refresh_token
-      this.writeToken(result);
+      this.writeToken(result)
       // we got a new token, save it to main file to allow it to request the datas
       self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
         status: 'OK',
@@ -136,31 +136,31 @@ module.exports = {
    * @bugsounet
    */
   readToken: function() {
-    var refresh_token = null;
-    var file = path.resolve(__dirname, "./token.json");
+    var refresh_token = null
+    var file = path.resolve(__dirname, "./token.json")
     // check presence of token.json
     if (fs.existsSync(file)) {
-      let tokenFile = JSON.parse(fs.readFileSync(file));
-      refresh_token = tokenFile.refresh_token;
+      let tokenFile = JSON.parse(fs.readFileSync(file))
+      refresh_token = tokenFile.refresh_token
       if (!refresh_token) {
-        console.error("Token not found in token.json file");
-        return null;
+        console.error("Token not found in token.json file")
+        return null
       }
-      return refresh_token;
+      return refresh_token
     }
     // Token file not used
-    return null;
+    return null
   },
 
   writeToken: function(token) {
     try {
-      var file = path.resolve(__dirname, "./token.json");
-      fs.writeFileSync(file, JSON.stringify(token));
-      console.log("netatmo token.json was written successfully");
-      return token;
+      var file = path.resolve(__dirname, "./token.json")
+      fs.writeFileSync(file, JSON.stringify(token))
+      console.log("netatmo token.json was written successfully")
+      return token
     } catch (error) {
-      console.error("netatmo token.json writeToken error", error.message);
-      return null;
+      console.error("netatmo token.json writeToken error", error.message)
+      return null
     }
   }
 }
