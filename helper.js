@@ -27,7 +27,7 @@ module.exports = {
 
     const params = new URLSearchParams()
     params.append('grant_type', 'refresh_token')
-    params.append('refresh_token', refreshToken || self.refresh_token || self.config.refresh_token)
+    params.append('refresh_token', self.refresh_token || refreshToken || self.config.refresh_token)
     params.append('client_id', self.config.clientId)
     params.append('client_secret', self.config.clientSecret)
 
