@@ -135,15 +135,14 @@ module.exports = {
   /* from MMM-Netatmo
    * @bugsounet
    */
-  readToken: function() {
-    var refresh_token = null
-    var file = path.resolve(__dirname, "./token.json")
+  readToken: function () {
+    var file = path.resolve(__dirname, './token.json')
     // check presence of token.json
     if (fs.existsSync(file)) {
       let tokenFile = JSON.parse(fs.readFileSync(file))
-      refresh_token = tokenFile.refresh_token
+      const refresh_token = tokenFile.refresh_token
       if (!refresh_token) {
-        console.error("Token not found in token.json file")
+        console.error('Token not found in token.json file')
         return null
       }
       return refresh_token
@@ -152,15 +151,15 @@ module.exports = {
     return null
   },
 
-  writeToken: function(token) {
+  writeToken: function (token) {
     try {
-      var file = path.resolve(__dirname, "./token.json")
+      const file = path.resolve(__dirname, './token.json')
       fs.writeFileSync(file, JSON.stringify(token))
-      console.log("netatmo token.json was written successfully")
+      console.log('netatmo token.json was written successfully')
       return token
     } catch (error) {
-      console.error("netatmo token.json writeToken error", error.message)
+      console.error('netatmo token.json writeToken error', error.message)
       return null
     }
-  }
+  },
 }
