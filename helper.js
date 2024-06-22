@@ -4,36 +4,36 @@
  * By Christopher Fenner https://github.com/CFenner
  * MIT Licensed.
  */
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 const moment = require("moment");
 
 module.exports = {
   notifications: {
-    AUTH: 'NETATMO_AUTH',
-    AUTH_RESPONSE: 'NETATMO_AUTH_RESPONSE',
-    DATA: 'NETATMO_DATA',
-    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE'
+    AUTH: "NETATMO_AUTH",
+    AUTH_RESPONSE: "NETATMO_AUTH_RESPONSE",
+    DATA: "NETATMO_DATA",
+    DATA_RESPONSE: "NETATMO_DATA_RESPONSE"
   },
 
-  start: function () {
-    console.log('Netatmo helper started ...');
+  start () {
+    console.log("Netatmo helper started ...");
     this.token = null;
   },
 
-  authenticate: async function () {
+  async authenticate () {
     const params = new URLSearchParams();
-    params.append('grant_type', 'refresh_token');
-    params.append('refresh_token', this.refreshToken);
-    params.append('client_id', this.clientId);
-    params.append('client_secret', this.clientSecret);
+    params.append("grant_type", "refresh_token");
+    params.append("refresh_token", this.refreshToken);
+    params.append("client_id", this.clientId);
+    params.append("client_secret", this.clientSecret);
 
     try {
       const result = await fetch(`https://${this.config.apiBase}${this.config.authEndpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params
-      }).then(response => response.json());
+      }).then((response) => response.json());
 
       if (result.error) {
         throw new Error(`${result.error} : ${result.error_description}`);
@@ -42,7 +42,7 @@ module.exports = {
       this.token = result.access_token;
       this.token_expires_in = result.expires_in;
       this.refreshToken = result.refresh_token;
-      console.log('Netatmo: Authenticated');
+      console.log("Netatmo: Authenticated");
 
       // write in token file and provides for token refresh
       this.writeToken(result);
@@ -54,24 +54,24 @@ module.exports = {
 
       // inform module AUTH ok
       this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
-        status: 'OK'
+        status: "OK"
       });
 
     } catch (error) {
-      console.error('Netatmo:', error);
+      console.error("Netatmo:", error);
       this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
         payloadReturn: error,
-        status: 'NOTOK',
+        status: "NOTOK",
         message: error
       });
     };
   },
 
-  loadData: async function () {
+  async loadData () {
     if (this.config.mockData === true) {
       this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
         payloadReturn: this.mockData(),
-        status: 'OK'
+        status: "OK"
       });
       return;
     };
@@ -79,8 +79,8 @@ module.exports = {
     if (!this.token) {
       this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
         payloadReturn: 400,
-        status: 'INVALID_TOKEN',
-        message: 'token not set'
+        status: "INVALID_TOKEN",
+        message: "token not set"
       });
       return;
     };
@@ -88,7 +88,7 @@ module.exports = {
     try {
       let result = await fetch(`https://${this.config.apiBase}${this.config.dataEndpoint}`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`
         }
       });
@@ -97,7 +97,7 @@ module.exports = {
         console.warn(`Netatmo: status code: ${result.status} (${result.statusText})`);
         this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
           payloadReturn: result.statusText,
-          status: 'INVALID_TOKEN',
+          status: "INVALID_TOKEN",
           message: result
         });
         return;
@@ -111,24 +111,24 @@ module.exports = {
 
       this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
         payloadReturn: result.body.devices,
-        status: 'OK'
+        status: "OK"
       });
     } catch (error) {
-      console.error('Netatmo:', error);
+      console.error("Netatmo:", error);
       this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
         payloadReturn: error,
-        status: 'NOTOK',
+        status: "NOTOK",
         message: error
       });
     };
   },
 
-  mockData: function () {
-    const sample = fs.readFileSync(path.join(__dirname, 'sample', 'sample.json'), 'utf8');
+  mockData () {
+    const sample = fs.readFileSync(path.join(__dirname, "sample", "sample.json"), "utf8");
     return JSON.parse(sample);
   },
 
-  socketNotificationReceived: function (notification, payload) {
+  socketNotificationReceived (notification, payload) {
     switch (notification) {
       case "INIT":
         this.Init(payload);
@@ -142,8 +142,8 @@ module.exports = {
     }
   },
 
-  Init: function (config) {
-    this.config = config
+  Init (config) {
+    this.config = config;
     if (!this.config.clientId) {
       console.error("Netatmo: clientId not set in config.");
       return;
@@ -171,11 +171,11 @@ module.exports = {
   /* from MMM-NetatmoThermostat
    * @bugsounet
    */
-  readToken: function () {
-    var file = path.resolve(__dirname, './token.json');
+  readToken () {
+    var file = path.resolve(__dirname, "./token.json");
     // check presence of token.json
     if (fs.existsSync(file)) {
-      console.log('Netatmo: using token.json file');
+      console.log("Netatmo: using token.json file");
       let tokenFile = JSON.parse(fs.readFileSync(file));
       const refresh_token = tokenFile.refresh_token;
       if (!refresh_token) {
@@ -190,33 +190,33 @@ module.exports = {
     return null;
   },
 
-  writeToken: function (token) {
+  writeToken (token) {
     try {
-      const file = path.resolve(__dirname, './token.json');
+      const file = path.resolve(__dirname, "./token.json");
       fs.writeFileSync(file, JSON.stringify(token));
-      console.log('Netatmo: token.json was written successfully');
+      console.log("Netatmo: token.json was written successfully");
       return token;
     } catch (error) {;
-      console.error('Netatmo: writeToken error', error.message)
+      console.error("Netatmo: writeToken error", error.message);
       return null;
     };
   },
 
   // Refresh Token
-  authenticateRefresh: async function (refresh_token) {
+  async authenticateRefresh (refresh_token) {
     console.log("Netatmo: Refresh Token");
     const params = new URLSearchParams();
     params.append("grant_type", "refresh_token");
     params.append("refresh_token", refresh_token);
-    params.append('client_id', this.clientId);
-    params.append('client_secret', this.clientSecret);
+    params.append("client_id", this.clientId);
+    params.append("client_secret", this.clientSecret);
 
     try {
       const result = await fetch(`https://${this.config.apiBase}${this.config.authEndpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params
-      }).then(response => response.json());
+      }).then((response) => response.json());
 
       if (result.error) {
         throw new Error(result.error);
@@ -224,7 +224,7 @@ module.exports = {
 
       this.writeToken(result);
       this.token = result.access_token;
-      console.log('Netatmo: TOKEN Updated');
+      console.log("Netatmo: TOKEN Updated");
 
       if (result.expires_in) {
         let expire_at = moment(Date.now() + (result.expires_in*1000)).format("LLLL");
@@ -233,18 +233,18 @@ module.exports = {
       };
 
       this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
-        status: 'OK'
+        status: "OK"
       });
 
     } catch (error) {
-      console.error('Netatmo:', error)
+      console.error("Netatmo:", error);
       this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
         payloadReturn: error,
-        status: 'NOTOK',
+        status: "NOTOK",
         message: error
-      })
-      console.log('Netatmo: Retry login in 60 sec')
-      setTimeout(() => this.authenticate(this.config), 60 * 1000)
+      });
+      console.log("Netatmo: Retry login in 60 sec");
+      setTimeout(() => this.authenticate(this.config), 60 * 1000);
     }
   }
-}
+};
