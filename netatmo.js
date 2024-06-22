@@ -32,20 +32,20 @@ Module.register('netatmo', {
     fontClassMeasurement: 'xsmall',
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
-    mockData: false,
+    mockData: false
   },
   notifications: {
     AUTH: 'NETATMO_AUTH',
     AUTH_RESPONSE: 'NETATMO_AUTH_RESPONSE',
     DATA: 'NETATMO_DATA',
-    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE',
+    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE'
   },
   moduleType: {
     MAIN: 'NAMain',
     INDOOR: 'NAModule4',
     OUTDOOR: 'NAModule1',
     RAIN: 'NAModule3',
-    WIND: 'NAModule2',
+    WIND: 'NAModule2'
   },
   measurement: {
     CO2: 'CO2',
@@ -61,25 +61,23 @@ Module.register('netatmo', {
     GUST_ANGLE: 'GustAngle',
     RAIN: 'Rain',
     RAIN_PER_HOUR: 'sum_rain_1',
-    RAIN_PER_DAY: 'sum_rain_24',
+    RAIN_PER_DAY: 'sum_rain_24'
   },
   // init method
   start: function () {
-    const self = this
     Log.info(`Starting module: ${this.name}`)
-    self.loaded = false
-    self.moduleList = []
+    this.loaded = false
+    this.moduleList = []
 
     // get a new token at start-up.
-    setTimeout(function () {
-      // best way is auth at start and if auth OK --> fetch data
-      self.sendSocketNotification(self.notifications.AUTH, self.config)
-      //self.sendSocketNotification(self.notifications.DATA, self.config)
+    setTimeout(() => {
+      // best way is using initialize at start and if auth OK --> fetch data
+      this.sendSocketNotification("INIT", this.config)
     }, this.config.initialDelay * 1000)
 
     // set auto-update
-    setInterval(function () {
-      self.sendSocketNotification(self.notifications.DATA, self.config)
+    setInterval(() => {
+      this.sendSocketNotification(this.notifications.DATA)
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
   updateModuleList: function (stationList) {
@@ -134,7 +132,7 @@ Module.register('netatmo', {
         value: this.getValue(measurement, 0),
         unit: this.getUnit(measurement),
         icon: this.getIcon(measurement, 0) + ' flash red',
-        label: this.translate(measurement.toUpperCase()),
+        label: this.translate(measurement.toUpperCase())
       })
 
       return result
@@ -174,7 +172,7 @@ Module.register('netatmo', {
           result.primary = {
             value: this.getValue(primaryType, primaryValue),
             unit: this.getUnit(primaryType),
-            class: this.kebabCase(primaryType),
+            class: this.kebabCase(primaryType)
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.TEMPERATURE))
@@ -189,7 +187,7 @@ Module.register('netatmo', {
           result.primary = {
             value: this.getValue(primaryType, primaryValue),
             unit: this.getUnit(primaryType),
-            class: this.kebabCase(primaryType),
+            class: this.kebabCase(primaryType)
           }
           secondaryType = this.measurement.WIND_ANGLE
           secondaryValue = module.dashboard_data[secondaryType]
@@ -197,7 +195,7 @@ Module.register('netatmo', {
             value: this.getValue(secondaryType, secondaryValue),
             unit: this.getUnit(secondaryType),
             class: this.kebabCase(secondaryType),
-            visualClass: 'xlarge wi wi-direction-up',
+            visualClass: 'xlarge wi wi-direction-up'
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.WIND_STRENGTH))
@@ -214,7 +212,7 @@ Module.register('netatmo', {
           result.primary = {
             value: this.getValue(primaryType, primaryValue),
             unit: this.getUnit(primaryType),
-            class: this.kebabCase(primaryType),
+            class: this.kebabCase(primaryType)
           }
         } else {
           result.measurementList.push(this.getMeasurement(module, this.measurement.RAIN))
@@ -256,7 +254,7 @@ Module.register('netatmo', {
       value: this.getValue(measurement, value),
       unit: this.getUnit(measurement),
       icon: this.getIcon(measurement, value),
-      label: this.translate(measurement.toUpperCase()),
+      label: this.translate(measurement.toUpperCase())
     }
   },
   kebabCase: function (name) {
@@ -415,7 +413,7 @@ Module.register('netatmo', {
       fontClassPrimary: this.config.fontClassPrimary,
       fontClassSecondary: this.config.fontClassSecondary,
       fontClassMeasurement: this.config.fontClassMeasurement,
-      labelLoading: this.translate('LOADING'),
+      labelLoading: this.translate('LOADING')
     }
   },
   getTranslations: function () {
@@ -428,37 +426,36 @@ Module.register('netatmo', {
       nb: 'l10n/nb.json',
       nn: 'l10n/nn.json',
       ru: 'l10n/ru.json',
-      sv: 'l10n/sv.json',
+      sv: 'l10n/sv.json'
     }
   },
   socketNotificationReceived: function (notification, payload) {
-    const self = this
-    Log.debug('received ' + notification)
+    Log.debug('Netatmo: received ' + notification)
     switch (notification) {
-      case self.notifications.AUTH_RESPONSE:
+      case this.notifications.AUTH_RESPONSE:
         if (payload.status === 'OK') {
-          console.log('AUTH OK')
-          self.sendSocketNotification(self.notifications.DATA, self.config)
+          console.log('Netatmo: AUTH OK')
+          this.sendSocketNotification(this.notifications.DATA)
         } else {
-          console.error('AUTH FAILED ' + payload.message)
+          console.error('Netatmo: AUTH FAILED ' + payload.message)
         }
         break
-      case self.notifications.DATA_RESPONSE:
+      case this.notifications.DATA_RESPONSE:
         if (payload.status === 'OK') {
           console.log('Devices %o', payload.payloadReturn)
           const stationList = payload.payloadReturn
-          self.updateModuleList(stationList)
-          self.updateDom(self.config.animationSpeed)
+          this.updateModuleList(stationList)
+          this.updateDom(this.config.animationSpeed)
         } else if (payload.status === 'INVALID_TOKEN') {
           // node_module has no valid token, reauthenticate
           console.error('DATA FAILED, refreshing token')
           // i'm not agree with this... can have error 403 loop
-          // --> coded in helper
-          //self.sendSocketNotification(self.notifications.AUTH, self.config)
+          // --> managed with node_helper
+          //this.sendSocketNotification(this.notifications.AUTH)
         } else {
-          console.error('DATA FAILED ' + payload.message)
+          console.error('Netatmo: DATA FAILED ' + payload.message)
         }
         break
     }
-  },
+  }
 })
