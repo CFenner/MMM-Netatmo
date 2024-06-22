@@ -2,6 +2,7 @@
  * Module: MMM-Netatmo
  *
  * By Christopher Fenner https://github.com/CFenner
+ * Review @bugsounet https://github.com/bugsounet
  * MIT Licensed.
  */
 const fs = require("fs");
@@ -137,7 +138,7 @@ module.exports = {
         this.authenticate();
         break;
       case this.notifications.DATA:
-        this.loadData(payload);
+        this.loadData();
         break;
     }
   },
