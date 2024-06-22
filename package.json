@@ -1,6 +1,6 @@
 {
   "name": "netatmo",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A module for the MagicMirror² to display information about your rooms climate from your Netatmo system.",
   "main": "netatmo.js",
   "scripts": {
@@ -51,8 +51,5 @@
     "stylelint": "16.6.1",
     "stylelint-config-standard": "36.0.1"
   },
-  "snyk": true,
-  "dependencies": {
-    "@ungap/url-search-params": "0.2.2"
-  }
+  "snyk": true
 }

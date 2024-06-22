@@ -4,62 +4,72 @@
  * By Christopher Fenner https://github.com/CFenner
  * MIT Licensed.
  */
-const fs = require('fs')
-const path = require('path')
-const URLSearchParams = require('@ungap/url-search-params')
+const fs = require('fs');
+const path = require('path');
+const moment = require("moment");
 
 module.exports = {
   notifications: {
     AUTH: 'NETATMO_AUTH',
     AUTH_RESPONSE: 'NETATMO_AUTH_RESPONSE',
     DATA: 'NETATMO_DATA',
-    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE',
+    DATA_RESPONSE: 'NETATMO_DATA_RESPONSE'
   },
+
   start: function () {
     console.log('Netatmo helper started ...')
     this.token = null
   },
-  authenticate: async function (config) {
-    const self = this
-    self.config = config
 
-    const refreshToken = this.readToken()
+  authenticate: async function (config) {
+    this.config = config
+    let refreshToken = this.readToken()
 
     const params = new URLSearchParams()
     params.append('grant_type', 'refresh_token')
-    params.append('refresh_token', self.refresh_token || refreshToken || self.config.refresh_token)
-    params.append('client_id', self.config.clientId)
-    params.append('client_secret', self.config.clientSecret)
+    params.append('refresh_token', refreshToken || this.config.refresh_token)
+    params.append('client_id', this.config.clientId)
+    params.append('client_secret', this.config.clientSecret)
 
     try {
-      const result = await fetch('https://' + self.config.apiBase + self.config.authEndpoint, {
+      const result = await fetch('https://' + this.config.apiBase + this.config.authEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params,
+        body: params
       }).then(response => response.json())
 
       if (result.error) {
         throw new Error(result.error + ': ' + result.error_description)
       }
 
-      console.log('UPDATING TOKEN ' + result.access_token)
-      self.token = result.access_token
-      self.token_expires_in = result.expires_in
-      self.refresh_token = result.refresh_token
+      this.token = result.access_token
+      this.token_expires_in = result.expires_in
+      this.refresh_token = result.refresh_token
+      console.log('Authenticated')
+
+      // write in token file and provides for token refresh
       this.writeToken(result)
-      // we got a new token, save it to main file to allow it to request the datas
-      self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
-        status: 'OK',
+      if (result.expires_in) {
+        let expire_at = moment(Date.now() + (result.expires_in*1000)).format("LLLL")
+        console.log(`New Token Expire ${expire_at}`)
+        setTimeout(() => this.authenticateRefresh(result.refresh_token), (result.expires_in - 60) * 1000)
+      }
+
+      // inform module AUTH ok
+      this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
+        status: 'OK'
       })
+
     } catch (error) {
-      console.log('error:', error)
-      self.sendSocketNotification(self.notifications.AUTH_RESPONSE, {
+      console.error('error:', error)
+      this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
         payloadReturn: error,
         status: 'NOTOK',
-        message: error,
+        message: error
       })
     }
   },
+
   loadData: async function (config) {
     const self = this
     self.config = config
@@ -67,7 +77,7 @@ module.exports = {
     if (self.config.mockData === true) {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: this.mockData(),
-        status: 'OK',
+        status: 'OK'
       })
       return
     }
@@ -75,7 +85,7 @@ module.exports = {
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: 400,
         status: 'INVALID_TOKEN',
-        message: 'token not set',
+        message: 'token not set'
       })
       return
     }
@@ -84,8 +94,8 @@ module.exports = {
       let result = await fetch('https://' + self.config.apiBase + self.config.dataEndpoint, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${self.token}`,
-        },
+          Authorization: `Bearer ${self.token}`
+        }
       })
 
       if (result.status === 403) {
@@ -93,7 +103,7 @@ module.exports = {
         self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
           payloadReturn: result.statusText,
           status: 'INVALID_TOKEN',
-          message: result,
+          message: result
         })
         return
       }
@@ -106,21 +116,23 @@ module.exports = {
 
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: result.body.devices,
-        status: 'OK',
+        status: 'OK'
       })
     } catch (error) {
       console.log('error:', error)
       self.sendSocketNotification(self.notifications.DATA_RESPONSE, {
         payloadReturn: error,
         status: 'NOTOK',
-        message: error,
+        message: error
       })
     }
   },
+
   mockData: function () {
     const sample = fs.readFileSync(path.join(__dirname, 'sample', 'sample.json'), 'utf8')
     return JSON.parse(sample)
   },
+
   socketNotificationReceived: function (notification, payload) {
     switch (notification) {
       case this.notifications.AUTH:
@@ -132,13 +144,14 @@ module.exports = {
     }
   },
 
-  /* from MMM-Netatmo
+  /* from MMM-NetatmoThermostat
    * @bugsounet
    */
   readToken: function () {
     var file = path.resolve(__dirname, './token.json')
     // check presence of token.json
     if (fs.existsSync(file)) {
+      console.log('--> using file')
       let tokenFile = JSON.parse(fs.readFileSync(file))
       const refresh_token = tokenFile.refresh_token
       if (!refresh_token) {
@@ -148,6 +161,7 @@ module.exports = {
       return refresh_token
     }
     // Token file not used
+    console.log("--> using config")
     return null
   },
 
@@ -162,4 +176,49 @@ module.exports = {
       return null
     }
   },
+
+  authenticateRefresh: async function (refresh_token) {
+    console.log("Refresh Token")
+    const params = new URLSearchParams();
+    params.append("grant_type", "refresh_token");
+    params.append("refresh_token", refresh_token);
+    params.append('client_id', this.config.clientId)
+    params.append('client_secret', this.config.clientSecret)
+
+    try {
+      const result = await fetch(`https://${this.config.apiBase}${this.config.authEndpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params
+      }).then(response => response.json())
+
+      if (result.error) {
+        throw new Error(result.error)
+      }
+
+      let token = this.writeToken(result)
+      this.token = result.access_token
+      console.log('TOKEN Updated')
+
+      if (result.expires_in) {
+        let expire_at = moment(Date.now() + (result.expires_in*1000)).format("LLLL")
+        console.log(`New Token Expire ${expire_at}`)
+        setTimeout(() => this.authenticateRefresh(result.refresh_token), (result.expires_in - 60) * 1000);
+      }
+
+      this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
+        status: 'OK'
+      })
+
+    } catch (error) {
+      console.error('error:', error)
+      this.sendSocketNotification(this.notifications.AUTH_RESPONSE, {
+        payloadReturn: error,
+        status: 'NOTOK',
+        message: error
+      })
+      console.log('Retry login in 60 sec')
+      setTimeout(() => this.authenticate(this.config), 60 * 1000)
+    }
+  }
 }
