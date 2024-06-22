@@ -48,8 +48,8 @@ module.exports = {
       // write in token file and provides for token refresh
       this.writeToken(result)
       if (result.expires_in) {
-        const expire_at = moment(Date.now() + (result.expires_in * 1000)).format('LLLL')
-        console.log(`Netatmo: New Token Expire ${expire_at}`)
+        const expireAt = moment(Date.now() + (result.expires_in * 1000)).format('LLLL')
+        console.log(`Netatmo: New Token Expire ${expireAt}`)
         setTimeout(() => this.authenticateRefresh(result.refresh_token), (result.expires_in - 60) * 1000)
       };
 
@@ -177,13 +177,13 @@ module.exports = {
     if (fs.existsSync(file)) {
       console.log('Netatmo: using token.json file')
       const tokenFile = JSON.parse(fs.readFileSync(file))
-      const refresh_token = tokenFile.refresh_token
-      if (!refresh_token) {
+      const refreshToken = tokenFile.refresh_token
+      if (!refreshToken) {
         console.error('Netatmo: Token not found in token.json file')
         console.log('Netatmo: using refresh_token from config')
         return null
       }
-      return refresh_token
+      return refreshToken
     }
     // Token file not used
     console.log('Netatmo: using refresh_token from config')
@@ -204,11 +204,11 @@ module.exports = {
   },
 
   // Refresh Token
-  async authenticateRefresh (refresh_token) {
+  async authenticateRefresh (refreshToken) {
     console.log('Netatmo: Refresh Token')
     const params = new URLSearchParams()
     params.append('grant_type', 'refresh_token')
-    params.append('refresh_token', refresh_token)
+    params.append('refresh_token', refreshToken)
     params.append('client_id', this.clientId)
     params.append('client_secret', this.clientSecret)
 
@@ -228,8 +228,8 @@ module.exports = {
       console.log('Netatmo: TOKEN Updated')
 
       if (result.expires_in) {
-        const expire_at = moment(Date.now() + (result.expires_in * 1000)).format('LLLL')
-        console.log(`Netatmo: New Token Expire ${expire_at}`)
+        const expireAt = moment(Date.now() + (result.expires_in * 1000)).format('LLLL')
+        console.log(`Netatmo: New Token Expire ${expireAt}`)
         setTimeout(() => this.authenticateRefresh(result.refresh_token), (result.expires_in - 60) * 1000)
       };
 
