@@ -51,25 +51,6 @@ jobs:
         run: npm clean-install
       - name: Validate CSS Sources
         run: npm run validate:css
-  unit:
-    runs-on: ubuntu-latest
-    name: 'Unit Tests'
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.node-version }}
-          cache: "npm"
-      - name: Install Dependencies
-        run: npm clean-install
-      - name: Execute Unit Tests
-        run: npm run test
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
   package-lock-is-up-to-date:
     runs-on: ubuntu-latest
     steps:

@@ -29,11 +29,7 @@ cd ~/MagicMirror/modules && git clone https://github.com/CFenner/MMM-Netatmo net
 
 :warning: Note that the checkout folder is named `netatmo` and not `MMM-Netatmo` as the repository.
 
-Navigate into the module folder and install missing dependencies:
-
-```shell
-cd netatmo && npm ci --production --ignore-scripts
-```
+Since v2.1.0: **No special dependencies and no others commands are now needed!**
 
 ### Connection to Netatmo Service API
 

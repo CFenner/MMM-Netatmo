@@ -3,3 +3,4 @@ node_modules
 report
 .env*
 .DS_Store
+/token.json
