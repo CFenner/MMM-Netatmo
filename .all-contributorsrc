@@ -85,6 +85,17 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "bugsounet",
+      "name": "Bugsounet - Cédric",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30669209?v=4",
+      "profile": "http://www.bugsounet.fr",
+      "contributions": [
+        "code",
+        "bug",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
