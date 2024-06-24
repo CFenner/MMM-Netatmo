@@ -438,29 +438,29 @@ Module.register('netatmo', {
   },
   getTemperatureUnitLabel (unit) {
     switch (unit) {
-      case 'imperial':
+      case 'IMPERIAL':
         return '°F'
-      case 'metric':
+      case 'METRIC':
       default:
         return '°C'
     }
   },
   getRainUnitLabel (unit) {
     switch (unit) {
-      case 'imperial':
+      case 'IMPERIAL':
         return 'in/h'
-      case 'metric':
+      case 'METRIC':
       default:
         return 'mm/h'
     }
   },
   getPressureUnitLabel (unit) {
     switch (unit) {
-      case 'mmhg':
-        return '°F'
-      case 'inhg':
-        return '°F'
-      case 'mbar':
+      case 'MMHG':
+        return 'mmHg'
+      case 'INHG':
+        return 'inHg'
+      case 'MBAR':
       default:
         return 'mbar'
     }
