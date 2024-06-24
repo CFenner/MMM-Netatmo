@@ -82,7 +82,7 @@ Module.register('netatmo', {
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
   updateUnitOfMeasurements (userPreferences) {
-    if (this.config.unitOfMeasurementWind === ''){
+    if (this.config.unitOfMeasurementWind === '') {
       this.config.unitOfMeasurementWind = this.convertNetatmoWindUnit(userPreferences.windunit)
       console.log('Using user preferred unit of measurement for wind values %o', this.config.unitOfMeasurementWind)
     }
