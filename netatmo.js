@@ -32,6 +32,7 @@ Module.register('netatmo', {
     fontClassMeasurement: 'xsmall',
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
+    unitOfMeasurementWind: '',
     mockData: false,
   },
   notifications: {
@@ -79,6 +80,12 @@ Module.register('netatmo', {
     setInterval(() => {
       this.sendSocketNotification(this.notifications.DATA)
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
+  },
+  updateUnitOfMeasurements (userPreferences) {
+    if (this.config.unitOfMeasurementWind === '') {
+      this.config.unitOfMeasurementWind = this.convertNetatmoWindUnit(userPreferences.windunit)
+      console.log('Using user preferred unit of measurement for wind values %o', this.config.unitOfMeasurementWind)
+    }
   },
   updateModuleList (stationList) {
     let moduleList = []
@@ -285,7 +292,7 @@ Module.register('netatmo', {
         return value.toFixed(1)// + '&nbsp;mm/h'
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return value.toFixed(0)// + '&nbsp;km/h'
+        return this.convertWindUnit(value, this.config.unitOfMeasurementWind)
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
         return `${this.getDirection(value)}&nbsp;|&nbsp;${value}`// + '°'
@@ -295,6 +302,51 @@ Module.register('netatmo', {
       default:
         return value
     }
+  },
+  convertNetatmoWindUnit (unit) {
+    switch (unit) {
+      case 4:
+        return 'KT'
+      case 3:
+        return 'BFT'
+      case 2:
+        return 'MS'
+      case 1:
+        return 'MPH'
+      case 0:
+      default:
+        return 'KPH'
+    }
+  },
+  convertWindUnit (value, unit) {
+    switch (unit) {
+      case 'MPH':
+        return (value / 1.609).toFixed(1)
+      case 'MS':
+        return (value / 3.6).toFixed(1)
+      case 'BFT':
+        return this.convertToBeaufort(value)
+      case 'KT':
+        return (value / 1.852).toFixed(1)
+      case 'KPH':
+      default:
+        return value.toFixed(1)
+    }
+  },
+  convertToBeaufort (value) {
+    if (value < 1) return 0
+    if (value <= 5) return 1
+    if (value <= 11) return 2
+    if (value <= 19) return 3
+    if (value <= 28) return 4
+    if (value <= 38) return 5
+    if (value <= 49) return 6
+    if (value <= 61) return 7
+    if (value <= 74) return 8
+    if (value <= 88) return 9
+    if (value <= 102) return 10
+    if (value <= 117) return 11
+    return 12
   },
   getUnit (measurement) {
     switch (measurement) {
@@ -317,12 +369,27 @@ Module.register('netatmo', {
         return 'mm/h'
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return 'km/h'
+        return this.getWindUnitLabel(this.config.unitOfMeasurementWind)
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
         return '°'
       default:
         return ''
+    }
+  },
+  getWindUnitLabel (unit) {
+    switch (unit) {
+      case 'MPH':
+        return 'mph'
+      case 'MS':
+        return 'm/s'
+      case 'BFT':
+        return 'Bft'
+      case 'KT':
+        return 'kt'
+      case 'KPH':
+      default:
+        return 'km/h'
     }
   },
   getDirection (value) {
@@ -443,8 +510,10 @@ Module.register('netatmo', {
         break
       case this.notifications.DATA_RESPONSE:
         if (payload.status === 'OK') {
-          console.log('Devices %o', payload.payloadReturn)
-          const stationList = payload.payloadReturn
+          console.log('Devices %o', payload.payloadReturn.devices)
+          const stationList = payload.payloadReturn.devices
+          const userPreferences = payload.payloadReturn.user.administrative
+          this.updateUnitOfMeasurements(userPreferences)
           this.updateModuleList(stationList)
           this.updateDom(this.config.animationSpeed)
         } else if (payload.status === 'INVALID_TOKEN') {
