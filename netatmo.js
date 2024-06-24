@@ -83,7 +83,7 @@ Module.register('netatmo', {
   },
   updateUnitOfMeasurements (userPreferences) {
     if (this.config.unitOfMeasurementWind === ''){
-      this.config.unitOfMeasurementWind = this.convertNetatmoWindUOM(userPreferences.windunit)
+      this.config.unitOfMeasurementWind = this.convertNetatmoWindUnit(userPreferences.windunit)
       console.log('Using user preferred unit of measurement for wind values %o', this.config.unitOfMeasurementWind)
     }
   },
@@ -303,7 +303,7 @@ Module.register('netatmo', {
         return value
     }
   },
-  convertNetatmoWindUOM (unit) {
+  convertNetatmoWindUnit (unit) {
     switch (unit) {
       case 4:
         return 'KT'
