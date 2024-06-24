@@ -286,7 +286,7 @@ Module.register('netatmo', {
         return value.toFixed(1)// + '&nbsp;mm/h'
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return value.toFixed(0)// + '&nbsp;m/s'
+        return value.toFixed(0)// + '&nbsp;km/h'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
         return `${this.getDirection(value)}&nbsp;|&nbsp;${value}`// + '°'
@@ -318,7 +318,7 @@ Module.register('netatmo', {
         return 'mm/h'
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return 'm/s'
+        return 'km/h'
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
         return '°'
