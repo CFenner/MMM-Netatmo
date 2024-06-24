@@ -32,6 +32,8 @@ Module.register('netatmo', {
     fontClassMeasurement: 'xsmall',
     thresholdCO2Average: 800,
     thresholdCO2Bad: 1800,
+    unitOfMeasurement: '',
+    unitOfMeasurementPressure: '',
     unitOfMeasurementWind: '',
     mockData: false,
   },
@@ -82,9 +84,17 @@ Module.register('netatmo', {
     }, this.config.updateInterval * 60 * 1000 + this.config.initialDelay * 1000)
   },
   updateUnitOfMeasurements (userPreferences) {
+    if (this.config.unitOfMeasurement === '') {
+      this.config.unitOfMeasurement = this.convertNetatmoUnit(userPreferences.unit)
+      console.log('Using user-preferred unit of measurement for temp/rain values %o', this.config.unitOfMeasurement)
+    }
+    if (this.config.unitOfMeasurementPressure === '') {
+      this.config.unitOfMeasurementPressure = this.convertNetatmoPressureUnit(userPreferences.pressureunit)
+      console.log('Using user-preferred unit of measurement for pressure values %o', this.config.unitOfMeasurementPressure)
+    }
     if (this.config.unitOfMeasurementWind === '') {
       this.config.unitOfMeasurementWind = this.convertNetatmoWindUnit(userPreferences.windunit)
-      console.log('Using user preferred unit of measurement for wind values %o', this.config.unitOfMeasurementWind)
+      console.log('Using user-preferred unit of measurement for wind values %o', this.config.unitOfMeasurementWind)
     }
   },
   updateModuleList (stationList) {
@@ -283,16 +293,16 @@ Module.register('netatmo', {
       case 'radio':
         return value.toFixed(0)// + '%'
       case this.measurement.PRESSURE:
-        return value.toFixed(0)// + '&nbsp;mbar'
+        return this.convertPressureValue(value, this.config.unitOfMeasurementPressure)
       case this.measurement.TEMPERATURE:
-        return value.toFixed(1)// + '°C'
+        return this.convertTemperatureValue(value, this.config.unitOfMeasurement)
       case this.measurement.RAIN:
       case this.measurement.RAIN_PER_HOUR:
       case this.measurement.RAIN_PER_DAY:
-        return value.toFixed(1)// + '&nbsp;mm/h'
+        return this.convertRainValue(value, this.config.unitOfMeasurement)
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
-        return this.convertWindUnit(value, this.config.unitOfMeasurementWind)
+        return this.convertWindValue(value, this.config.unitOfMeasurementWind)
       case this.measurement.WIND_ANGLE:
       case this.measurement.GUST_ANGLE:
         return `${this.getDirection(value)}&nbsp;|&nbsp;${value}`// + '°'
@@ -303,22 +313,36 @@ Module.register('netatmo', {
         return value
     }
   },
-  convertNetatmoWindUnit (unit) {
+  convertTemperatureValue (value, unit) {
     switch (unit) {
-      case 4:
-        return 'KT'
-      case 3:
-        return 'BFT'
-      case 2:
-        return 'MS'
-      case 1:
-        return 'MPH'
-      case 0:
+      case 'IMPERIAL':
+        return (value * 1.8 + 32).toFixed(1)
+      case 'METRIC':
       default:
-        return 'KPH'
+        return value.toFixed(1)
     }
   },
-  convertWindUnit (value, unit) {
+  convertRainValue (value, unit) {
+    switch (unit) {
+      case 'IMPERIAL':
+        return (value / 25.4).toFixed(1)
+      case 'METRIC':
+      default:
+        return value.toFixed(1)
+    }
+  },
+  convertPressureValue (value, unit) {
+    switch (unit) {
+      case 'MMHG':
+        return (value / 1.333).toFixed(1)
+      case 'INHG':
+        return (value / 33.864).toFixed(1)
+      case 'MBAR':
+      default:
+        return value.toFixed(0)
+    }
+  },
+  convertWindValue (value, unit) {
     switch (unit) {
       case 'MPH':
         return (value / 1.609).toFixed(1)
@@ -348,6 +372,41 @@ Module.register('netatmo', {
     if (value <= 117) return 11
     return 12
   },
+  convertNetatmoUnit (unit) {
+    switch (unit) {
+      case 1:
+        return 'IMPERIAL'
+      case 0:
+      default:
+        return 'METRIC'
+    }
+  },
+  convertNetatmoPressureUnit (unit) {
+    switch (unit) {
+      case 2:
+        return 'MMHG'
+      case 1:
+        return 'INHG'
+      case 0:
+      default:
+        return 'MBAR'
+    }
+  },
+  convertNetatmoWindUnit (unit) {
+    switch (unit) {
+      case 4:
+        return 'KT'
+      case 3:
+        return 'BFT'
+      case 2:
+        return 'MS'
+      case 1:
+        return 'MPH'
+      case 0:
+      default:
+        return 'KPH'
+    }
+  },
   getUnit (measurement) {
     switch (measurement) {
       case this.measurement.CO2:
@@ -360,13 +419,13 @@ Module.register('netatmo', {
       case 'radio':
         return '%'
       case this.measurement.PRESSURE:
-        return 'mbar'
+        return this.getPressureUnitLabel(this.config.unitOfMeasurementPressure)
       case this.measurement.TEMPERATURE:
-        return '°C'
+        return this.getTemperatureUnitLabel(this.config.unitOfMeasurement)
       case this.measurement.RAIN:
       case this.measurement.RAIN_PER_HOUR:
       case this.measurement.RAIN_PER_DAY:
-        return 'mm/h'
+        return this.getRainUnitLabel(this.config.unitOfMeasurement)
       case this.measurement.WIND_STRENGTH:
       case this.measurement.GUST_STRENGTH:
         return this.getWindUnitLabel(this.config.unitOfMeasurementWind)
@@ -375,6 +434,35 @@ Module.register('netatmo', {
         return '°'
       default:
         return ''
+    }
+  },
+  getTemperatureUnitLabel (unit) {
+    switch (unit) {
+      case 'IMPERIAL':
+        return '°F'
+      case 'METRIC':
+      default:
+        return '°C'
+    }
+  },
+  getRainUnitLabel (unit) {
+    switch (unit) {
+      case 'IMPERIAL':
+        return 'in/h'
+      case 'METRIC':
+      default:
+        return 'mm/h'
+    }
+  },
+  getPressureUnitLabel (unit) {
+    switch (unit) {
+      case 'MMHG':
+        return 'mmHg'
+      case 'INHG':
+        return 'inHg'
+      case 'MBAR':
+      default:
+        return 'mbar'
     }
   },
   getWindUnitLabel (unit) {
