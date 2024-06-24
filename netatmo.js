@@ -316,7 +316,7 @@ Module.register('netatmo', {
   convertTemperatureValue (value, unit) {
     switch (unit) {
       case 'IMPERIAL':
-        return (value * 1, 8 + 32).toFixed(1)
+        return (value * 1.8 + 32).toFixed(1)
       case 'METRIC':
       default:
         return value.toFixed(1)
