@@ -245,12 +245,11 @@ Module.register('netatmo', {
     return result
   },
   getMeasurement (module, measurement, value) {
-    /* eslint-disable no-param-reassign */
     value = value || module.dashboard_data[measurement]
     if (measurement === this.measurement.TEMPERATURE_TREND || measurement === this.measurement.PRESSURE_TREND) {
       value = value || 'undefined'
     }
-    /* eslint-enable no-param-reassign */
+
     return {
       name: measurement,
       value: this.getValue(measurement, value),
