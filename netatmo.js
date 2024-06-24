@@ -387,7 +387,7 @@ Module.register('netatmo', {
         return 'Bft'
       case 'KT':
         return 'kt'
-      case 'KMH':
+      case 'KPH':
       default:
         return 'km/h'
     }
