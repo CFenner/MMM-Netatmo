@@ -11,7 +11,7 @@ plugins:
     enabled: true
   eslint:
     enabled: true
-    channel: eslint-8
+    channel: eslint-9
   fixme:
     enabled: true
   markdownlint:
