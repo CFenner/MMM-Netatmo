@@ -443,8 +443,9 @@ Module.register('netatmo', {
         break
       case this.notifications.DATA_RESPONSE:
         if (payload.status === 'OK') {
-          console.log('Devices %o', payload.payloadReturn)
-          const stationList = payload.payloadReturn
+          console.log('Devices %o', payload.payloadReturn.devices)
+          const stationList = payload.payloadReturn.devices
+          const userPreferences = payload.payloadReturn.user.administrative
           this.updateModuleList(stationList)
           this.updateDom(this.config.animationSpeed)
         } else if (payload.status === 'INVALID_TOKEN') {

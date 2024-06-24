@@ -110,7 +110,7 @@ module.exports = {
       };
 
       this.sendSocketNotification(this.notifications.DATA_RESPONSE, {
-        payloadReturn: result.body.devices,
+        payloadReturn: result.body,
         status: 'OK',
       })
     } catch (error) {
