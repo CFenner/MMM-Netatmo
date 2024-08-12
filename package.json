@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/CFenner/MagicMirror-Netatmo-Module#readme",
   "devDependencies": {
-    "@snyk/protect": "1.1292.2",
+    "@snyk/protect": "1.1292.3",
     "eslint": "9.9.0",
     "jest": "29.7.0",
     "jsonlint-newline-fork": "1.6.8",
