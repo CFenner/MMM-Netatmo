@@ -8,7 +8,7 @@
 
 # MMM-Netatmo
 
-A module to integrate information from a [Netatmo weather station][weather-station] into the [MagicMirror][mirror].
+A module for [MagicMirror²][mirror] to integrate information from a [Netatmo weather station][weather-station].
 
 ![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/main/.github/preview.classic.png)
 ![Netatmo visualisation](https://github.com/CFenner/MagicMirror-Netatmo-Module/blob/main/.github/preview.bubbles.png)
