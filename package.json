@@ -45,7 +45,7 @@
     "markdownlint": "0.36.1",
     "markdownlint-cli2": "0.15.0",
     "neostandard": "0.11.5",
-    "stylelint": "16.10.0",
+    "stylelint": "16.11.0",
     "stylelint-config-standard": "36.0.1"
   },
   "snyk": true
