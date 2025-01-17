@@ -43,7 +43,7 @@
     "jsonlint-newline-fork": "1.6.8",
     "less": "4.2.0",
     "markdownlint": "0.37.4",
-    "markdownlint-cli2": "0.17.1",
+    "markdownlint-cli2": "0.17.2",
     "neostandard": "0.11.5",
     "stylelint": "16.13.2",
     "stylelint-config-standard": "37.0.0"
