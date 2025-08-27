@@ -39,7 +39,7 @@
   "devDependencies": {
     "@snyk/protect": "1.1298.3",
     "eslint": "9.34.0",
-    "jest": "30.1.0",
+    "jest": "30.1.1",
     "jsonlint-newline-fork": "1.6.8",
     "less": "4.2.0",
     "markdownlint": "0.38.0",
