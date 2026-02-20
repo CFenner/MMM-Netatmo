@@ -44,7 +44,7 @@
     "less": "4.2.0",
     "markdownlint": "0.40.0",
     "markdownlint-cli2": "0.21.0",
-    "neostandard": "0.11.5",
+    "neostandard": "0.12.2",
     "stylelint": "16.26.1",
     "stylelint-config-standard": "39.0.1"
   },
