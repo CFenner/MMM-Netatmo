@@ -9,6 +9,10 @@ const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 
+// Only known, trusted Netatmo API hosts are allowed to prevent credential
+// and data exfiltration via a tampered apiBase configuration value.
+const ALLOWED_API_BASES = ['api.netatmo.com']
+
 module.exports = {
   notifications: {
     AUTH: 'NETATMO_AUTH',
@@ -144,6 +148,10 @@ module.exports = {
 
   Init (config) {
     this.config = config
+    if (!ALLOWED_API_BASES.includes(this.config.apiBase)) {
+      console.error('Netatmo: apiBase not in allowed list, falling back to default.')
+      this.config.apiBase = ALLOWED_API_BASES[0]
+    }
     if (!this.config.clientId) {
       console.error('Netatmo: clientId not set in config.')
       return
